@@ -161,7 +161,6 @@ public class MohafezActivity extends AppCompatActivity implements NavigationView
                 updateToken(instanceIdResult.getToken());
             }
         });
-
     }
 
     private void updateToken(String token) {
