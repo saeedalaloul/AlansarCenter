@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activitys.HomeActivity">
+
+    <TextView
+        android:id="@+id/tv_wel_user"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/_20sdp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btn_logout"
+        android:layout_width="@dimen/_120sdp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:background="@drawable/btn_login"
+        android:text="logout"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_20sdp"
+        app:layout_constraintEnd_toEndOf="@id/tv_wel_user"
+        app:layout_constraintStart_toStartOf="@id/tv_wel_user"
+        app:layout_constraintTop_toBottomOf="@id/tv_wel_user" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

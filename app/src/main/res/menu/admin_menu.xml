@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <group
+        android:id="@+id/group1"
+        android:checkableBehavior="single">
+        <item
+            android:title="الرئيسية"
+            tools:ignore="HardcodedText">
+            <menu>
+                <item
+                    android:id="@+id/admin_home"
+                    android:icon="@drawable/ic_homepage"
+                    android:title="الصفحة الرئيسية" />
+            </menu>
+        </item>
+
+    </group>
+
+    <group
+        android:id="@+id/group2"
+        android:checkableBehavior="single">
+        <item
+            android:title="قسم الإدارة"
+            tools:ignore="HardcodedText">
+            <menu>
+                <item
+                    android:id="@+id/admin_halakat"
+                    android:icon="@drawable/ic_group"
+                    android:title="الحلقات" />
+                <item
+                    android:id="@+id/admin_edareen"
+                    android:icon="@drawable/ic_maneger"
+                    android:title="الإداريين" />
+                <item
+                    android:id="@+id/admin_moshrefeen"
+                    android:icon="@drawable/ic_moshref"
+                    android:title="المشرفين" />
+                <item
+                    android:id="@+id/admin_mohafezeen"
+                    android:icon="@drawable/ic_mohafez"
+                    android:title="المحفظين" />
+                <item
+                    android:id="@+id/admin_students"
+                    android:icon="@drawable/ic_group"
+                    android:title="الطلاب" />
+                <item
+                    android:id="@+id/admin_permissions_persons"
+                    android:icon="@drawable/ic_permissions"
+                    android:title="الأذونات" />
+
+                <item
+                    android:id="@+id/admin_center_reports"
+                    android:icon="@drawable/ic_report"
+                    android:title="تقارير المركز" />
+            </menu>
+        </item>
+    </group>
+    <group
+        android:id="@+id/group3"
+        android:checkableBehavior="single">
+        <item
+            android:title="أخرى"
+            tools:ignore="HardcodedText">
+            <menu>
+                <item
+                    android:id="@+id/admin_switch_account"
+                    android:icon="@drawable/ic_switch"
+                    android:title="تبديل الحساب" />
+                <item
+                    android:id="@+id/admin_logout"
+                    android:icon="@drawable/ic_logout"
+                    android:title="تسجيل خروج" />
+            </menu>
+        </item>
+    </group>
+</menu>

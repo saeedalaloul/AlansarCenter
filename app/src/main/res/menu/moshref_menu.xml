@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <group
+        android:id="@+id/group1"
+        android:checkableBehavior="single">
+        <item
+            android:title="الرئيسية"
+            tools:ignore="HardcodedText">
+            <menu>
+                <item
+                    android:id="@+id/moshref_home"
+                    android:icon="@drawable/ic_homepage"
+                    android:title="الصفحة الرئيسية" />
+            </menu>
+        </item>
+    </group>
+    <group
+        android:id="@+id/group2"
+        android:checkableBehavior="single">
+        <item
+            android:title="قسم الإختبارات"
+            tools:ignore="HardcodedText">
+            <menu>
+                <item
+                    android:id="@+id/moshref_exams"
+                    android:icon="@drawable/ic_exams"
+                    android:title="الإختبارات"
+                    app:actionLayout="@layout/menu_counter" />
+                <item
+                    android:id="@+id/moshref_orders_exams"
+                    android:icon="@drawable/ic_order"
+                    android:title="طلبات الإختبارات"
+                    app:actionLayout="@layout/menu_counter" />
+            </menu>
+        </item>
+    </group>
+
+    <group
+        android:id="@+id/group3"
+        android:checkableBehavior="single">
+        <item
+            android:title="قسم الإدارة"
+            tools:ignore="HardcodedText">
+            <menu>
+                <item
+                    android:id="@+id/moshref_halakat"
+                    android:icon="@drawable/ic_group"
+                    android:title="الحلقات" />
+                <item
+                    android:id="@+id/moshref_mohafezeen"
+                    android:icon="@drawable/ic_mohafez"
+                    android:title="المحفظين" />
+                <item
+                    android:id="@+id/moshref_student"
+                    android:icon="@drawable/ic_group"
+                    android:title="الطلاب" />
+            </menu>
+        </item>
+    </group>
+
+    <group
+        android:id="@+id/group4"
+        android:checkableBehavior="single">
+        <item
+            android:title="أخرى"
+            tools:ignore="HardcodedText">
+            <menu>
+                <item
+                    android:id="@+id/moshref_switch_account"
+                    android:icon="@drawable/ic_switch"
+                    android:title="تبديل الحساب" />
+
+                <item
+                    android:id="@+id/moshref_logout"
+                    android:icon="@drawable/ic_logout"
+                    android:title="تسجيل خروج" />
+            </menu>
+        </item>
+    </group>
+
+
+</menu>

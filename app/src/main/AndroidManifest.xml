@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.alansar.center">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+
+    <application
+        android:name=".App"
+        android:allowBackup="true"
+        android:icon="@drawable/logo_ansar"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ansar_logo"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        tools:ignore="AllowBackup,GoogleAppIndexingWarning">
+
+        <provider
+            android:name=".GenericFileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths"/>
+        </provider>
+
+        <service
+            android:name=".Services.DownloadReportService"
+            tools:ignore="InnerclassSeparator" />
+
+        <activity
+            android:name=".supervisor_exams.Activitys.UpdateExamActivity"
+            tools:ignore="InnerclassSeparator" />
+        <activity
+            android:name=".testers.Activitys.PlaceExamActivity"
+            tools:ignore="InnerclassSeparator" />
+        <activity
+            android:name=".testers.Activitys.TesterActivity"
+            tools:ignore="InnerclassSeparator" />
+        <activity
+            android:name=".supervisor_exams.Activitys.SuperVisorExamsActivity"
+            tools:ignore="InnerclassSeparator" />
+        <activity
+            android:name=".Mohafez.Activitys.UpdateDailyMemorizationActivity"
+            tools:ignore="InnerclassSeparator" />
+        <activity
+            android:name=".Mohafez.Activitys.ViewMonthlyReportsActivity"
+            tools:ignore="InnerclassSeparator" />
+        <activity
+            android:name=".Mohafez.Activitys.AddDailyMemorizationActivity"
+            tools:ignore="InnerclassSeparator" />
+        <activity
+            android:name=".Mohafez.Activitys.MohafezActivity"
+            tools:ignore="InnerclassSeparator" />
+        <activity
+            android:name=".Edare.Activitys.EdareActivity"
+            tools:ignore="InnerclassSeparator" />
+        <activity
+            android:name=".Moshref.Activity.MoshrefActivity"
+            tools:ignore="InnerclassSeparator" />
+        <activity
+            android:name=".Activitys.HostingActivity"
+            tools:ignore="InnerclassSeparator" />
+        <activity
+            android:name=".administrator.Activitys.AdminActivity"
+            tools:ignore="InnerclassSeparator" />
+        <activity
+            android:name=".Activitys.LoginActivity"
+            tools:ignore="InnerclassSeparator">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <meta-data
+            android:name="firebase_crashlytics_collection_enabled"
+            android:value="false" />
+        <!--
+ Set custom default icon. This is used when no icon is set for incoming notification messages.
+     See README(https://goo.gl/l4GJaQ) for more.
+        -->
+        <service
+            android:name=".Notifications.MyFirebaseService"
+            android:enabled="true"
+            android:exported="true"
+            tools:ignore="ExportedService,InnerclassSeparator">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
+        <service
+            android:name=".Notifications.MyFirebaseMessagingService"
+            android:enabled="true"
+            android:exported="true"
+            tools:ignore="ExportedService,InnerclassSeparator">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/logo_ansar" />
+        <!--
+ Set color used with incoming notification messages. This is used when no color is set for the incoming
+             notification message. See README(https://goo.gl/6BKBk7) for more.
+        -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/colorAccent" />
+    </application>
+
+</manifest>

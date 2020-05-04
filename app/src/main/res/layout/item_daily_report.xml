@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/_15sdp"
+    android:padding="@dimen/_20sdp"
+    app:cardBackgroundColor="@color/white"
+    app:cardCornerRadius="@dimen/_20sdp"
+    app:cardElevation="@dimen/_5sdp"
+    tools:context=".administrator.Fragment.EdareFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/tv_day"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/_5sdp"
+            android:text="اليوم :"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_daily_report_day"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/_5sdp"
+            android:text="اليوم :"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@id/tv_day"
+            app:layout_constraintTop_toBottomOf="@id/tv_day" />
+
+        <TextView
+            android:id="@+id/tv_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/_5sdp"
+            android:text="حالة الطالب :"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@id/tv_daily_report_day"
+            app:layout_constraintTop_toBottomOf="@id/tv_daily_report_day" />
+
+        <TextView
+            android:id="@+id/tv_daily_report_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/_5sdp"
+            android:text="حالة الطالب :"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@id/tv_status"
+            app:layout_constraintTop_toBottomOf="@id/tv_status" />
+
+        <TextView
+            android:id="@+id/tv_end_hefaz"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/_5sdp"
+            android:text="نهاية الحفظ :"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@id/tv_daily_report_status"
+            app:layout_constraintTop_toBottomOf="@id/tv_daily_report_status" />
+
+
+        <TextView
+            android:id="@+id/tv_end_sura"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/_5sdp"
+            android:text="سورة :"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@id/tv_end_hefaz"
+            app:layout_constraintTop_toBottomOf="@id/tv_end_hefaz" />
+
+        <TextView
+            android:id="@+id/tv_daily_report_end_sura"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/_5sdp"
+            android:text="سورة :"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@id/tv_end_sura"
+            app:layout_constraintTop_toBottomOf="@id/tv_end_sura" />
+
+        <TextView
+            android:id="@+id/tv_end_aya"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/_5sdp"
+            android:text="أية :"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@id/tv_end_sura"
+            app:layout_constraintTop_toTopOf="@id/tv_end_sura" />
+
+        <TextView
+            android:id="@+id/tv_daily_report_end_aya"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/_5sdp"
+            android:text="أية :"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@id/tv_daily_report_end_sura"
+            app:layout_constraintTop_toTopOf="@id/tv_daily_report_end_sura" />
+
+
+        <TextView
+            android:id="@+id/tv_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/_5sdp"
+            android:text="تاريخ اليوم :"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_daily_report_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/_5sdp"
+            android:text="تاريخ اليوم :"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@id/tv_date"
+            app:layout_constraintTop_toBottomOf="@id/tv_date" />
+
+        <TextView
+            android:id="@+id/tv_evaluation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/_5sdp"
+            android:text="تقييم الحفظ :"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@id/tv_daily_report_date"
+            app:layout_constraintTop_toBottomOf="@id/tv_daily_report_date" />
+
+        <TextView
+            android:id="@+id/tv_daily_report_evaluation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/_5sdp"
+            android:text="تقييم الحفظ :"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@id/tv_evaluation"
+            app:layout_constraintTop_toBottomOf="@id/tv_evaluation" />
+
+        <TextView
+            android:id="@+id/tv_start_hefaz"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/_5sdp"
+            android:text="بداية الحفظ :"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@id/tv_daily_report_evaluation"
+            app:layout_constraintTop_toBottomOf="@id/tv_daily_report_evaluation" />
+
+        <TextView
+            android:id="@+id/tv_start_sura"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/_5sdp"
+            android:text="سورة :"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@id/tv_start_hefaz"
+            app:layout_constraintTop_toBottomOf="@id/tv_start_hefaz" />
+
+        <TextView
+            android:id="@+id/tv_daily_report_start_sura"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/_5sdp"
+            android:text="سورة :"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@id/tv_start_sura"
+            app:layout_constraintTop_toBottomOf="@id/tv_start_sura" />
+
+        <TextView
+            android:id="@+id/tv_start_aya"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/_5sdp"
+            android:text="أية :"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@id/tv_start_sura"
+            app:layout_constraintTop_toTopOf="@id/tv_start_sura" />
+
+        <TextView
+            android:id="@+id/tv_daily_report_start_aya"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/_5sdp"
+            android:text="أية :"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@id/tv_daily_report_start_sura"
+            app:layout_constraintTop_toTopOf="@id/tv_daily_report_start_sura" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

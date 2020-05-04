@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/otp_image"
+        android:layout_width="@dimen/_250sdp"
+        android:layout_height="@dimen/_150sdp"
+        android:layout_marginTop="64dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/otp_screen_image" />
+
+
+    <TextView
+        android:id="@+id/tv_notify_verify"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/_5sdp"
+        android:fontFamily="@font/open_sans_bold"
+        android:text="@string/Verify_Enter_OTP"
+        android:textAlignment="center"
+        android:textColor="@color/colorPrimary"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/pinView"
+        app:layout_constraintEnd_toEndOf="@id/pinView"
+        app:layout_constraintStart_toStartOf="@id/pinView"
+        app:layout_constraintTop_toBottomOf="@+id/otp_image" />
+
+    <com.chaos.view.PinView
+        android:id="@+id/pinView"
+        style="@style/PinWidget.PinView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_8sdp"
+        android:layout_marginTop="@dimen/_50sdp"
+        android:layout_marginEnd="@dimen/_8sdp"
+        android:inputType="number"
+        android:padding="@dimen/_15sdp"
+        android:textSize="18sp"
+        app:itemCount="6"
+        app:itemHeight="@dimen/_48sdp"
+        app:itemRadius="@dimen/_10sdp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:lineColor="@android:color/darker_gray"
+        app:viewType="rectangle" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/_80sdp"
+        android:text="Didn't get the OTP? RESEND OTP."
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/pinView"
+        app:layout_constraintHorizontal_bias="0.473"
+        app:layout_constraintStart_toStartOf="@+id/pinView"
+        app:layout_constraintTop_toBottomOf="@+id/pinView" />
+
+
+    <Button
+        android:id="@+id/btn_verify_code"
+        android:layout_width="@dimen/_250sdp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_8sdp"
+        android:layout_marginEnd="@dimen/_8sdp"
+        android:layout_marginBottom="@dimen/_70sdp"
+        android:background="@drawable/btn_verify_code_phone"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:text="@string/Verify_btn_verify"
+        android:textAllCaps="false"
+        android:textColor="@android:color/white"
+        android:textSize="17sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="UnusedAttribute" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

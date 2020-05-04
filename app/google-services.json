@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "520516617212",
+    "firebase_url": "https://alansarcenter-c93d5.firebaseio.com",
+    "project_id": "alansarcenter-c93d5",
+    "storage_bucket": "alansarcenter-c93d5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:520516617212:android:50aa66ae2e7d088e2ae879",
+        "android_client_info": {
+          "package_name": "com.alansar.center"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "520516617212-trutgtlpk0etptipantoqi3cek55ip24.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.alansar.center",
+            "certificate_hash": "1999de73fef0ab3f2212fbb4176072e5fb65fae5"
+          }
+        },
+        {
+          "client_id": "520516617212-40i3e0tdob1hc9hepghij8i9d0sgv9es.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAVSnXYXTO2F9V7ZGBGmbq0jURAGlZzoLw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "520516617212-40i3e0tdob1hc9hepghij8i9d0sgv9es.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
