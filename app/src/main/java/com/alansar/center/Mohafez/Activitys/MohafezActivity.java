@@ -199,7 +199,7 @@ public class MohafezActivity extends AppCompatActivity implements NavigationView
                 if (Common.currentPerson.getPermissions().size() == 1) {
                     hideItem();
                 }
-                checkUnreadDataOfExamFromDB();
+                //checkUnreadDataOfExamFromDB();
             }
         }
     }
