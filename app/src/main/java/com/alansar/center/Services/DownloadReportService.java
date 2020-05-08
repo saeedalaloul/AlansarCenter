@@ -42,7 +42,6 @@ import org.json.JSONObject;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -574,8 +573,7 @@ public class DownloadReportService extends Service {
         }
     }
 
-    private void getTotalConservationFromDB(int year) {
-        Calendar calendar = Calendar.getInstance();
+    private void getTotalConservationFromDB(int year, int month) {
         if (groupMembers != null && !groupMembers.isEmpty()) {
             for (int i = 0; i < groupMembers.size(); i++) {
                 int finalI = i;
@@ -584,27 +582,20 @@ public class DownloadReportService extends Service {
                         .whereEqualTo("idMohafez", Common.currentPerson.getId())
                         .whereEqualTo("statusAcceptance", 3)
                         .whereEqualTo("year", year)
-                        .orderBy("month", Query.Direction.ASCENDING)
-                        .orderBy("day", Query.Direction.ASCENDING)
-                        .limitToLast(1)
+                        .whereEqualTo("month", month)
+                        .orderBy("day", Query.Direction.DESCENDING)
+                        .limit(1)
                         .get().addOnSuccessListener(queryDocumentSnapshots -> {
-                    if (!queryDocumentSnapshots.isEmpty()) {
+                    if (queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
                         double result = calcMarksExam(Objects.requireNonNull(queryDocumentSnapshots.getDocuments()
                                 .get(0).toObject(Exam.class)).getMarksExamQuestions());
                         String examPart = Objects.requireNonNull(queryDocumentSnapshots.getDocuments().get(0).toObject(Exam.class)).getExamPart();
                         if (result >= 80.00) {
-                            if (queryDocumentSnapshots.getDocuments().get(0).get("month", Integer.TYPE) ==
-                                    calendar.get(Calendar.MONTH) + 1
-                                    && queryDocumentSnapshots.getDocuments().get(0).get("year", Integer.TYPE) ==
-                                    calendar.get(Calendar.YEAR)) {
-                                int start = examPart.indexOf("(");
-                                int end = examPart.indexOf(")");
-                                String castExamPart = examPart.substring(start + 1, end);
-                                String note = "اجتاز الطالب اختبار جزء" + castExamPart + "بمعدل" + result;
-                                NotesAndExams.put(groupMembers.get(finalI), note);
-                            } else {
-                                NotesAndExams.put(groupMembers.get(finalI), "");
-                            }
+                            int start = examPart.indexOf("(");
+                            int end = examPart.indexOf(")");
+                            String castExamPart = examPart.substring(start + 1, end);
+                            String note = "اجتاز الطالب اختبار جزء" + castExamPart + "بمعدل" + result;
+                            NotesAndExams.put(groupMembers.get(finalI), note);
                             for (int j = 0; j < Values.length; j++) {
                                 if (examPart.equals(Values[j])) {
                                     int countPart = 31 - j;
@@ -629,10 +620,52 @@ public class DownloadReportService extends Service {
                             }
                         }
                     } else {
-                        NotesAndExams.put(groupMembers.get(finalI), "");
-                        StudentsTotalConservation.put(groupMembers.get(finalI), 0);
+                        db.collection("Exam")
+                                .whereEqualTo("idStudent", groupMembers.get(finalI))
+                                .whereEqualTo("idMohafez", Common.currentPerson.getId())
+                                .whereEqualTo("statusAcceptance", 3)
+                                .whereEqualTo("year", year)
+                                .whereLessThan("month", month)
+                                .orderBy("month", Query.Direction.DESCENDING)
+                                .orderBy("day", Query.Direction.DESCENDING)
+                                .limit(1)
+                                .get().addOnSuccessListener(queryDocumentSnapshots1 -> {
+                            if (queryDocumentSnapshots1 != null && !queryDocumentSnapshots1.isEmpty()) {
+                                double result = calcMarksExam(Objects.requireNonNull(queryDocumentSnapshots1.getDocuments()
+                                        .get(0).toObject(Exam.class)).getMarksExamQuestions());
+                                String examPart = Objects.requireNonNull(queryDocumentSnapshots1.getDocuments().get(0).toObject(Exam.class)).getExamPart();
+                                if (result >= 80.00) {
+                                    NotesAndExams.put(groupMembers.get(finalI), "");
+                                    for (int j = 0; j < Values.length; j++) {
+                                        if (examPart.equals(Values[j])) {
+                                            int countPart = 31 - j;
+                                            if (j == 30) {
+                                                StudentsTotalConservation.put(groupMembers.get(finalI), 1);
+                                            } else {
+                                                StudentsTotalConservation.put(groupMembers.get(finalI), countPart);
+                                            }
+                                        }
+                                    }
+                                } else if (result < 80.00) {
+                                    NotesAndExams.put(groupMembers.get(finalI), "");
+                                    for (int j = 0; j < Values.length; j++) {
+                                        if (examPart.equals(Values[j])) {
+                                            int countPart = 31 - (j + 1);
+                                            if (countPart == -1) {
+                                                StudentsTotalConservation.put(groupMembers.get(finalI), 0);
+                                            } else {
+                                                StudentsTotalConservation.put(groupMembers.get(finalI), countPart);
+                                            }
+                                        }
+                                    }
+                                }
+                            } else {
+                                NotesAndExams.put(groupMembers.get(finalI), "");
+                                StudentsTotalConservation.put(groupMembers.get(finalI), 0);
+                            }
+                        }).addOnFailureListener(e -> Log.d("sss", "listen:error" + e.getLocalizedMessage()));
                     }
-                }).addOnFailureListener(e -> Log.d("sss", "listen:error" + e.getLocalizedMessage()));
+                });
             }
         }
     }
@@ -675,7 +708,7 @@ public class DownloadReportService extends Service {
                         groupMembers = groupMembers1.getGroupMembers();
                         getNameStudentsFromDB();
                         getDateOfBirth();
-                        getTotalConservationFromDB(year);
+                        getTotalConservationFromDB(year, month);
                         getStartHefezFromDB(month, year);
                         getAbsentFromDB(month, year);
                         getEndHefezFromDB(month, year);

@@ -28,8 +28,8 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
@@ -44,6 +44,7 @@ public class ViewMonthlyReportsActivity extends AppCompatActivity {
     private Calendar calendar;
     private int year, month;
     private ListenerRegistration registration;
+    private ArrayList<Integer> monthsArrayList;
 
     public ViewMonthlyReportsActivity() {
     }
@@ -67,7 +68,7 @@ public class ViewMonthlyReportsActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        LoadData();
+        queryLastMonthFromDB();
     }
 
     @Override
@@ -78,42 +79,43 @@ public class ViewMonthlyReportsActivity extends AppCompatActivity {
         }
     }
 
-    private void LoadData() {
+    private void queryLastMonthFromDB() {
+        year = calendar.get(Calendar.YEAR);
+        int[] month = new int[12];
+        for (int i = 1; i <= monthsArrayList.size(); i++) {
+            int finalI = i;
+            db.collection("DailyReport")
+                    .whereEqualTo("year", year)
+                    .whereEqualTo("uid", UID)
+                    .whereEqualTo("month", i)
+                    .limit(1)
+                    .get().addOnSuccessListener(queryDocumentSnapshots -> {
+                if (queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
+                    month[finalI] = finalI;
+                    this.month = Arrays.stream(month).max().getAsInt();
+                    LoadData(Arrays.stream(month).max().getAsInt());
+                }
+            });
+        }
+    }
+
+    private void LoadData(int month) {
         year = calendar.get(Calendar.YEAR);
         registration = db.collection("DailyReport")
-                .whereEqualTo("year", year)
                 .whereEqualTo("uid", UID)
-                .orderBy("month", Query.Direction.DESCENDING)
-                .limit(1)
-                .addSnapshotListener(this, (queryDocumentSnapshots, e) -> {
-                    if (e != null) {
-                        Log.w("sss", "listen:error" + e.getLocalizedMessage());
+                .whereEqualTo("year", year)
+                .whereEqualTo("month", month)
+                .orderBy("day", Query.Direction.DESCENDING)
+                .addSnapshotListener((queryDocumentSnapshots1, e1) -> {
+                    if (e1 != null) {
+                        Log.w("sss", "listen:error 1" + e1.getLocalizedMessage());
                         return;
                     }
-
-                    if (queryDocumentSnapshots != null) {
-                        if (!queryDocumentSnapshots.isEmpty()) {
-                            month = Integer.parseInt(Objects.requireNonNull(queryDocumentSnapshots
-                                    .getDocuments().get(0)
-                                    .get("month")).toString());
-                            registration = db.collection("DailyReport")
-                                    .whereEqualTo("uid", UID)
-                                    .whereEqualTo("year", year)
-                                    .whereEqualTo("month", queryDocumentSnapshots.getDocuments().get(0).get("month"))
-                                    .orderBy("day", Query.Direction.DESCENDING)
-                                    .addSnapshotListener((queryDocumentSnapshots1, e1) -> {
-                                        if (e1 != null) {
-                                            Log.w("sss", "listen:error 1" + e1.getLocalizedMessage());
-                                            return;
-                                        }
-                                        if (queryDocumentSnapshots1 != null) {
-                                            dailyReports.clear();
-                                            for (DocumentChange dc : queryDocumentSnapshots1.getDocumentChanges()) {
-                                                dailyReports.add(dc.getDocument().toObject(DailyReport.class));
-                                                adapter.notifyDataSetChanged();
-                                            }
-                                        }
-                                    });
+                    if (queryDocumentSnapshots1 != null) {
+                        dailyReports.clear();
+                        for (DocumentChange dc : queryDocumentSnapshots1.getDocumentChanges()) {
+                            dailyReports.add(dc.getDocument().toObject(DailyReport.class));
+                            adapter.notifyDataSetChanged();
                         }
                     }
                 });
@@ -158,6 +160,10 @@ public class ViewMonthlyReportsActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
         dailyReports = new ArrayList<>();
+        monthsArrayList = new ArrayList<>();
+        for (int i = 1; i <= 12; i++) {
+            monthsArrayList.add(i);
+        }
         db = FirebaseFirestore.getInstance();
         adapter = new ViewMonthlyReportsAdapter(dailyReports);
         recyclerView.setAdapter(adapter);
@@ -195,7 +201,7 @@ public class ViewMonthlyReportsActivity extends AppCompatActivity {
         AtomicBoolean isFound = new AtomicBoolean(false);
         if (newText.isEmpty()) {
             dailyReports.clear();
-            LoadData();
+            LoadData(month);
             adapter.notifyDataSetChanged();
         } else {
             dailyReports.clear();

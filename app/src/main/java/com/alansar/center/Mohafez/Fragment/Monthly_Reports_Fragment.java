@@ -241,6 +241,9 @@ public class Monthly_Reports_Fragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        if (reportArrayList != null) {
+            reportArrayList.clear();
+        }
         RequestPermissions();
     }
 

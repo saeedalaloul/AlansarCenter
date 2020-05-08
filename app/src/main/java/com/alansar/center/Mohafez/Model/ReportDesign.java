@@ -22,7 +22,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class ReportDesign {
-   public static File file;
+    public static File file;
+
     public ReportDesign(String nameMohafez, XSSFWorkbook wb, int month, int year, ArrayList<MonthlyReport> reports) {
         if (reports.size() > 0) {
             String ReportName = "تقرير الحلقة عن شهر " + month;
@@ -87,10 +88,13 @@ public class ReportDesign {
             XSSFCell cellD11 = rowD.createCell(10);
             XSSFCell cellD12 = rowD.createCell(11);
 
+            String val1 = "                                        تقرير  حلقات التحفيظ عن شهر:......";
+            String val2 = month + "....... " + year + "م";
+            String val3 = "                  انتساب الحلقة :..........دار القرآن الكريم والسنة…................";
 
             cellA1.setCellValue("اسم المركز:.............بسيسو................... منطقة:.....الشجاعية.........");
             cellA6.setCellValue("                                      اسم محفظ الحلقة:..........." + nameMohafez + "................... ");
-            cellB1.setCellValue("                                        تقرير  حلقات التحفيظ عن شهر:......9....... 2018م                  انتساب الحلقة :..........دار القرآن الكريم والسنة…................");
+            cellB1.setCellValue(val1 + val2 + val3);
             cellC1.setCellValue("م");
             cellC2.setCellValue("اسم الطالب رباعي");
             cellC3.setCellValue("الصف");
@@ -338,10 +342,9 @@ public class ReportDesign {
             }
 
             try {
-                if (!folder.exists())
-                {
-                   boolean isCreated = folder.mkdirs();
-                    Log.d("sss","is Created file :"+isCreated);
+                if (!folder.exists()) {
+                    boolean isCreated = folder.mkdirs();
+                    Log.d("sss", "is Created file :" + isCreated);
                 }
                 FileOutputStream fileOut = new FileOutputStream(file);
                 wb.write(fileOut);
