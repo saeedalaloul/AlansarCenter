@@ -98,7 +98,8 @@ public class ExamsFragment extends Fragment {
                                         exams.clear();
                                         for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
                                             if (doc.exists()) {
-                                                if (!doc.getBoolean("isSeenExam.isSeenMohafez")) {
+                                                if (doc.getBoolean("isSeenExam.isSeenMohafez") != null
+                                                        && !doc.getBoolean("isSeenExam.isSeenMohafez")) {
                                                     doc.getReference().update("isSeenExam.isSeenMohafez", true);
                                                 }
                                                 Exam exam = doc.toObject(Exam.class);

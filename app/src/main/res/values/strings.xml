@@ -14,6 +14,7 @@
     <string name="stage_prompt">اختر المرحلة..</string>
     <string name="Authentication_details">Authentication details</string>
     <string name="search_hint">بحث</string>
+    <string name="place_exam">إجراء الإختبار</string>
 
     <string-array name="stage_array">
         <item>اختر المرحلة</item>
