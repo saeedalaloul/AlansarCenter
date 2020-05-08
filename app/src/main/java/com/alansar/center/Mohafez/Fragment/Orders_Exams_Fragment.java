@@ -234,7 +234,7 @@ public class Orders_Exams_Fragment extends Fragment {
         long elapsedSeconds = different / secondsInMilli;
 
         new Thread(() -> {
-            if (!Common.hasActiveInternetConnection(getContext())) {
+            if (Common.hasActiveInternetConnection(getContext())) {
                 Log.d("sss", "لا يوجد اتصال بالإنترنت ..");
             } else {
                 Log.d("sss", "متصل بالإنترنت ..");

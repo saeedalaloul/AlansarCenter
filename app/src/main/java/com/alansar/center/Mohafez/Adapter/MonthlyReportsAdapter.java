@@ -43,7 +43,7 @@ public class MonthlyReportsAdapter extends RecyclerView.Adapter<MonthlyReportsVi
         holder.imgbtn_download_report.setOnClickListener(view -> {
             if (DownloadReportService.isRunning) {
                 Toast.makeText(context, "عذرا يتم تحميل التقرير الشهري في الخلفية ..", Toast.LENGTH_SHORT).show();
-            } else{
+            } else {
                 context.startService(new Intent(context, DownloadReportService.class)
                         .putExtra("month", reports.get(position).getMoth())
                         .putExtra("year", reports.get(position).getYear()));

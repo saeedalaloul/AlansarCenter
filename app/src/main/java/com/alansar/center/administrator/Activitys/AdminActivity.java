@@ -1,7 +1,6 @@
 package com.alansar.center.administrator.Activitys;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -26,7 +25,6 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.alansar.center.Activitys.LoginActivity;
 import com.alansar.center.Adapter.Multiple_accounts_Adapter;
 import com.alansar.center.Common.Common;
 import com.alansar.center.FButton;
@@ -99,7 +97,7 @@ public class AdminActivity extends AppCompatActivity implements NavigationView.O
         if (getIntent() != null && getIntent().getStringExtra("Permission") != null) {
             tv_person_Permission.setText(getIntent().getStringExtra("Permission"));
         } else {
-            SignOut();
+            Common.SignOut(mauth, AdminActivity.this, registration);
         }
 
         setSupportActionBar(toolbar);
@@ -270,7 +268,7 @@ public class AdminActivity extends AppCompatActivity implements NavigationView.O
             case R.id.admin_logout:
                 menuItem.setChecked(true);
                 menuItem.setCheckable(true);
-                SignOut();
+                Common.SignOut(mauth, AdminActivity.this, registration);
                 break;
         }
         return true;
@@ -280,7 +278,7 @@ public class AdminActivity extends AppCompatActivity implements NavigationView.O
     protected void onStart() {
         super.onStart();
         if (mCurrentUser == null) {
-            SignOut();
+            Common.SignOut(mauth, AdminActivity.this, registration);
         }
     }
 
@@ -306,7 +304,7 @@ public class AdminActivity extends AppCompatActivity implements NavigationView.O
                 if (!person.isEnableAccount()) {
                     if (!this.isFinishing()) {
                         sweetAlertDialog_.showDialogError("لقد تم تعطيل حسابك , يرجى مراجعة إدارة التطبيق !")
-                                .setConfirmButton("OK", sweetAlertDialog1 -> SignOut());
+                                .setConfirmButton("OK", sweetAlertDialog1 -> Common.SignOut(mauth, AdminActivity.this, registration));
                     }
                 }
 
@@ -334,19 +332,12 @@ public class AdminActivity extends AppCompatActivity implements NavigationView.O
                 } else if (person.getPermissions().isEmpty()) {
                     if (!this.isFinishing()) {
                         sweetAlertDialog_.showDialogError("لا يوجد لديك أي صلاحية لتسجيل الدخول إلى حسابك , راجع إدارة التطبيق")
-                                .setConfirmButton("OK", sweetAlertDialog -> SignOut());
+                                .setConfirmButton("OK", sweetAlertDialog -> Common.SignOut(mauth, AdminActivity.this, registration));
                     }
                 }
 
             }
         });
-    }
-
-    private void SignOut() {
-        Paper.book().destroy();
-        mauth.signOut();
-        startActivity(new Intent(AdminActivity.this, LoginActivity.class));
-        finish();
     }
 
     @Override
@@ -377,7 +368,7 @@ public class AdminActivity extends AppCompatActivity implements NavigationView.O
             }
         }
 
-        logout.setOnClickListener(view -> SignOut());
+        logout.setOnClickListener(view -> Common.SignOut(mauth, AdminActivity.this, registration));
 
         Multiple_accounts_Adapter adapter = new Multiple_accounts_Adapter(accountItems, this);
         mRecyclerView.setHasFixedSize(true);

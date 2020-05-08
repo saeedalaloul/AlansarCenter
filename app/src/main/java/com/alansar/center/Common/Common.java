@@ -1,18 +1,25 @@
 package com.alansar.center.Common;
 
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.text.InputType;
 import android.util.Log;
 
+import com.alansar.center.Activitys.LoginActivity;
 import com.alansar.center.Models.Person;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+
+import io.paperdb.Paper;
 
 
 public class Common {
@@ -86,14 +93,24 @@ public class Common {
                         (new URL("https://clients3.google.com/generate_204")
                                 .openConnection());
 
-                return (urlc.getResponseCode() == 204 && urlc.getContentLength() == 0);
+                return (urlc.getResponseCode() != 204 || urlc.getContentLength() != 0);
             } catch (IOException e) {
                 Log.e("sss", "Error checking internet connection", e);
             }
         } else {
             Log.d("sss", "No network available!");
         }
-        return false;
+        return true;
+    }
+
+    public static void SignOut(FirebaseAuth mauth, Activity activity, ListenerRegistration registration) {
+        Paper.book().destroy();
+        mauth.signOut();
+        activity.startActivity(new Intent(activity, LoginActivity.class));
+        if (registration != null) {
+            registration.remove();
+        }
+        activity.finish();
     }
 
 }

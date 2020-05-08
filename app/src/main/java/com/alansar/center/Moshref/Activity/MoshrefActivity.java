@@ -1,7 +1,6 @@
 package com.alansar.center.Moshref.Activity;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,7 +23,6 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.alansar.center.Activitys.LoginActivity;
 import com.alansar.center.Adapter.Multiple_accounts_Adapter;
 import com.alansar.center.Common.Common;
 import com.alansar.center.FButton;
@@ -101,7 +99,7 @@ public class MoshrefActivity extends AppCompatActivity implements NavigationView
                 typeFragment = getIntent().getStringExtra("typeFragment");
             }
         } else {
-            SignOut();
+            Common.SignOut(mauth, MoshrefActivity.this, registration);
         }
 
         setSupportActionBar(toolbar);
@@ -278,7 +276,7 @@ public class MoshrefActivity extends AppCompatActivity implements NavigationView
                 if (!person.isEnableAccount()) {
                     if (!this.isFinishing()) {
                         sweetAlertDialog_.showDialogError("لقد تم تعطيل حسابك , يرجى مراجعة إدارة التطبيق !")
-                                .setConfirmButton("OK", sweetAlertDialog1 -> SignOut());
+                                .setConfirmButton("OK", sweetAlertDialog1 -> Common.SignOut(mauth, MoshrefActivity.this, registration));
                     }
                 }
 
@@ -307,19 +305,12 @@ public class MoshrefActivity extends AppCompatActivity implements NavigationView
                 } else if (person.getPermissions().isEmpty()) {
                     if (!this.isFinishing()) {
                         sweetAlertDialog_.showDialogError("لا يوجد لديك أي صلاحية لتسجيل الدخول إلى حسابك , راجع إدارة التطبيق")
-                                .setConfirmButton("OK", sweetAlertDialog -> SignOut());
+                                .setConfirmButton("OK", sweetAlertDialog -> Common.SignOut(mauth, MoshrefActivity.this, registration));
                     }
                 }
 
             }
         });
-    }
-
-    private void SignOut() {
-        Paper.book().destroy();
-        mauth.signOut();
-        startActivity(new Intent(MoshrefActivity.this, LoginActivity.class));
-        finish();
     }
 
     private void hideItem() {
@@ -398,7 +389,7 @@ public class MoshrefActivity extends AppCompatActivity implements NavigationView
             case R.id.moshref_logout:
                 menuItem.setChecked(true);
                 menuItem.setCheckable(true);
-                SignOut();
+                Common.SignOut(mauth, MoshrefActivity.this, registration);
                 break;
         }
         return true;
@@ -429,7 +420,7 @@ public class MoshrefActivity extends AppCompatActivity implements NavigationView
             accountItem.setImage(person.getImage());
             accountItems.add(accountItem);
         }
-        logout.setOnClickListener(view -> SignOut());
+        logout.setOnClickListener(view -> Common.SignOut(mauth, MoshrefActivity.this, registration));
         Multiple_accounts_Adapter adapter = new Multiple_accounts_Adapter(accountItems, this);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));

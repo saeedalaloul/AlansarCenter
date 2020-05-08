@@ -455,7 +455,7 @@ public class Orders_Exams_Fragment extends Fragment {
         int status = Integer.parseInt(Objects.requireNonNull(doc.get("statusAcceptance")).toString());
 
         new Thread(() -> {
-            if (!Common.hasActiveInternetConnection(getContext())) {
+            if (Common.hasActiveInternetConnection(getContext())) {
                 Log.d("sss", "لا يوجد اتصال بالإنترنت ..");
             } else {
                 Log.d("sss", "متصل بالإنترنت ..");
