@@ -113,4 +113,44 @@ public class Common {
         activity.finish();
     }
 
+    public static String ConvertPermissionToNameArabic(String Permission) {
+        if (Permission != null && !Permission.isEmpty()) {
+            switch (Permission) {
+                case Common.PERMISSIONS_MOHAFEZ:
+                    return "محفظ";
+                case Common.PERMISSIONS_SUPER_VISOR:
+                    return "مشرف مرحلة";
+                case Common.PERMISSIONS_TESTER:
+                    return "مختبر";
+                case Common.PERMISSIONS_EDARE:
+                    return "إداري مرحلة";
+                case Common.PERMISSIONS_ADMIN:
+                    return "أمير المركز";
+                case Common.PERMISSIONS_SUPER_VISOR_EXAMS:
+                    return "مشرف الإختبارات";
+            }
+        }
+        return "";
+    }
+
+    public static String ConvertPermissionToNameEnglish(String Permission) {
+        if (Permission != null && !Permission.isEmpty()) {
+            switch (Permission) {
+                case "محفظ":
+                    return Common.PERMISSIONS_MOHAFEZ;
+                case "مشرف مرحلة":
+                    return Common.PERMISSIONS_SUPER_VISOR;
+                case "مختبر":
+                    return Common.PERMISSIONS_TESTER;
+                case "إداري مرحلة":
+                    return Common.PERMISSIONS_EDARE;
+                case "أمير المركز":
+                    return Common.PERMISSIONS_ADMIN;
+                case "مشرف الإختبارات":
+                    return Common.PERMISSIONS_SUPER_VISOR_EXAMS;
+            }
+        }
+        return "";
+    }
+
 }

@@ -93,7 +93,7 @@ public class SuperVisorExamsActivity extends AppCompatActivity implements Naviga
         img_profile = view.findViewById(R.id.img_person_profile);
 
         if (getIntent() != null && getIntent().getStringExtra("Permission") != null) {
-            tv_person_Permission.setText(getIntent().getStringExtra("Permission"));
+            tv_person_Permission.setText(Common.ConvertPermissionToNameArabic(getIntent().getStringExtra("Permission")));
             Common.currentPermission = getIntent().getStringExtra("Permission");
             if (getIntent().getStringExtra("typeFragment") != null) {
                 typeFragment = getIntent().getStringExtra("typeFragment");

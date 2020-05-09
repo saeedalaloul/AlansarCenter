@@ -95,7 +95,7 @@ public class AdminActivity extends AppCompatActivity implements NavigationView.O
         img_profile.setOnClickListener(view12 -> Toast.makeText(this, "this", Toast.LENGTH_SHORT).show());
 
         if (getIntent() != null && getIntent().getStringExtra("Permission") != null) {
-            tv_person_Permission.setText(getIntent().getStringExtra("Permission"));
+            tv_person_Permission.setText(Common.ConvertPermissionToNameArabic(getIntent().getStringExtra("Permission")));
         } else {
             Common.SignOut(mauth, AdminActivity.this, registration);
         }

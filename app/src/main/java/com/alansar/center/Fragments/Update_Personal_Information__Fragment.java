@@ -454,11 +454,16 @@ public class Update_Personal_Information__Fragment extends Fragment {
         builder.setTitle("اختيار بعض الصلاحيات");
 
 // Add a checkbox list
-        String[] PERMISSIONS = {Common.PERMISSIONS_ADMIN, Common.PERMISSIONS_MOHAFEZ, Common.PERMISSIONS_SUPER_VISOR, Common.PERMISSIONS_SUPER_VISOR_EXAMS, Common.PERMISSIONS_TESTER, Common.PERMISSIONS_EDARE};
+        String[] PERMISSIONS = {Common.ConvertPermissionToNameArabic(Common.PERMISSIONS_ADMIN),
+                Common.ConvertPermissionToNameArabic(Common.PERMISSIONS_MOHAFEZ),
+                Common.ConvertPermissionToNameArabic(Common.PERMISSIONS_SUPER_VISOR),
+                Common.ConvertPermissionToNameArabic(Common.PERMISSIONS_SUPER_VISOR_EXAMS),
+                Common.ConvertPermissionToNameArabic(Common.PERMISSIONS_TESTER),
+                Common.ConvertPermissionToNameArabic(Common.PERMISSIONS_EDARE)};
         boolean[] checkedItems = {false, false, false, false, false, false};
 
         for (int i = 0; i < PERMISSIONS.length; i++) {
-            if (ListPermissions.contains(PERMISSIONS[i])) {
+            if (ListPermissions.contains(Common.ConvertPermissionToNameEnglish(PERMISSIONS[i]))) {
                 checkedItems[i] = true;
             }
         }
@@ -466,10 +471,10 @@ public class Update_Personal_Information__Fragment extends Fragment {
             // The user checked or unchecked a box
             if (isChecked) {
                 // If the user checked the item, add it to the selected items
-                ListPermissions.add(PERMISSIONS[which]);
+                ListPermissions.add(Common.ConvertPermissionToNameEnglish(PERMISSIONS[which]));
             } else {
                 // Else, if the item is already in the array, remove it
-                ListPermissions.remove(PERMISSIONS[which]);
+                ListPermissions.remove(Common.ConvertPermissionToNameEnglish(PERMISSIONS[which]));
             }
 
         });

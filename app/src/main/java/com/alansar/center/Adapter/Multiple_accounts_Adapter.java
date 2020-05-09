@@ -51,8 +51,8 @@ public class Multiple_accounts_Adapter extends RecyclerView.Adapter<Multiple_acc
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         AccountItem accountItem = accountItems.get(position);
         holder.tv_name.setText(accountItem.getName());
-        holder.tv_Permission.setText(accountItem.getPermission());
-        if (accountItem.getImage().isEmpty()) {
+        holder.tv_Permission.setText(Common.ConvertPermissionToNameArabic(accountItem.getPermission()));
+        if (accountItem.getImage() != null && accountItem.getImage().isEmpty()) {
             holder.img_profile.setImageResource(R.drawable.profile_image);
         } else {
             Picasso.get().load(accountItem.getImage()).into(holder.img_profile);
