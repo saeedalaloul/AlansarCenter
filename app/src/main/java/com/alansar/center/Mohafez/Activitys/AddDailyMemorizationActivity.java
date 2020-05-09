@@ -330,16 +330,30 @@ public class AddDailyMemorizationActivity extends AppCompatActivity {
                 evaluation_student_mourahae != null &&
                 !evaluation_student_mourahae.isEmpty() &&
                 !Objects.requireNonNull(edt_Date.getText()).toString().isEmpty()) {
-            if (Integer.parseInt(edt_aya_start_Murajaea.getText().toString()) <= arrayOfAyaNumber[spinner_aya_start.getSelectedItemPosition()]
-                    && Integer.parseInt(edt_aya_end_Murajaea.getText().toString()) <= arrayOfAyaNumber[spinner_aya_end.getSelectedItemPosition()]) {
-                if (Integer.parseInt(edt_aya_start_Murajaea.getText().toString()) >=
-                        Integer.parseInt(edt_aya_end_Murajaea.getText().toString())) {
-                    sweetAlertDialog.showDialogError("يجب أن يكون رقم أية البداية أقل من رقم أية النهاية");
+            if (sp_surah_start_Murajaea.getSelectedItem().toString()
+                    .equals(sp_surah_end_Murajaea.getSelectedItem().toString())) {
+                if (Integer.parseInt(edt_aya_start_Murajaea.getText().toString()) <= arrayOfAyaNumber[sp_surah_start_Murajaea.getSelectedItemPosition()]
+                        && Integer.parseInt(edt_aya_end_Murajaea.getText().toString()) <= arrayOfAyaNumber[sp_surah_end_Murajaea.getSelectedItemPosition()]) {
+                    if (Integer.parseInt(edt_aya_start_Murajaea.getText().toString()) >=
+                            Integer.parseInt(edt_aya_end_Murajaea.getText().toString())) {
+                        sweetAlertDialog.showDialogError("يجب أن يكون رقم أية البداية أقل من رقم أية النهاية");
+                    } else {
+                        addDataMoragea();
+                    }
                 } else {
-                    addDataMoragea();
+                    sweetAlertDialog.showDialogError("عذرا عدد أيات سورة " + sp_surah_end_Murajaea.getSelectedItem().toString() + " " + arrayOfAyaNumber[sp_surah_end_Murajaea.getSelectedItemPosition()]);
                 }
             } else {
-                sweetAlertDialog.showDialogError("عذرا عدد أيات سورة " + spinner_aya_end.getSelectedItem().toString() + " " + arrayOfAyaNumber[spinner_aya_end.getSelectedItemPosition()]);
+                if (Integer.parseInt(edt_aya_start_Murajaea.getText().toString()) <= arrayOfAyaNumber[sp_surah_start_Murajaea.getSelectedItemPosition()]) {
+                    if (Integer.parseInt(edt_aya_end_Murajaea.getText().toString()) <= arrayOfAyaNumber[sp_surah_end_Murajaea.getSelectedItemPosition()]) {
+                        addDataMoragea();
+                    } else {
+                        sweetAlertDialog.showDialogError("عذرا عدد أيات سورة " + sp_surah_end_Murajaea.getSelectedItem().toString() + " " + arrayOfAyaNumber[sp_surah_end_Murajaea.getSelectedItemPosition()]);
+                    }
+                } else {
+                    sweetAlertDialog.showDialogError("عذرا عدد أيات سورة " + sp_surah_start_Murajaea.getSelectedItem().toString() + " " + arrayOfAyaNumber[sp_surah_start_Murajaea.getSelectedItemPosition()]);
+                }
+
             }
         } else {
             if (sp_surah_start_Murajaea.getSelectedItemPosition() == 0) {
@@ -366,16 +380,30 @@ public class AddDailyMemorizationActivity extends AppCompatActivity {
                 evaluation_student_hefez != null &&
                 !evaluation_student_hefez.isEmpty() &&
                 !Objects.requireNonNull(edt_Date.getText()).toString().isEmpty()) {
-            if (Integer.parseInt(ed_aya_start.getText().toString()) <= arrayOfAyaNumber[spinner_aya_start.getSelectedItemPosition()]
-                    && Integer.parseInt(ed_aya_end.getText().toString()) <= arrayOfAyaNumber[spinner_aya_end.getSelectedItemPosition()]) {
-                if (Integer.parseInt(ed_aya_start.getText().toString()) >=
-                        Integer.parseInt(ed_aya_end.getText().toString())) {
-                    sweetAlertDialog.showDialogError("يجب أن يكون رقم أية البداية أقل من رقم أية النهاية");
+            if (spinner_aya_start.getSelectedItem().toString()
+                    .equals(spinner_aya_end.getSelectedItem().toString())) {
+                if (Integer.parseInt(ed_aya_start.getText().toString()) <= arrayOfAyaNumber[spinner_aya_start.getSelectedItemPosition()]
+                        && Integer.parseInt(ed_aya_end.getText().toString()) <= arrayOfAyaNumber[spinner_aya_end.getSelectedItemPosition()]) {
+                    if (Integer.parseInt(ed_aya_start.getText().toString()) >=
+                            Integer.parseInt(ed_aya_end.getText().toString())) {
+                        sweetAlertDialog.showDialogError("يجب أن يكون رقم أية البداية أقل من رقم أية النهاية");
+                    } else {
+                        addDataHefez();
+                    }
                 } else {
-                    addDataHefez();
+                    sweetAlertDialog.showDialogError("عذرا عدد أيات سورة " + spinner_aya_start.getSelectedItem().toString() + " " + arrayOfAyaNumber[spinner_aya_start.getSelectedItemPosition()]);
                 }
             } else {
-                sweetAlertDialog.showDialogError("عذرا عدد أيات سورة " + spinner_aya_end.getSelectedItem().toString() + " " + arrayOfAyaNumber[spinner_aya_end.getSelectedItemPosition()]);
+                if (Integer.parseInt(ed_aya_start.getText().toString()) <= arrayOfAyaNumber[spinner_aya_start.getSelectedItemPosition()]) {
+                    if (Integer.parseInt(ed_aya_end.getText().toString()) <= arrayOfAyaNumber[spinner_aya_end.getSelectedItemPosition()]) {
+                        addDataHefez();
+                    } else {
+                        sweetAlertDialog.showDialogError("عذرا عدد أيات سورة " + spinner_aya_end.getSelectedItem().toString() + " " + arrayOfAyaNumber[spinner_aya_end.getSelectedItemPosition()]);
+                    }
+                } else {
+                    sweetAlertDialog.showDialogError("عذرا عدد أيات سورة " + spinner_aya_start.getSelectedItem().toString() + " " + arrayOfAyaNumber[spinner_aya_start.getSelectedItemPosition()]);
+                }
+
             }
         } else {
             if (spinner_aya_start.getSelectedItemPosition() == 0) {

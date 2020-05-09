@@ -49,6 +49,7 @@ public class UpdateDailyMemorizationActivity extends AppCompatActivity {
     private CircleImageView img_profile;
     private String[] Values;
     private DailyReport retdailyReport;
+    private int[] arrayOfAyaNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -461,7 +462,31 @@ public class UpdateDailyMemorizationActivity extends AppCompatActivity {
                 evaluation_student_mourahae != null &&
                 !evaluation_student_mourahae.isEmpty() &&
                 !Objects.requireNonNull(edt_Date.getText()).toString().isEmpty()) {
-            updateDataMurajaea();
+            if (sp_surah_start_Murajaea.getSelectedItem().toString()
+                    .equals(sp_surah_end_Murajaea.getSelectedItem().toString())) {
+                if (Integer.parseInt(edt_aya_start_Murajaea.getText().toString()) <= arrayOfAyaNumber[sp_surah_start_Murajaea.getSelectedItemPosition()]
+                        && Integer.parseInt(edt_aya_end_Murajaea.getText().toString()) <= arrayOfAyaNumber[sp_surah_end_Murajaea.getSelectedItemPosition()]) {
+                    if (Integer.parseInt(edt_aya_start_Murajaea.getText().toString()) >=
+                            Integer.parseInt(edt_aya_end_Murajaea.getText().toString())) {
+                        sweetAlertDialog.showDialogError("يجب أن يكون رقم أية البداية أقل من رقم أية النهاية");
+                    } else {
+                        updateDataMurajaea();
+                    }
+                } else {
+                    sweetAlertDialog.showDialogError("عذرا عدد أيات سورة " + sp_surah_end_Murajaea.getSelectedItem().toString() + " " + arrayOfAyaNumber[sp_surah_end_Murajaea.getSelectedItemPosition()]);
+                }
+            } else {
+                if (Integer.parseInt(edt_aya_start_Murajaea.getText().toString()) <= arrayOfAyaNumber[sp_surah_start_Murajaea.getSelectedItemPosition()]) {
+                    if (Integer.parseInt(edt_aya_end_Murajaea.getText().toString()) <= arrayOfAyaNumber[sp_surah_end_Murajaea.getSelectedItemPosition()]) {
+                        updateDataMurajaea();
+                    } else {
+                        sweetAlertDialog.showDialogError("عذرا عدد أيات سورة " + sp_surah_end_Murajaea.getSelectedItem().toString() + " " + arrayOfAyaNumber[sp_surah_end_Murajaea.getSelectedItemPosition()]);
+                    }
+                } else {
+                    sweetAlertDialog.showDialogError("عذرا عدد أيات سورة " + sp_surah_start_Murajaea.getSelectedItem().toString() + " " + arrayOfAyaNumber[sp_surah_start_Murajaea.getSelectedItemPosition()]);
+                }
+
+            }
         } else {
             if (sp_surah_start_Murajaea.getSelectedItemPosition() == 0) {
                 sweetAlertDialog.showDialogError("يجب اختيار سورة البداية");
@@ -487,7 +512,31 @@ public class UpdateDailyMemorizationActivity extends AppCompatActivity {
                 evaluation_student_hefez != null &&
                 !evaluation_student_hefez.isEmpty() &&
                 !Objects.requireNonNull(edt_Date.getText()).toString().isEmpty()) {
-            updateDataHefez();
+            if (sp_surah_start.getSelectedItem().toString()
+                    .equals(sp_surah_end.getSelectedItem().toString())) {
+                if (Integer.parseInt(ed_aya_start.getText().toString()) <= arrayOfAyaNumber[sp_surah_start.getSelectedItemPosition()]
+                        && Integer.parseInt(ed_aya_end.getText().toString()) <= arrayOfAyaNumber[sp_surah_end.getSelectedItemPosition()]) {
+                    if (Integer.parseInt(ed_aya_start.getText().toString()) >=
+                            Integer.parseInt(ed_aya_end.getText().toString())) {
+                        sweetAlertDialog.showDialogError("يجب أن يكون رقم أية البداية أقل من رقم أية النهاية");
+                    } else {
+                        updateDataHefez();
+                    }
+                } else {
+                    sweetAlertDialog.showDialogError("عذرا عدد أيات سورة " + sp_surah_start.getSelectedItem().toString() + " " + arrayOfAyaNumber[sp_surah_start.getSelectedItemPosition()]);
+                }
+            } else {
+                if (Integer.parseInt(ed_aya_start.getText().toString()) <= arrayOfAyaNumber[sp_surah_start.getSelectedItemPosition()]) {
+                    if (Integer.parseInt(ed_aya_end.getText().toString()) <= arrayOfAyaNumber[sp_surah_end.getSelectedItemPosition()]) {
+                        updateDataHefez();
+                    } else {
+                        sweetAlertDialog.showDialogError("عذرا عدد أيات سورة " + sp_surah_end.getSelectedItem().toString() + " " + arrayOfAyaNumber[sp_surah_end.getSelectedItemPosition()]);
+                    }
+                } else {
+                    sweetAlertDialog.showDialogError("عذرا عدد أيات سورة " + sp_surah_start.getSelectedItem().toString() + " " + arrayOfAyaNumber[sp_surah_start.getSelectedItemPosition()]);
+                }
+
+            }
         } else {
             if (sp_surah_start.getSelectedItemPosition() == 0) {
                 sweetAlertDialog.showDialogError("يجب اختيار سورة البداية");
@@ -669,6 +718,7 @@ public class UpdateDailyMemorizationActivity extends AppCompatActivity {
         tv_Person_name = findViewById(R.id.tv_Person_name);
         Values = getResources().getStringArray(
                 R.array.surah_array);
+        arrayOfAyaNumber = getResources().getIntArray(R.array.ayat_array);
 
         db = FirebaseFirestore.getInstance();
         sweetAlertDialog = new SweetAlertDialog_(this);
