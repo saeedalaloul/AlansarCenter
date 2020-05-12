@@ -29,6 +29,7 @@ import com.alansar.center.Adapter.Multiple_accounts_Adapter;
 import com.alansar.center.Common.Common;
 import com.alansar.center.FButton;
 import com.alansar.center.Models.AccountItem;
+import com.alansar.center.Models.DownloadDataFromDB;
 import com.alansar.center.Models.Person;
 import com.alansar.center.Mohafez.Fragment.ExamsFragment;
 import com.alansar.center.Mohafez.Fragment.HomeFragment;
@@ -48,7 +49,9 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -335,6 +338,12 @@ public class MohafezActivity extends AppCompatActivity implements NavigationView
                 menuItem.setChecked(true);
                 menuItem.setCheckable(true);
                 break;
+            case R.id.mohafez_download_reports_db:
+                showDialogSelectColumns();
+                drawerLayout.closeDrawers();
+                menuItem.setChecked(true);
+                menuItem.setCheckable(true);
+                break;
             case R.id.mohafez_switch_account:
                 showDialogMultipleAccounts();
                 drawerLayout.closeDrawers();
@@ -358,6 +367,60 @@ public class MohafezActivity extends AppCompatActivity implements NavigationView
             super.onBackPressed();
         }
     }
+
+    private void showDialogSelectColumns() {
+        // Set up the alert builder
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("حدد الأعمدة التي تريدها أو حدد الكل");
+
+        List<String> ColumnsList = new ArrayList<>();
+
+// Add a checkbox list
+        String[] Columns = {"اسم الطالب رباعي", "الصف", "الحفظ الكلي", "المرحلة", "جوال ولي الأمر", "سنة الميلاد", "تاريخ الميلاد", "رقم هوية الطالب", "اسم المحفظ", "العمر"};
+        boolean[] checkedItems = {false, false, false, false, false, false, false, false, false, false};
+
+        builder.setMultiChoiceItems(Columns, checkedItems, (dialog, which, isChecked) -> {
+            // The user checked or unchecked a box
+            if (isChecked) {
+                // If the user checked the item, add it to the selected items
+                ColumnsList.add(Columns[which]);
+            } else {
+                // Else, if the item is already in the array, remove it
+                ColumnsList.remove(Columns[which]);
+            }
+
+        });
+
+// Add OK and Cancel buttons
+        builder.setPositiveButton("تحميل التقرير", (dialog, which) -> {
+            // The user clicked OK
+            if (!ColumnsList.isEmpty()) {
+                if (Common.currentGroupId != null && Common.currentSTAGE != null) {
+                    new DownloadDataFromDB(this, ColumnsList,
+                            FirebaseFirestore.getInstance(),
+                            Common.currentGroupId,
+                            Common.currentSTAGE);
+                }
+            } else {
+                sweetAlertDialog_.showDialogError("عذرا يجب تحديد عمود ..");
+            }
+        });
+
+        builder.setNeutralButton("حدد الكل", (dialogInterface, i) -> {
+            Arrays.fill(checkedItems, true);
+            ColumnsList.clear();
+            Collections.addAll(ColumnsList, Columns);
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        });
+
+        builder.setNegativeButton("إلغاء", null);
+
+// Create and show the alert dialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
 
     @SuppressLint("SetTextI18n")
     private void checkUnreadDataOfExamFromDB() {

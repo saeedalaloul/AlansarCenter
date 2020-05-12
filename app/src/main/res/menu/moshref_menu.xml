@@ -57,6 +57,10 @@
                     android:id="@+id/moshref_student"
                     android:icon="@drawable/ic_group"
                     android:title="الطلاب" />
+                <item
+                    android:id="@+id/moshref_stage_reports"
+                    android:icon="@drawable/ic_report"
+                    android:title="تقارير المرحلة" />
             </menu>
         </item>
     </group>

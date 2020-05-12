@@ -28,6 +28,7 @@ import com.alansar.center.Common.Common;
 import com.alansar.center.FButton;
 import com.alansar.center.Models.AccountItem;
 import com.alansar.center.Models.Person;
+import com.alansar.center.Moshref.Fragmment.CenterReportsFragment;
 import com.alansar.center.Moshref.Fragmment.ExamsFragment;
 import com.alansar.center.Moshref.Fragmment.HalakatFragment;
 import com.alansar.center.Moshref.Fragmment.HomeFragment;
@@ -375,6 +376,15 @@ public class MoshrefActivity extends AppCompatActivity implements NavigationView
                 MohafezFragment mohafez = new MohafezFragment();
                 moveFragment(mohafez);
                 toolbar.setTitle("المحفظين");
+                toolbar.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                drawerLayout.closeDrawers();
+                menuItem.setChecked(true);
+                menuItem.setCheckable(true);
+                break;
+            case R.id.moshref_stage_reports:
+                CenterReportsFragment centerReportsFragment = new CenterReportsFragment();
+                moveFragment(centerReportsFragment);
+                toolbar.setTitle("تقارير المرحلة");
                 toolbar.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                 drawerLayout.closeDrawers();
                 menuItem.setChecked(true);
