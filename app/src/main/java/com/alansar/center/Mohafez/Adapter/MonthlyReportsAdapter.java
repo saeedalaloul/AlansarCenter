@@ -11,6 +11,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.alansar.center.Common.Common;
 import com.alansar.center.Mohafez.Model.Report;
 import com.alansar.center.Mohafez.ViewHolder.MonthlyReportsViewHolder;
 import com.alansar.center.R;
@@ -41,12 +42,19 @@ public class MonthlyReportsAdapter extends RecyclerView.Adapter<MonthlyReportsVi
         holder.tv_month_report.setText("" + reports.get(position).getMoth());
         holder.tv_year_report.setText("" + reports.get(position).getYear());
         holder.imgbtn_download_report.setOnClickListener(view -> {
-            if (DownloadReportService.isRunning) {
-                Toast.makeText(context, "عذرا يتم تحميل التقرير الشهري في الخلفية ..", Toast.LENGTH_SHORT).show();
-            } else {
-                context.startService(new Intent(context, DownloadReportService.class)
-                        .putExtra("month", reports.get(position).getMoth())
-                        .putExtra("year", reports.get(position).getYear()));
+            if (Common.currentGroupId != null && !Common.currentGroupId.isEmpty()) {
+                if (DownloadReportService.isRunning) {
+                    Toast.makeText(context, "عذرا يتم تحميل التقرير الشهري في الخلفية ..", Toast.LENGTH_SHORT).show();
+                } else {
+                    String NameMohafez = Common.currentPerson.getFname()
+                            + " " + Common.currentPerson.getMname()
+                            + " " + Common.currentPerson.getLname();
+                    context.startService(new Intent(context, DownloadReportService.class)
+                            .putExtra("month", reports.get(position).getMoth())
+                            .putExtra("year", reports.get(position).getYear())
+                            .putExtra("groupId", Common.currentGroupId)
+                            .putExtra("mohafezName", NameMohafez));
+                }
             }
         });
         holder.setItemClickListener((view, position1, isLongClick) -> {

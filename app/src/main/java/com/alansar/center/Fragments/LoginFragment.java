@@ -21,7 +21,6 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.alansar.center.Activitys.LoginActivity;
 import com.alansar.center.Adapter.Multiple_accounts_Adapter;
 import com.alansar.center.Common.Common;
 import com.alansar.center.Edare.Activitys.EdareActivity;
@@ -39,6 +38,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.ListenerRegistration;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -50,15 +50,16 @@ import io.paperdb.Paper;
  * A simple {@link Fragment} subclass.
  */
 public class LoginFragment extends Fragment {
-    static PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks;
+    public static PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks;
     private EditText mEdPhoneOTP;
     private Button mBtnLogin;
     private FirebaseAuth mAuth;
     private TextView mtvNotifyLogin;
     private FirebaseFirestore db;
-    private String PhoneBumber;
+    private String PhoneNumber;
     private ArrayList<AccountItem> accountItems;
     private SweetAlertDialog_ sweetAlertDialog_;
+    private ListenerRegistration registration;
 
 
     public LoginFragment() {
@@ -81,7 +82,7 @@ public class LoginFragment extends Fragment {
                 mtvNotifyLogin.setText("يجب أن لا يقل عدد أرقام الهاتف عن  سبعة أرقام !");
                 mtvNotifyLogin.setTextColor(Color.RED);
             } else {
-                VerifyPhoneofDatabase(phoneNumber);
+                VerifyPhoneOfDatabase(phoneNumber);
             }
         });
 
@@ -103,26 +104,27 @@ public class LoginFragment extends Fragment {
             public void onCodeSent(@NonNull String verificationId,
                                    @NonNull PhoneAuthProvider.ForceResendingToken token) {
                 // Save verification ID and resending token so we can use them later
-                VerifyCodePhoneFragment newFragment = new VerifyCodePhoneFragment();
-                Bundle bundle = new Bundle();
-                bundle.putString("AuthCredentials", verificationId);
-                bundle.putString("PhoneNumber", PhoneBumber);
-                newFragment.setArguments(bundle);
-                FragmentTransaction transaction = Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.frame_login_layout, newFragment);
-                transaction.addToBackStack(null);
-                transaction.commit();
-
+                if (getActivity() != null) {
+                    VerifyCodePhoneFragment newFragment = new VerifyCodePhoneFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("AuthCredentials", verificationId);
+                    bundle.putString("PhoneNumber", PhoneNumber);
+                    newFragment.setArguments(bundle);
+                    FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                    transaction.replace(R.id.frame_login_layout, newFragment);
+                    transaction.addToBackStack(null);
+                    transaction.commit();
+                }
             }
         };
         return view1;
     }
 
-    private void VerifyPhoneofDatabase(String phoneNumber) {
+    private void VerifyPhoneOfDatabase(String phoneNumber) {
         sweetAlertDialog_.showdialogProgress();
         String fullPhoneNumber = "059" + phoneNumber;
-        PhoneBumber = fullPhoneNumber;
-        db.collection("Person")
+        PhoneNumber = fullPhoneNumber;
+        registration = db.collection("Person")
                 .whereEqualTo("phone", fullPhoneNumber)
                 .addSnapshotListener((queryDocumentSnapshots, e) -> {
                     if (e != null) {
@@ -172,21 +174,31 @@ public class LoginFragment extends Fragment {
                 });
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (registration != null) {
+            registration.remove();
+        }
+    }
+
     private void VerifyPhone(String phoneNumber) {
-        String fullPhoneNumber = "+972" + phoneNumber.substring(1, 10);
-        Log.d("sss", fullPhoneNumber);
-        sweetAlertDialog_.cancelDialog();
-        PhoneAuthProvider.getInstance().verifyPhoneNumber(
-                fullPhoneNumber,        // Phone number to verify
-                60,                 // Timeout duration
-                TimeUnit.SECONDS,   // Unit of timeout
-                Objects.requireNonNull(getActivity()),               // Activity (for callback binding)
-                mCallbacks);        // OnVerificationStateChangedCallbacks
+        if (getActivity() != null) {
+            String fullPhoneNumber = "+972" + phoneNumber.substring(1, 10);
+            Log.d("sss", fullPhoneNumber);
+            sweetAlertDialog_.cancelDialog();
+            PhoneAuthProvider.getInstance().verifyPhoneNumber(
+                    fullPhoneNumber,        // Phone number to verify
+                    60,                 // Timeout duration
+                    TimeUnit.SECONDS,   // Unit of timeout
+                    getActivity(),               // Activity (for callback binding)
+                    mCallbacks);        // OnVerificationStateChangedCallbacks
+        }
     }
 
     private void VerifyPhoneofDatabase() {
         db.collection("Person")
-                .whereEqualTo("phone", PhoneBumber)
+                .whereEqualTo("phone", PhoneNumber)
                 .get().addOnSuccessListener(queryDocumentSnapshots -> {
             if (!queryDocumentSnapshots.isEmpty()) {
                 Person person = queryDocumentSnapshots.toObjects(Person.class).get(0);
@@ -204,8 +216,10 @@ public class LoginFragment extends Fragment {
                         }
                     });
                 } else {
-                    sweetAlertDialog_.showDialogError("لا يوجد لديك أي صلاحية لتسجيل الدخول إلى حسابك , راجع إدارة التطبيق")
-                            .setConfirmButton("OK", sweetAlertDialog -> SignOut());
+                    if (getActivity() != null) {
+                        sweetAlertDialog_.showDialogError("لا يوجد لديك أي صلاحية لتسجيل الدخول إلى حسابك , راجع إدارة التطبيق")
+                                .setConfirmButton("OK", sweetAlertDialog -> Common.SignOut(mAuth, getActivity(), registration));
+                    }
                 }
             } else {
                 sweetAlertDialog_.cancelDialog();
@@ -231,9 +245,9 @@ public class LoginFragment extends Fragment {
             accountItem.setImage(person.getImage());
             accountItems.add(accountItem);
         }
-
-        logout.setOnClickListener(view -> SignOut());
-
+        if (getActivity() != null) {
+            logout.setOnClickListener(view -> Common.SignOut(mAuth, getActivity(), registration));
+        }
         Multiple_accounts_Adapter adapter = new Multiple_accounts_Adapter(accountItems, getActivity());
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -244,14 +258,6 @@ public class LoginFragment extends Fragment {
         builder.setCancelable(false);
         builder.show();
 
-
-    }
-
-    private void SignOut() {
-        Paper.book().destroy();
-        mAuth.signOut();
-        startActivity(new Intent(getContext(), LoginActivity.class));
-        Objects.requireNonNull(getActivity()).finish();
     }
 
     private void SendUserToMainActivity(String permission) {

@@ -52,14 +52,14 @@
                     android:layout_marginTop="@dimen/_10sdp"
                     android:weightSum="4">
 
-                    <Spinner
+                    <com.toptoche.searchablespinnerlibrary.SearchableSpinner
                         android:id="@+id/sp_center_reports_mohafzeen"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:padding="@dimen/_3sdp"
                         android:textColor="@android:color/black"
-                        android:textSize="16sp"
+                        android:textSize="12sp"
                         android:textStyle="bold" />
 
                     <Spinner
@@ -69,7 +69,7 @@
                         android:layout_weight="1"
                         android:padding="@dimen/_3sdp"
                         android:textColor="@android:color/black"
-                        android:textSize="16sp"
+                        android:textSize="12sp"
                         android:textStyle="bold" />
 
                     <Spinner
@@ -79,7 +79,7 @@
                         android:layout_weight="1"
                         android:padding="@dimen/_3sdp"
                         android:textColor="@android:color/black"
-                        android:textSize="16sp"
+                        android:textSize="12sp"
                         android:textStyle="bold" />
 
                     <ImageButton
@@ -150,6 +150,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:padding="@dimen/_3sdp"
+                        android:entries="@array/stage_array"
                         android:textColor="@android:color/black"
                         android:textSize="16sp"
                         android:textStyle="bold" />

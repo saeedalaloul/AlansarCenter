@@ -147,29 +147,33 @@ public class Update_Personal_Information__Fragment extends Fragment {
 
 
     private void getHalakasfromDatebase() {
-        db.collection("Group")
-                .whereEqualTo("stage", Common.currentSTAGE)
-                .get().addOnSuccessListener(queryDocumentSnapshots -> {
-            groups.clear();
-            groups_Names.clear();
-            groups.add(new Group("اختر الحلقة", "", "", ""));
-            groups_Names.add("اختر الحلقة");
-            for (int i = 0; i < queryDocumentSnapshots.size(); i++) {
-                groups_Names.add(queryDocumentSnapshots.toObjects(Group.class).get(i).getName());
-            }
+        if (getActivity() != null) {
+            db.collection("Group")
+                    .whereEqualTo("stage", Common.currentSTAGE)
+                    .get().addOnSuccessListener(queryDocumentSnapshots -> {
+                if (queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
+                    groups.clear();
+                    groups_Names.clear();
+                    groups.add(new Group("اختر الحلقة", "", "", ""));
+                    groups_Names.add("اختر الحلقة");
+                    for (int i = 0; i < queryDocumentSnapshots.size(); i++) {
+                        groups_Names.add(queryDocumentSnapshots.toObjects(Group.class).get(i).getName());
+                    }
 
-            for (int i = 0; i < queryDocumentSnapshots.size(); i++) {
-                groups.add(queryDocumentSnapshots.toObjects(Group.class).get(i));
-                adapter = new ArrayAdapter<>(Objects.requireNonNull(getActivity()),
-                        android.R.layout.simple_spinner_item, groups);
-                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                sp_group.setAdapter(adapter);
-                if (queryDocumentSnapshots.getDocuments().get(i).getId().equals(retGroupId)) {
-                    retGroupName = Objects.requireNonNull(queryDocumentSnapshots.getDocuments().get(i).get("name")).toString();
+                    for (int i = 0; i < queryDocumentSnapshots.size(); i++) {
+                        groups.add(queryDocumentSnapshots.toObjects(Group.class).get(i));
+                        if (queryDocumentSnapshots.getDocuments().get(i).getId().equals(retGroupId)) {
+                            retGroupName = queryDocumentSnapshots.getDocuments().get(i).getString("name");
+                        }
+                    }
+                    adapter = new ArrayAdapter<>(getActivity(),
+                            android.R.layout.simple_spinner_item, groups);
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    sp_group.setAdapter(adapter);
+                    sp_group.setSelection(groups_Names.indexOf(retGroupName));
                 }
-                sp_group.setSelection(groups_Names.indexOf(retGroupName));
-            }
-        });
+            });
+        }
     }
 
     private void updatepermissions(ArrayList<String> listPermissions) {
@@ -195,32 +199,27 @@ public class Update_Personal_Information__Fragment extends Fragment {
             if (listPermissions.get(i).equals(Common.PERMISSIONS_EDARE)) {
                 if (!map.isEmpty()) {
                     db.collection("Edare").document(UID).update(map);
-                    Log.d("sss", "update Edare");
                 }
             }
 
             if (listPermissions.get(i).equals(Common.PERMISSIONS_SUPER_VISOR)) {
                 if (!map.isEmpty()) {
                     db.collection("Moshref").document(UID).update(map);
-                    Log.d("sss", "update Moshref");
                 }
             }
             if (listPermissions.get(i).equals(Common.PERMISSIONS_MOHAFEZ)) {
                 if (!map.isEmpty()) {
                     db.collection("Mohafez").document(UID).update(map);
-                    Log.d("sss", "update Mohafez");
                 }
             }
             if (listPermissions.get(i).equals(Common.PERMISSIONS_STUDENTN)) {
                 if (!map.isEmpty()) {
                     db.collection("Student").document(UID).update(map);
-                    Log.d("sss", "update Student");
                 }
             }
             if (listPermissions.get(i).equals(Common.PERMISSIONS_SUPER_VISOR_EXAMS)) {
                 if (!map.isEmpty()) {
                     db.collection("SuperVisorExams").document(UID).update(map);
-                    Log.d("sss", "update SuperVisorExams");
                 }
             }
         }

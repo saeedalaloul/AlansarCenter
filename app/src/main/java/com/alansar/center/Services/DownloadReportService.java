@@ -25,7 +25,7 @@ import com.alansar.center.Common.Common;
 import com.alansar.center.Models.GroupMembers;
 import com.alansar.center.Mohafez.Model.CalcStudentClass;
 import com.alansar.center.Mohafez.Model.MonthlyReport;
-import com.alansar.center.Mohafez.Model.ReportDesign;
+import com.alansar.center.Mohafez.Model.ReportDesignMonthly;
 import com.alansar.center.R;
 import com.alansar.center.supervisor_exams.Model.Exam;
 import com.android.volley.Request;
@@ -95,11 +95,11 @@ public class DownloadReportService extends Service {
                 startForeground(1, notification.build());
             } else {
                 Uri uri;
-                if (ReportDesign.file != null) {
+                if (ReportDesignMonthly.file != null) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        uri = FileProvider.getUriForFile(this, this.getApplicationContext().getPackageName() + ".provider", ReportDesign.file);
+                        uri = FileProvider.getUriForFile(this, this.getApplicationContext().getPackageName() + ".provider", ReportDesignMonthly.file);
                     } else {
-                        uri = Uri.fromFile(ReportDesign.file);
+                        uri = Uri.fromFile(ReportDesignMonthly.file);
                     }
                     Intent intent = new Intent(Intent.ACTION_VIEW);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -107,27 +107,22 @@ public class DownloadReportService extends Service {
                     intent.setDataAndType(uri, "application/vnd.ms-excel");
                     PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
                     notification.setContentIntent(pendingIntent);
-                    getNotificationManager().notify(10, notification.build());
+                    Common.getNotificationManager(notificationManager,this).notify(10, notification.build());
                 }
             }
         }
-    }
-
-    public NotificationManager getNotificationManager() {
-        if (notificationManager == null) {
-            notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        }
-        return notificationManager;
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent != null) {
             if (intent.hasExtra("month")
-                    && intent.hasExtra("year")) {
+                    && intent.hasExtra("year")
+                    && intent.hasExtra("groupId")
+                    && intent.hasExtra("mohafezName")) {
                 month = intent.getIntExtra("month", 0);
                 year = intent.getIntExtra("year", 0);
-                getIdsOfStudentsFromDB(year, month);
+                getIdsOfStudentsFromDB(year, month,intent.getStringExtra("groupId"));
                 if (requestQueue != null) {
                     final int[] i = {0};
                     i[0] = 1;
@@ -196,11 +191,9 @@ public class DownloadReportService extends Service {
                                 if (reports.size() > 0 && reports.size() == size) {
                                     if (Common.currentPerson != null) {
                                         createNotification("تجهيز التقرير الشهري", "جاري الإنتهاء من إعداد التقري الشهري ...", 0);
-                                        String NameMohafez = Common.currentPerson.getFname()
-                                                + " " + Common.currentPerson.getMname()
-                                                + " " + Common.currentPerson.getLname();
+
                                         if (month != 0 && year != 0) {
-                                            new ReportDesign("" + NameMohafez, new XSSFWorkbook(), month, year, reports);
+                                            new ReportDesignMonthly("" + intent.getStringExtra("mohafezName"), new XSSFWorkbook(), month, year, reports);
                                             reports.clear();
                                             stopSelf();
                                         }
@@ -696,11 +689,11 @@ public class DownloadReportService extends Service {
         return bd.doubleValue();
     }
 
-    public void getIdsOfStudentsFromDB(int year, int month) {
+    public void getIdsOfStudentsFromDB(int year, int month, String groupId) {
         if (Common.currentPerson != null && !Common.currentPerson.getId().isEmpty()
-                && Common.currentGroupId != null) {
+                && groupId != null && !groupId.isEmpty()) {
             db.collection("GroupMembers")
-                    .document(Common.currentGroupId)
+                    .document(groupId)
                     .get().addOnSuccessListener(documentSnapshot1 -> {
                 if (documentSnapshot1.exists()) {
                     GroupMembers groupMembers1 = documentSnapshot1.toObject(GroupMembers.class);

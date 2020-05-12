@@ -35,6 +35,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.ListenerRegistration;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -53,6 +54,7 @@ public class VerifyCodePhoneFragment extends Fragment {
     private FirebaseFirestore db;
     private ArrayList<AccountItem> accountItems;
     private SweetAlertDialog_ sweetAlertDialog_;
+
 
 
     public VerifyCodePhoneFragment() {
@@ -98,35 +100,39 @@ public class VerifyCodePhoneFragment extends Fragment {
 
 
     private void VerifyPhoneofDatabase() {
-        db.collection("Person").whereEqualTo("phone", PhoneNumber).get().addOnSuccessListener(queryDocumentSnapshots -> {
-            if (!queryDocumentSnapshots.isEmpty()) {
-                Person person = queryDocumentSnapshots.toObjects(Person.class).get(0);
-                if (!person.getPermissions().isEmpty()) {
-                    Common.currentPerson = person;
-                    Paper.book().write(Common.ISLOGIN, true);
-                    Paper.book().write(Common.PERSON, person);
-                    sweetAlertDialog_.cancelDialog();
-                    sweetAlertDialog_.showDialogSuccess("OK",
-                            "تمت عملية تسجيل الدخول إلى حسابك بنجاح !")
-                            .setConfirmButton("OK", sweetAlertDialog1 -> {
-                                sweetAlertDialog1.dismissWithAnimation();
-                                if (person.getPermissions().size() == 1) {
-                                    getStageOfPersonFromDB(person.getPermissions().get(0), person.getId());
-                                } else {
-                                    sweetAlertDialog1.dismissWithAnimation();
-                                    sweetAlertDialog_.cancelDialog();
-                                    showDialogMultipleAccounts();
-                                }
-                            });
-                } else {
-                    sweetAlertDialog_.showDialogError("لا يوجد لديك أي صلاحية لتسجيل الدخول إلى حسابك , راجع إدارة التطبيق")
-                            .setConfirmButton("OK", sweetAlertDialog -> SignOut());
-                }
-            } else {
-                sweetAlertDialog_.cancelDialog();
-                sweetAlertDialog_.showDialogError("لم يتم العثور على حساب في النظام يجب التأكد من رقم الهاتف المدخل ..");
-            }
-        });
+        db.collection("Person")
+                .whereEqualTo("phone", PhoneNumber)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    if (!queryDocumentSnapshots.isEmpty()) {
+                        Person person = queryDocumentSnapshots.toObjects(Person.class).get(0);
+                        if (!person.getPermissions().isEmpty()) {
+                            Common.currentPerson = person;
+                            Paper.book().write(Common.ISLOGIN, true);
+                            Paper.book().write(Common.PERSON, person);
+                            sweetAlertDialog_.cancelDialog();
+                            sweetAlertDialog_.showDialogSuccess("OK",
+                                    "تمت عملية تسجيل الدخول إلى حسابك بنجاح !")
+                                    .setConfirmButton("OK", sweetAlertDialog1 -> {
+                                        sweetAlertDialog1.dismissWithAnimation();
+                                        if (person.getPermissions().size() == 1) {
+                                            getStageOfPersonFromDB(person.getPermissions().get(0), person.getId());
+                                        } else {
+                                            sweetAlertDialog1.dismissWithAnimation();
+                                            sweetAlertDialog_.cancelDialog();
+                                            showDialogMultipleAccounts();
+                                        }
+                                    });
+                        } else {
+                            if (getActivity() != null)
+                            sweetAlertDialog_.showDialogError("لا يوجد لديك أي صلاحية لتسجيل الدخول إلى حسابك , راجع إدارة التطبيق")
+                                    .setConfirmButton("OK", sweetAlertDialog -> Common.SignOut(mAuth,getActivity(),null));
+                        }
+                    } else {
+                        sweetAlertDialog_.cancelDialog();
+                        sweetAlertDialog_.showDialogError("لم يتم العثور على حساب في النظام يجب التأكد من رقم الهاتف المدخل ..");
+                    }
+                });
     }
 
     private void validOTP(String CodeOTP) {
@@ -182,7 +188,8 @@ public class VerifyCodePhoneFragment extends Fragment {
             accountItem.setImage(person.getImage());
             accountItems.add(accountItem);
         }
-        logout.setOnClickListener(view -> SignOut());
+        if (getActivity() != null)
+        logout.setOnClickListener(view -> Common.SignOut(mAuth,getActivity(),null));
 
         Multiple_accounts_Adapter adapter = new Multiple_accounts_Adapter(accountItems, getActivity());
         mRecyclerView.setHasFixedSize(true);
@@ -194,12 +201,6 @@ public class VerifyCodePhoneFragment extends Fragment {
         builder.show();
     }
 
-    private void SignOut() {
-        Paper.book().destroy();
-        mAuth.signOut();
-        startActivity(new Intent(getContext(), LoginActivity.class));
-        Objects.requireNonNull(getActivity()).finish();
-    }
 
     private void SendUserToMainActivity(String permission) {
         if (getActivity() != null && getContext() != null) {

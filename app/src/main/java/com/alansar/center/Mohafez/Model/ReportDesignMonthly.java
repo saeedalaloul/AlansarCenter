@@ -21,10 +21,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class ReportDesign {
+public class ReportDesignMonthly {
     public static File file;
 
-    public ReportDesign(String nameMohafez, XSSFWorkbook wb, int month, int year, ArrayList<MonthlyReport> reports) {
+    public ReportDesignMonthly(String nameMohafez, XSSFWorkbook wb, int month, int year, ArrayList<MonthlyReport> reports) {
         if (reports.size() > 0) {
             String ReportName = "تقرير الحلقة عن شهر " + month;
             String extStorageDirectory = Environment.getExternalStorageDirectory().toString();

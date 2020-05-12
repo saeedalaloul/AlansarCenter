@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -52,7 +53,6 @@ public class TodayTestsFragment extends Fragment {
     private List<String> questionsExamNumber;
     private ListenerRegistration registration;
     private String IdMoshrefExams, StudentName;
-    private String[] numberQuestions;
 
     public TodayTestsFragment() {
         // Required empty public constructor
@@ -74,8 +74,6 @@ public class TodayTestsFragment extends Fragment {
         setHasOptionsMenu(true);
         questionsExamNumber = new ArrayList<>();
         questionsExamNumber.add("اختر عدد أسئلة الإختبار");
-        numberQuestions = getResources().getStringArray(
-                R.array.number_questions);
         getIdMoshrefExams();
         return view;
     }
@@ -101,6 +99,7 @@ public class TodayTestsFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        exams.clear();
         loadData();
     }
 
@@ -134,7 +133,8 @@ public class TodayTestsFragment extends Fragment {
                                         exams.clear();
                                         for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
                                             if (doc.exists()) {
-                                                if (!doc.getBoolean("isSeenExam.isSeenTester")) {
+                                                if (doc.getBoolean("isSeenExam.isSeenTester") != null
+                                                        && !doc.getBoolean("isSeenExam.isSeenTester")) {
                                                     doc.getReference().update("isSeenExam.isSeenTester", true);
                                                 }
                                                 Exam exam = doc.toObject(Exam.class);
@@ -148,7 +148,8 @@ public class TodayTestsFragment extends Fragment {
                                         exams.clear();
                                         for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
                                             if (doc.exists()) {
-                                                if (!doc.getBoolean("isSeenExam.isSeenTester")) {
+                                                if (doc.getBoolean("isSeenExam.isSeenTester") != null &&
+                                                        !doc.getBoolean("isSeenExam.isSeenTester")) {
                                                     doc.getReference().update("isSeenExam.isSeenTester", true);
                                                 }
                                                 Exam exam = doc.toObject(Exam.class);
@@ -195,7 +196,11 @@ public class TodayTestsFragment extends Fragment {
                                         .putExtra("StudentName", StudentName));
                             }
                         });
+                    } else {
+                        Toast.makeText(getContext(), "معرف مشرف الإختبارات غير متوفر", Toast.LENGTH_SHORT).show();
                     }
+                } else {
+                    Toast.makeText(getContext(), "اسم الطالب غير متوفر", Toast.LENGTH_SHORT).show();
                 }
             } else {
                 startExamOfDB(item.getOrder());

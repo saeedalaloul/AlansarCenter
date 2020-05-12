@@ -54,7 +54,6 @@ public class UpdateExamActivity extends AppCompatActivity {
     private HashMap<String, String> signsExamQuestions;
     private Exam retExam;
     private APIService apiService;
-    private boolean notify = false;
     private String IdMoshrefExams, IdMohafez;
 
     @SuppressLint("NewApi")
@@ -222,7 +221,7 @@ public class UpdateExamActivity extends AppCompatActivity {
     }
 
     private void updateExamToDB(String notes) {
-        notify = true;
+        boolean notify = true;
         HashMap<String, Object> map1 = new HashMap<>();
         map1.put("notes", notes);
         map1.put("marksExamQuestions", marksExamQuestions);
@@ -306,6 +305,9 @@ public class UpdateExamActivity extends AppCompatActivity {
 
         EditText ed_notes = alertDialog.findViewById(R.id.place_exam_et_notes);
         EditText ed_mark = alertDialog.findViewById(R.id.place_exam_et_mark);
+        if (ed_notes != null) {
+            ed_notes.setText(retExam.getNotes());
+        }
 
         String statusMark;
         double mark = Double.parseDouble("" + tv_mark_exam.getText().toString());
@@ -429,8 +431,7 @@ public class UpdateExamActivity extends AppCompatActivity {
                                 @Override
                                 public void onResponse(@NonNull Call<Response> call, @NonNull retrofit2.Response<Response> response) {
                                     if (response.code() == 200) {
-                                        assert response.body() != null;
-                                        if (response.body().success != 1) {
+                                        if (response.body() != null && response.body().success != 1) {
                                             new SweetAlertDialog_(getBaseContext())
                                                     .showDialogError("حدث خطا ما في إرسال الإشعار!");
                                         }

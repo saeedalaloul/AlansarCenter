@@ -148,6 +148,7 @@ public class ViewMonthlyReportsActivity extends AppCompatActivity {
                 sweetAlertDialog.setTitleText("تم حذف التقرير بنجاح !");
                 dialog.dismiss();
                 sweetAlertDialog.show();
+                LoadData(month);
             });
 
             BtnDialog.getButton(SweetAlertDialog.BUTTON_CANCEL).setOnClickListener(view -> dialog.dismiss());

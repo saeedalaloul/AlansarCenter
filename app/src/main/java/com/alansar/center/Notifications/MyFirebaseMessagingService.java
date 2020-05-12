@@ -178,7 +178,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 j = i;
             }
             if (manager != null) {
-                notification1.getNotificationManager().notify(j + Timestamp.now().getNanoseconds(), builder.build());
+                Common.getNotificationManager(manager, this).notify(j + Timestamp.now().getNanoseconds(), builder.build());
             }
         }
     }

@@ -42,9 +42,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 import static android.app.Activity.RESULT_OK;
 
-/**
- * A simple {@link Fragment} subclass.
- */
+
 public class Personal_Information__Fragment extends Fragment {
     private MaterialEditText edtDOB, edtFName, edtMName, edtLName, edtPhone, edtIdentificationNumber;
     private DatePickerDialog.OnDateSetListener setListener;

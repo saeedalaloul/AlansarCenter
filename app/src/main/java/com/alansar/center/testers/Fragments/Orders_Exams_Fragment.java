@@ -101,7 +101,6 @@ public class Orders_Exams_Fragment extends Fragment {
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onResume() {
         super.onResume();

@@ -2,6 +2,7 @@ package com.alansar.center.Common;
 
 
 import android.app.Activity;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -20,6 +21,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import io.paperdb.Paper;
+
+import static android.content.Context.NOTIFICATION_SERVICE;
 
 
 public class Common {
@@ -111,6 +114,13 @@ public class Common {
             registration.remove();
         }
         activity.finish();
+    }
+
+    public static NotificationManager getNotificationManager(NotificationManager notificationManager, Context context) {
+        if (notificationManager == null) {
+            notificationManager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
+        }
+        return notificationManager;
     }
 
     public static String ConvertPermissionToNameArabic(String Permission) {

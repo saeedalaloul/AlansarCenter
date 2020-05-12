@@ -14,6 +14,7 @@ import android.os.Build;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 
+import com.alansar.center.Common.Common;
 import com.alansar.center.R;
 
 
@@ -37,14 +38,7 @@ public class OreoAndAboveNotification extends ContextWrapper {
         notificationChannel.enableLights(true);
         notificationChannel.enableVibration(true);
         notificationChannel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
-        getNotificationManager().createNotificationChannel(notificationChannel);
-    }
-
-    public NotificationManager getNotificationManager() {
-        if (notificationManager == null) {
-            notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        }
-        return notificationManager;
+        Common.getNotificationManager(notificationManager,this).createNotificationChannel(notificationChannel);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
