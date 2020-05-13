@@ -3,7 +3,7 @@ package com.alansar.center.supervisor_exams.Model;
 import java.util.HashMap;
 
 public class Exam {
-    private String id, idStudent, idMohafez, idTester, ExamPart, Notes, stage, dateRejection, date;
+    private String id, idStudent, idMohafez, idTester, ExamPart, Notes, stage;
     private int statusAcceptance, day, month, year;
     private HashMap<String, Double> marksExamQuestions;
     private HashMap<String, String> signsExamQuestions;
@@ -32,8 +32,7 @@ public class Exam {
 
     public Exam(String id, String idStudent, String idMohafez,
                 String idTester, String examPart, String notes,
-                String stage, String dateRejection, String date,
-                int statusAcceptance, int day, int month, int year,
+                String stage, int statusAcceptance, int day, int month, int year,
                 HashMap<String, Double> marksExamQuestions, HashMap<String, String> signsExamQuestions,
                 HashMap<String, Boolean> isSeenExam) {
         this.id = id;
@@ -43,8 +42,6 @@ public class Exam {
         ExamPart = examPart;
         Notes = notes;
         this.stage = stage;
-        this.dateRejection = dateRejection;
-        this.date = date;
         this.statusAcceptance = statusAcceptance;
         this.day = day;
         this.month = month;
@@ -148,22 +145,6 @@ public class Exam {
 
     public void setIsSeenExam(HashMap<String, Boolean> isSeenExam) {
         IsSeenExam = isSeenExam;
-    }
-
-    public String getDateRejection() {
-        return dateRejection;
-    }
-
-    public void setDateRejection(String dateRejection) {
-        this.dateRejection = dateRejection;
-    }
-
-    public String getDate() {
-        return date;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
     }
 
     public HashMap<String, Double> getMarksExamQuestions() {

@@ -52,7 +52,7 @@ public class TodayTestsFragment extends Fragment {
     private Spinner sp_number_questions;
     private List<String> questionsExamNumber;
     private ListenerRegistration registration;
-    private String IdMoshrefExams, StudentName;
+    private String StudentName;
 
     public TodayTestsFragment() {
         // Required empty public constructor
@@ -74,26 +74,24 @@ public class TodayTestsFragment extends Fragment {
         setHasOptionsMenu(true);
         questionsExamNumber = new ArrayList<>();
         questionsExamNumber.add("اختر عدد أسئلة الإختبار");
-        getIdMoshrefExams();
+        getDetailsQuestionsExam();
         return view;
     }
 
     private void getDetailsQuestionsExam() {
-        if (IdMoshrefExams != null && !IdMoshrefExams.isEmpty()) {
-            db.collection("ExamsSettings")
-                    .document(IdMoshrefExams)
-                    .get().addOnSuccessListener(documentSnapshot -> {
-                String maxQuestions = Objects.requireNonNull(documentSnapshot.get("maxQuestionsExam")).toString();
-                String minQuestions = Objects.requireNonNull(documentSnapshot.get("minQuestionsExam")).toString();
-                if (Integer.parseInt(maxQuestions) == Integer.parseInt(minQuestions)) {
-                    questionsExamNumber.add("" + maxQuestions);
-                } else {
-                    for (int i = Integer.parseInt(minQuestions); i <= Integer.parseInt(maxQuestions); i++) {
-                        questionsExamNumber.add("" + i);
-                    }
+        db.collection("ExamsSettings")
+                .document("examsSettings")
+                .get().addOnSuccessListener(documentSnapshot -> {
+            String maxQuestions = Objects.requireNonNull(documentSnapshot.get("maxQuestionsExam")).toString();
+            String minQuestions = Objects.requireNonNull(documentSnapshot.get("minQuestionsExam")).toString();
+            if (Integer.parseInt(maxQuestions) == Integer.parseInt(minQuestions)) {
+                questionsExamNumber.add("" + maxQuestions);
+            } else {
+                for (int i = Integer.parseInt(minQuestions); i <= Integer.parseInt(maxQuestions); i++) {
+                    questionsExamNumber.add("" + i);
                 }
-            });
-        }
+            }
+        });
     }
 
     @Override
@@ -185,20 +183,16 @@ public class TodayTestsFragment extends Fragment {
             getNameStudentFromDB(item.getOrder(), null);
             if (exams.get(item.getOrder()).getExamPart().equals(Common.PART_OF_AMA)) {
                 if (StudentName != null && !StudentName.isEmpty()) {
-                    if (IdMoshrefExams != null && !IdMoshrefExams.isEmpty()) {
-                        db.collection("ExamsSettings")
-                                .document(IdMoshrefExams)
-                                .get().addOnSuccessListener(documentSnapshot -> {
-                            if (documentSnapshot.exists()) {
-                                startActivity(new Intent(getContext(), PlaceExamActivity.class)
-                                        .putExtra("questionsNumberExam", Objects.requireNonNull(documentSnapshot.get("numberQuestionsPart")).toString())
-                                        .putExtra("idExam", exams.get(item.getOrder()).getId())
-                                        .putExtra("StudentName", StudentName));
-                            }
-                        });
-                    } else {
-                        Toast.makeText(getContext(), "معرف مشرف الإختبارات غير متوفر", Toast.LENGTH_SHORT).show();
-                    }
+                    db.collection("ExamsSettings")
+                            .document("examsSettings")
+                            .get().addOnSuccessListener(documentSnapshot -> {
+                        if (documentSnapshot.exists()) {
+                            startActivity(new Intent(getContext(), PlaceExamActivity.class)
+                                    .putExtra("questionsNumberExam", Objects.requireNonNull(documentSnapshot.get("numberQuestionsPart")).toString())
+                                    .putExtra("idExam", exams.get(item.getOrder()).getId())
+                                    .putExtra("StudentName", StudentName));
+                        }
+                    });
                 } else {
                     Toast.makeText(getContext(), "اسم الطالب غير متوفر", Toast.LENGTH_SHORT).show();
                 }
@@ -263,15 +257,4 @@ public class TodayTestsFragment extends Fragment {
             return false;
         }
     }
-
-    private void getIdMoshrefExams() {
-        db.collection("SuperVisorExams")
-                .get().addOnSuccessListener(queryDocumentSnapshots -> {
-            if (!queryDocumentSnapshots.isEmpty()) {
-                IdMoshrefExams = queryDocumentSnapshots.getDocuments().get(0).getId();
-                getDetailsQuestionsExam();
-            }
-        });
-    }
-
 }

@@ -145,7 +145,7 @@ public class ExamsSettingsFragment extends Fragment {
 
     private void getDataFromDB() {
         registration = db.collection("ExamsSettings")
-                .document(Common.currentPerson.getId())
+                .document("examsSettings")
                 .addSnapshotListener((documentSnapshot, e) -> {
                     if (e != null) {
                         Log.w("sss", "listen:error" + e.getLocalizedMessage());
@@ -204,7 +204,6 @@ public class ExamsSettingsFragment extends Fragment {
         if (b) {
             resetData();
             setDefaultDataFromDB();
-
         } else {
             UnResetData();
         }
@@ -212,7 +211,7 @@ public class ExamsSettingsFragment extends Fragment {
 
     private void setDefaultDataFromDB() {
         db.collection("ExamsSettings")
-                .document(Common.currentPerson.getId())
+                .document("examsSettings")
                 .set(new ExamsSettings(false,
                         true, Integer.parseInt(sp_mix_questions_exam.getSelectedItem().toString()),
                         Integer.parseInt(sp_min_questions_exam.getSelectedItem().toString()),
@@ -226,7 +225,7 @@ public class ExamsSettingsFragment extends Fragment {
         sp_min_questions_exam.setEnabled(true);
         sp_number_questions_exam_part.setEnabled(true);
         sp_number_days_order_exam.setEnabled(true);
-        db.collection("ExamsSettings").document(Common.currentPerson.getId())
+        db.collection("ExamsSettings").document("examsSettings")
                 .update("defaultData", false);
     }
 
@@ -247,7 +246,7 @@ public class ExamsSettingsFragment extends Fragment {
         ExamsSettings examsSettings = new ExamsSettings();
         examsSettings.setNumberOrdersExamDay(NumberDay);
         db.collection("ExamsSettings")
-                .document(Common.currentPerson.getId())
+                .document("examsSettings")
                 .get().addOnSuccessListener(documentSnapshot -> {
             if (documentSnapshot.exists()) {
                 documentSnapshot.getReference().update("numberOrdersExamDay", NumberDay);
@@ -261,7 +260,7 @@ public class ExamsSettingsFragment extends Fragment {
         ExamsSettings examsSettings = new ExamsSettings();
         examsSettings.setNumberQuestionsPart(NumberQuestions);
         db.collection("ExamsSettings")
-                .document(Common.currentPerson.getId())
+                .document("examsSettings")
                 .get().addOnSuccessListener(documentSnapshot -> {
             if (documentSnapshot.exists()) {
                 documentSnapshot.getReference().update("numberQuestionsPart", NumberQuestions);
@@ -275,7 +274,7 @@ public class ExamsSettingsFragment extends Fragment {
         ExamsSettings examsSettings = new ExamsSettings();
         examsSettings.setMaxQuestionsExam(maxQuestions);
         db.collection("ExamsSettings")
-                .document(Common.currentPerson.getId())
+                .document("examsSettings")
                 .get().addOnSuccessListener(documentSnapshot -> {
             if (documentSnapshot.exists()) {
                 documentSnapshot.getReference().update("maxQuestionsExam", maxQuestions);
@@ -289,7 +288,7 @@ public class ExamsSettingsFragment extends Fragment {
         ExamsSettings examsSettings = new ExamsSettings();
         examsSettings.setMinQuestionsExam(minQuestions);
         db.collection("ExamsSettings")
-                .document(Common.currentPerson.getId())
+                .document("examsSettings")
                 .get().addOnSuccessListener(documentSnapshot -> {
             if (documentSnapshot.exists()) {
                 documentSnapshot.getReference().update("minQuestionsExam", minQuestions);
@@ -303,7 +302,7 @@ public class ExamsSettingsFragment extends Fragment {
         ExamsSettings examsSettings = new ExamsSettings();
         examsSettings.setUpdateExam(b);
         db.collection("ExamsSettings")
-                .document(Common.currentPerson.getId())
+                .document("examsSettings")
                 .get().addOnSuccessListener(documentSnapshot -> {
             if (documentSnapshot.exists()) {
                 documentSnapshot.getReference().update("updateExam", b);

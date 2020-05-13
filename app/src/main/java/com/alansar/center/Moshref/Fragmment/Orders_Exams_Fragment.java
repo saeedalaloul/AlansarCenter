@@ -42,7 +42,9 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -152,13 +154,11 @@ public class Orders_Exams_Fragment extends Fragment {
                                                 Exam exam = doc.toObject(Exam.class);
                                                 if (dateformat != null) {
                                                     String date = dateformat.format(Timestamp.now().toDate().getTime());
+                                                    GregorianCalendar gregorianCalendar = new GregorianCalendar();
                                                     try {
-                                                        if (exam.getDateRejection() != null && !exam.getDateRejection().trim().isEmpty()) {
-                                                            getDifferenceDate(dateformat.parse(exam.getDateRejection()), dateformat.parse(date), doc);
-                                                        }
-                                                        if (exam.getDate() != null && !exam.getDate().trim().isEmpty()) {
-                                                            getDifferenceDate(dateformat.parse(exam.getDate()), dateformat.parse(date), doc);
-                                                        }
+                                                        gregorianCalendar.set(exam.getYear(), exam.getMonth(), exam.getDay(), 6, 0, 0);
+                                                        String dateRet = dateformat.format(gregorianCalendar.getTime());
+                                                        getDifferenceDate(dateformat.parse(dateRet), dateformat.parse(date), doc);
                                                     } catch (ParseException ex) {
                                                         ex.printStackTrace();
                                                     }
@@ -176,13 +176,11 @@ public class Orders_Exams_Fragment extends Fragment {
                                                 Exam exam = doc.toObject(Exam.class);
                                                 if (dateformat != null) {
                                                     String date = dateformat.format(Timestamp.now().toDate().getTime());
+                                                    GregorianCalendar gregorianCalendar = new GregorianCalendar();
                                                     try {
-                                                        if (exam.getDateRejection() != null && !exam.getDateRejection().trim().isEmpty()) {
-                                                            getDifferenceDate(dateformat.parse(exam.getDateRejection()), dateformat.parse(date), doc);
-                                                        }
-                                                        if (exam.getDate() != null && !exam.getDate().trim().isEmpty()) {
-                                                            getDifferenceDate(dateformat.parse(exam.getDate()), dateformat.parse(date), doc);
-                                                        }
+                                                        gregorianCalendar.set(exam.getYear(), exam.getMonth(), exam.getDay(), 6, 0, 0);
+                                                        String dateRet = dateformat.format(gregorianCalendar.getTime());
+                                                        getDifferenceDate(dateformat.parse(dateRet), dateformat.parse(date), doc);
                                                     } catch (ParseException ex) {
                                                         ex.printStackTrace();
                                                     }
@@ -356,6 +354,7 @@ public class Orders_Exams_Fragment extends Fragment {
     }
 
     private void showDialogRequestNotes(int order, SweetAlertDialog btnDialog) {
+        Calendar calendar = Calendar.getInstance();
         if (getContext() != null) {
             notify = true;
             SweetAlertDialog dialog = new SweetAlertDialog(getContext())
@@ -378,11 +377,12 @@ public class Orders_Exams_Fragment extends Fragment {
                     dateformat = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss aa", Locale.getDefault());
                 }
                 if (dateformat != null) {
-                    String datetime = dateformat.format(Timestamp.now().toDate().getTime());
                     HashMap<String, Object> map = new HashMap<>();
                     map.put("statusAcceptance", -1);
                     map.put("notes", Notes);
-                    map.put("dateRejection", datetime);
+                    map.put("day", calendar.get(Calendar.DAY_OF_MONTH));
+                    map.put("month", calendar.get(Calendar.MONTH) +1);
+                    map.put("year", calendar.get(Calendar.YEAR));
                     map.put("isSeenExam.isSeenMohafez", false);
                     map.put("isSeenExam.isSeenEdare", false);
                     db.collection("Exam").document(exams.get(order).getId()).update(map);

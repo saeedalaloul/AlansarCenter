@@ -2,6 +2,7 @@ package com.alansar.center.Mohafez.Activitys;
 
 import android.annotation.SuppressLint;
 import android.graphics.Color;
+import android.icu.text.SimpleDateFormat;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -41,6 +42,7 @@ import com.alansar.center.Notifications.Token;
 import com.alansar.center.R;
 import com.alansar.center.SweetAlertDialog_;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.ListenerRegistration;
@@ -53,6 +55,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -203,6 +206,10 @@ public class MohafezActivity extends AppCompatActivity implements NavigationView
                 checkUnreadDataOfExamFromDB();
             }
         }
+
+        SimpleDateFormat dateformat = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss aa", Locale.getDefault());
+        String date = dateformat.format(Timestamp.now().toDate().getTime());
+        Log.d("sss",""+date);
     }
 
     public void moveFragment(Fragment fragment) {

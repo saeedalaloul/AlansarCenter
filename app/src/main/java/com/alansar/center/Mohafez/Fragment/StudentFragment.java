@@ -63,6 +63,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -296,10 +297,11 @@ public class StudentFragment extends Fragment {
                             if (result < 80.00) {
                                 if (dateformat != null) {
                                     String date = dateformat.format(Timestamp.now().toDate().getTime());
+                                    GregorianCalendar gregorianCalendar = new GregorianCalendar();
+                                    gregorianCalendar.set(exam.getYear(), exam.getMonth(), exam.getDay(), 6, 0, 0);
+                                    String dateRet = dateformat.format(gregorianCalendar.getTime());
                                     try {
-                                        if (exam.getDate() != null && !exam.getDate().trim().isEmpty()) {
-                                            getDifferenceDate(dateformat.parse(exam.getDate()), dateformat.parse(date), order);
-                                        }
+                                        getDifferenceDate(dateformat.parse(dateRet), dateformat.parse(date), order);
                                     } catch (ParseException ex) {
                                         ex.printStackTrace();
                                     }

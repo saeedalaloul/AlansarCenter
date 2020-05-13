@@ -40,6 +40,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -57,7 +58,7 @@ public class Orders_Exams_Fragment extends Fragment {
     private Spinner sp_number_questions;
     private List<String> questionsExamNumber;
     private ListenerRegistration registration;
-    private String StudentName, IdMoshrefExams;
+    private String StudentName;
 
     public Orders_Exams_Fragment() {
         // Required empty public constructor
@@ -79,26 +80,24 @@ public class Orders_Exams_Fragment extends Fragment {
         setHasOptionsMenu(true);
         questionsExamNumber = new ArrayList<>();
         questionsExamNumber.add("اختر عدد أسئلة الإختبار");
-        getIdMoshrefExams();
+        getDetailsQuestionsExam();
         return view;
     }
 
     private void getDetailsQuestionsExam() {
-        if (IdMoshrefExams != null && !IdMoshrefExams.isEmpty()) {
-            db.collection("ExamsSettings")
-                    .document(IdMoshrefExams)
-                    .get().addOnSuccessListener(documentSnapshot -> {
-                String maxQuestions = Objects.requireNonNull(documentSnapshot.get("maxQuestionsExam")).toString();
-                String minQuestions = Objects.requireNonNull(documentSnapshot.get("minQuestionsExam")).toString();
-                if (Integer.parseInt(maxQuestions) == Integer.parseInt(minQuestions)) {
-                    questionsExamNumber.add("" + maxQuestions);
-                } else {
-                    for (int i = Integer.parseInt(minQuestions); i <= Integer.parseInt(maxQuestions); i++) {
-                        questionsExamNumber.add("" + i);
-                    }
+        db.collection("ExamsSettings")
+                .document("examsSettings")
+                .get().addOnSuccessListener(documentSnapshot -> {
+            String maxQuestions = Objects.requireNonNull(documentSnapshot.get("maxQuestionsExam")).toString();
+            String minQuestions = Objects.requireNonNull(documentSnapshot.get("minQuestionsExam")).toString();
+            if (Integer.parseInt(maxQuestions) == Integer.parseInt(minQuestions)) {
+                questionsExamNumber.add("" + maxQuestions);
+            } else {
+                for (int i = Integer.parseInt(minQuestions); i <= Integer.parseInt(maxQuestions); i++) {
+                    questionsExamNumber.add("" + i);
                 }
-            });
-        }
+            }
+        });
     }
 
     @Override
@@ -148,10 +147,11 @@ public class Orders_Exams_Fragment extends Fragment {
                                                 Exam exam = doc.toObject(Exam.class);
                                                 if (dateformat != null) {
                                                     String date = dateformat.format(Timestamp.now().toDate().getTime());
+                                                    GregorianCalendar gregorianCalendar = new GregorianCalendar();
                                                     try {
-                                                        if (exam.getDate() != null && !exam.getDate().trim().isEmpty()) {
-                                                            getDifferenceDate(dateformat.parse(exam.getDate()), dateformat.parse(date), doc);
-                                                        }
+                                                        gregorianCalendar.set(exam.getYear(), exam.getMonth(), exam.getDay(), 6, 0, 0);
+                                                        String dateRet = dateformat.format(gregorianCalendar.getTime());
+                                                        getDifferenceDate(dateformat.parse(dateRet), dateformat.parse(date), doc);
                                                     } catch (ParseException ex) {
                                                         ex.printStackTrace();
                                                     }
@@ -172,10 +172,11 @@ public class Orders_Exams_Fragment extends Fragment {
                                                 Exam exam = doc.toObject(Exam.class);
                                                 if (dateformat != null) {
                                                     String date = dateformat.format(Timestamp.now().toDate().getTime());
+                                                    GregorianCalendar gregorianCalendar = new GregorianCalendar();
                                                     try {
-                                                        if (exam.getDate() != null && !exam.getDate().trim().isEmpty()) {
-                                                            getDifferenceDate(dateformat.parse(exam.getDate()), dateformat.parse(date), doc);
-                                                        }
+                                                        gregorianCalendar.set(exam.getYear(), exam.getMonth(), exam.getDay(), 6, 0, 0);
+                                                        String dateRet = dateformat.format(gregorianCalendar.getTime());
+                                                        getDifferenceDate(dateformat.parse(dateRet), dateformat.parse(date), doc);
                                                     } catch (ParseException ex) {
                                                         ex.printStackTrace();
                                                     }
@@ -216,18 +217,16 @@ public class Orders_Exams_Fragment extends Fragment {
                 getNameStudentFromDB(item.getOrder(), null);
                 if (exams.get(item.getOrder()).getExamPart().equals(Common.PART_OF_AMA)) {
                     if (StudentName != null && !StudentName.isEmpty()) {
-                        if (IdMoshrefExams != null && !IdMoshrefExams.isEmpty()) {
-                            db.collection("ExamsSettings")
-                                    .document(IdMoshrefExams)
-                                    .get().addOnSuccessListener(documentSnapshot -> {
-                                if (documentSnapshot != null && documentSnapshot.exists()) {
-                                    startActivity(new Intent(getContext(), PlaceExamActivity.class)
-                                            .putExtra("questionsNumberExam", Objects.requireNonNull(documentSnapshot.get("numberQuestionsPart")).toString())
-                                            .putExtra("idExam", exams.get(item.getOrder()).getId())
-                                            .putExtra("StudentName", StudentName));
-                                }
-                            });
-                        }
+                        db.collection("ExamsSettings")
+                                .document("examsSettings")
+                                .get().addOnSuccessListener(documentSnapshot -> {
+                            if (documentSnapshot != null && documentSnapshot.exists()) {
+                                startActivity(new Intent(getContext(), PlaceExamActivity.class)
+                                        .putExtra("questionsNumberExam", Objects.requireNonNull(documentSnapshot.get("numberQuestionsPart")).toString())
+                                        .putExtra("idExam", exams.get(item.getOrder()).getId())
+                                        .putExtra("StudentName", StudentName));
+                            }
+                        });
                     }
                 } else {
                     startExamOfDB(item.getOrder());
@@ -295,16 +294,6 @@ public class Orders_Exams_Fragment extends Fragment {
             new SweetAlertDialog_(getContext()).showDialogError("يجب اختيار عدد أسئلة الإخنبار !");
             return false;
         }
-    }
-
-    private void getIdMoshrefExams() {
-        db.collection("SuperVisorExams")
-                .get().addOnSuccessListener(queryDocumentSnapshots -> {
-            if (!queryDocumentSnapshots.isEmpty()) {
-                IdMoshrefExams = queryDocumentSnapshots.getDocuments().get(0).getId();
-                getDetailsQuestionsExam();
-            }
-        });
     }
 
     private void getDifferenceDate(Date startDate, Date endDate, QueryDocumentSnapshot doc) {

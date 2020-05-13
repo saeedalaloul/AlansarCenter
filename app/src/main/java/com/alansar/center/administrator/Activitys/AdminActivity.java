@@ -248,7 +248,7 @@ public class AdminActivity extends AppCompatActivity implements NavigationView.O
             case R.id.admin_permissions_persons:
                 PermissionsFragment permissionsFragment = new PermissionsFragment();
                 moveFragment(permissionsFragment);
-                toolbar.setTitle("الأذونات");
+                toolbar.setTitle("صلاحيات المستخدمين");
                 toolbar.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                 drawerLayout.closeDrawers();
                 menuItem.setChecked(true);

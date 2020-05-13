@@ -48,7 +48,7 @@
                 <item
                     android:id="@+id/admin_permissions_persons"
                     android:icon="@drawable/ic_permissions"
-                    android:title="الأذونات" />
+                    android:title="صلاحيات المستخدمين" />
 
                 <item
                     android:id="@+id/admin_center_reports"

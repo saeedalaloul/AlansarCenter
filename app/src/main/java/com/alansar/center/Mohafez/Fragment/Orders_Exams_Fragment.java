@@ -31,6 +31,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -109,13 +110,11 @@ public class Orders_Exams_Fragment extends Fragment {
                                                 Exam exam = doc.toObject(Exam.class);
                                                 if (dateformat != null) {
                                                     String date = dateformat.format(Timestamp.now().toDate().getTime());
+                                                    GregorianCalendar gregorianCalendar = new GregorianCalendar();
                                                     try {
-                                                        if (exam.getDateRejection() != null && !exam.getDateRejection().trim().isEmpty()) {
-                                                            getDifferenceDate(dateformat.parse(exam.getDateRejection()), dateformat.parse(date), doc);
-                                                        }
-                                                        if (exam.getDate() != null && !exam.getDate().trim().isEmpty()) {
-                                                            getDifferenceDate(dateformat.parse(exam.getDate()), dateformat.parse(date), doc);
-                                                        }
+                                                        gregorianCalendar.set(exam.getYear(), exam.getMonth(), exam.getDay(), 6, 0, 0);
+                                                        String dateRet = dateformat.format(gregorianCalendar.getTime());
+                                                        getDifferenceDate(dateformat.parse(dateRet), dateformat.parse(date), doc);
                                                     } catch (ParseException ex) {
                                                         ex.printStackTrace();
                                                     }
@@ -136,13 +135,11 @@ public class Orders_Exams_Fragment extends Fragment {
                                                 Exam exam = doc.toObject(Exam.class);
                                                 if (dateformat != null) {
                                                     String date = dateformat.format(Timestamp.now().toDate().getTime());
+                                                    GregorianCalendar gregorianCalendar = new GregorianCalendar();
                                                     try {
-                                                        if (exam.getDateRejection() != null && !exam.getDateRejection().trim().isEmpty()) {
-                                                            getDifferenceDate(dateformat.parse(exam.getDateRejection()), dateformat.parse(date), doc);
-                                                        }
-                                                        if (exam.getDate() != null && !exam.getDate().trim().isEmpty()) {
-                                                            getDifferenceDate(dateformat.parse(exam.getDate()), dateformat.parse(date), doc);
-                                                        }
+                                                        gregorianCalendar.set(exam.getYear(), exam.getMonth(), exam.getDay(), 6, 0, 0);
+                                                        String dateRet = dateformat.format(gregorianCalendar.getTime());
+                                                        getDifferenceDate(dateformat.parse(dateRet), dateformat.parse(date), doc);
                                                     } catch (ParseException ex) {
                                                         ex.printStackTrace();
                                                     }
@@ -280,7 +277,6 @@ public class Orders_Exams_Fragment extends Fragment {
                             doc.getReference().delete();
                         }
                     } else {
-
                         if ((int) elapsedDays >= 1) {
                             doc.getReference().delete();
                         }
