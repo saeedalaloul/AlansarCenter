@@ -68,6 +68,7 @@ public class SuperVisorExamsActivity extends AppCompatActivity implements Naviga
     private ArrayList<AccountItem> accountItems;
     private ListenerRegistration registration;
     private String typeFragment;
+    private AlertDialog dialogMultipleAccounts;
 
 
     @SuppressLint("RestrictedApi")
@@ -198,6 +199,9 @@ public class SuperVisorExamsActivity extends AppCompatActivity implements Naviga
         super.onPause();
         if (registration != null) {
             registration.remove();
+        }
+        if (dialogMultipleAccounts != null && dialogMultipleAccounts.isShowing()) {
+            dialogMultipleAccounts.dismiss();
         }
     }
 
@@ -456,7 +460,8 @@ public class SuperVisorExamsActivity extends AppCompatActivity implements Naviga
             mRecyclerView.setAdapter(adapter);
             adapter.notifyDataSetChanged();
             builder.setCancelable(false);
-            builder.show();
+            dialogMultipleAccounts = builder.create();
+            dialogMultipleAccounts.show();
         }
     }
 }

@@ -70,6 +70,7 @@ public class AdminActivity extends AppCompatActivity implements NavigationView.O
     private SweetAlertDialog_ sweetAlertDialog_;
     private ArrayList<AccountItem> accountItems;
     private ListenerRegistration registration;
+    private AlertDialog dialogMultipleAccounts;
 
 
     @SuppressLint({"SetTextI18n", "RestrictedApi"})
@@ -165,6 +166,9 @@ public class AdminActivity extends AppCompatActivity implements NavigationView.O
         super.onPause();
         if (registration != null) {
             registration.remove();
+        }
+        if (dialogMultipleAccounts != null && dialogMultipleAccounts.isShowing()) {
+            dialogMultipleAccounts.dismiss();
         }
     }
 
@@ -377,6 +381,7 @@ public class AdminActivity extends AppCompatActivity implements NavigationView.O
         mRecyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
         builder.setCancelable(false);
-        builder.show();
+        dialogMultipleAccounts = builder.create();
+        dialogMultipleAccounts.show();
     }
 }

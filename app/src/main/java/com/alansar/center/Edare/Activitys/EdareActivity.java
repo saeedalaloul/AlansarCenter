@@ -68,6 +68,7 @@ public class EdareActivity extends AppCompatActivity implements NavigationView.O
     private ArrayList<AccountItem> accountItems;
     private ListenerRegistration registration;
     private TextView countUnread_exams;
+    private AlertDialog dialogMultipleAccounts;
 
 
     @SuppressLint("RestrictedApi")
@@ -168,6 +169,9 @@ public class EdareActivity extends AppCompatActivity implements NavigationView.O
         super.onPause();
         if (registration != null) {
             registration.remove();
+        }
+        if (dialogMultipleAccounts != null && dialogMultipleAccounts.isShowing()) {
+            dialogMultipleAccounts.dismiss();
         }
     }
 
@@ -380,7 +384,8 @@ public class EdareActivity extends AppCompatActivity implements NavigationView.O
         mRecyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
         builder.setCancelable(false);
-        builder.show();
+        dialogMultipleAccounts = builder.create();
+        dialogMultipleAccounts.show();
     }
 
 }

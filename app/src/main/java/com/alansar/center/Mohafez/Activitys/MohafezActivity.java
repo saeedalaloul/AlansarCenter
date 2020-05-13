@@ -76,6 +76,7 @@ public class MohafezActivity extends AppCompatActivity implements NavigationView
     private ArrayList<AccountItem> accountItems;
     private ListenerRegistration registration;
     private String typeFragment;
+    private AlertDialog dialogMultipleAccounts;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @SuppressLint("RestrictedApi")
@@ -525,7 +526,8 @@ public class MohafezActivity extends AppCompatActivity implements NavigationView
             mRecyclerView.setAdapter(adapter);
             adapter.notifyDataSetChanged();
             builder.setCancelable(false);
-            builder.show();
+            dialogMultipleAccounts = builder.create();
+            dialogMultipleAccounts.show();
         }
     }
 
@@ -534,6 +536,9 @@ public class MohafezActivity extends AppCompatActivity implements NavigationView
         super.onPause();
         if (registration != null) {
             registration.remove();
+        }
+        if (dialogMultipleAccounts != null && dialogMultipleAccounts.isShowing()) {
+            dialogMultipleAccounts.dismiss();
         }
     }
 }

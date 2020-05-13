@@ -19,7 +19,9 @@
         android:roundIcon="@mipmap/ansar_logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        tools:ignore="AllowBackup,GoogleAppIndexingWarning">
+        android:requestLegacyExternalStorage="true"
+        tools:ignore="AllowBackup,GoogleAppIndexingWarning"
+        tools:targetApi="q">
 
         <provider
             android:name=".GenericFileProvider"

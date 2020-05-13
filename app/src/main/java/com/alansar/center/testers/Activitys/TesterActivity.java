@@ -65,6 +65,7 @@ public class TesterActivity extends AppCompatActivity implements NavigationView.
     private ArrayList<AccountItem> accountItems;
     private ListenerRegistration registration;
     private String typeFragment;
+    private AlertDialog dialogMultipleAccounts;
 
     @SuppressLint("RestrictedApi")
     @Override
@@ -184,6 +185,9 @@ public class TesterActivity extends AppCompatActivity implements NavigationView.
         super.onPause();
         if (registration != null) {
             registration.remove();
+        }
+        if (dialogMultipleAccounts != null && dialogMultipleAccounts.isShowing()) {
+            dialogMultipleAccounts.dismiss();
         }
     }
 
@@ -419,7 +423,8 @@ public class TesterActivity extends AppCompatActivity implements NavigationView.
             mRecyclerView.setAdapter(adapter);
             adapter.notifyDataSetChanged();
             builder.setCancelable(false);
-            builder.show();
+            dialogMultipleAccounts = builder.create();
+            dialogMultipleAccounts.show();
         }
     }
 }
