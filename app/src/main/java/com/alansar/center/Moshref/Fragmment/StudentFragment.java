@@ -149,6 +149,9 @@ public class StudentFragment extends Fragment {
                 .get().addOnSuccessListener(queryDocumentSnapshots -> {
             if (queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
                 showDialogMoreDetails(queryDocumentSnapshots.getDocuments().get(0).toObject(Exam.class), order);
+            }else
+            {
+                new SweetAlertDialog_(getContext()).showDialogError("عذرا لم يتم العثور على أية إختبارات لهذا الطالب");
             }
         }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
     }

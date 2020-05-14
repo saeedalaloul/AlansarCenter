@@ -169,13 +169,15 @@ public class StudentFragment extends Fragment {
                 .limit(1)
                 .get().addOnSuccessListener(queryDocumentSnapshots -> {
             if (queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
-                showDialogMoreDetails(queryDocumentSnapshots.getDocuments().get(0).toObject(Exam.class),order);
+                showDialogMoreDetails(queryDocumentSnapshots.getDocuments().get(0).toObject(Exam.class), order);
+            } else {
+                new SweetAlertDialog_(getContext()).showDialogError("عذرا لم يتم العثور على أية إختبارات لهذا الطالب");
             }
         }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
     }
 
     @SuppressLint("SetTextI18n")
-    private void showDialogMoreDetails(Exam exam,int order) {
+    private void showDialogMoreDetails(Exam exam, int order) {
         if (getContext() != null && exam != null) {
             LayoutInflater factory = LayoutInflater.from(getActivity());
             @SuppressLint("InflateParams") final View moreDetailsDialogView
