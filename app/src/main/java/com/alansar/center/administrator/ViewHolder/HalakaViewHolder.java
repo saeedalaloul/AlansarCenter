@@ -46,6 +46,5 @@ public class HalakaViewHolder extends RecyclerView.ViewHolder implements View.On
         contextMenu.setHeaderTitle("Select the Action");
 
         contextMenu.add(0, 0, getAdapterPosition(), Common.UPDATE);
-        contextMenu.add(0, 1, getAdapterPosition(), Common.DELETE);
     }
 }

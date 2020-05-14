@@ -53,6 +53,10 @@
                     android:id="@+id/edare_mohafezeen"
                     android:icon="@drawable/ic_mohafez"
                     android:title="المحفظين" />
+                <item
+                    android:id="@+id/edare_stage_reports"
+                    android:icon="@drawable/ic_report"
+                    android:title="تقارير المرحلة" />
             </menu>
         </item>
 

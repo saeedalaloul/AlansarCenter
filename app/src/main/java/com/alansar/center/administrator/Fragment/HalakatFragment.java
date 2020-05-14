@@ -119,60 +119,66 @@ public class HalakatFragment extends Fragment {
     }
 
     private void showDialogAddHalaka() {
-        LayoutInflater factory = LayoutInflater.from(getActivity());
-        @SuppressLint("InflateParams") final View deleteDialogView = factory.inflate(R.layout.create_halaka, null);
-        alertDialog = new AlertDialog.Builder(Objects.requireNonNull(getActivity())).create();
-        alertDialog.setView(deleteDialogView);
-        alertDialog.show();
-        halaka_name = alertDialog.findViewById(R.id.creat_halaka_et_name);
-        spinner_halaka_stage = alertDialog.findViewById(R.id.creat_halaka_spinner_stage);
-        spinner_halaka_mohafez = alertDialog.findViewById(R.id.creat_halaka_spinner_mohafez);
-        assert spinner_halaka_mohafez != null;
-        spinner_halaka_mohafez.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if (!mohafezs.isEmpty()) {
-                    mohafezId = mohafezs.get(i).getId();
+        if (getActivity() != null) {
+            LayoutInflater factory = LayoutInflater.from(getActivity());
+            @SuppressLint("InflateParams") final View addDialogView = factory.inflate(R.layout.create_halaka, null);
+            alertDialog = new AlertDialog.Builder(getActivity()).create();
+            alertDialog.setView(addDialogView);
+            alertDialog.show();
+            halaka_name = alertDialog.findViewById(R.id.creat_halaka_et_name);
+            spinner_halaka_stage = alertDialog.findViewById(R.id.creat_halaka_spinner_stage);
+            spinner_halaka_mohafez = alertDialog.findViewById(R.id.creat_halaka_spinner_mohafez);
+            if (spinner_halaka_mohafez != null) {
+                spinner_halaka_mohafez.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                        if (!mohafezs.isEmpty()) {
+                            mohafezId = mohafezs.get(i).getId();
+                        }
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> adapterView) {
+
+                    }
+                });
+            }
+
+
+            spinner_halaka_stage.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+                @Override
+                public void onItemSelected(AdapterView<?> spinner, View v,
+                                           int arg2, long arg3) {
+                    String selectedVal = getResources().getStringArray(R.array.stage_array)[spinner.getSelectedItemPosition()];
+                    spinner_halaka_mohafez.setSelection(0);
+                    getMohafezsfromDatebase(selectedVal);
+                    mohafezId = "";
                 }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> arg0) {
+                    // TODO Auto-generated method stub
+                }
+
+            });
+
+            btn_add = alertDialog.findViewById(R.id.creat_halaka_add_btn_save);
+            if (btn_add != null) {
+                btn_add.setOnClickListener(view -> {
+                    if (Action.equals("Add")) {
+                        addHalakaToDatabase();
+                    } else {
+                        updateHalaka();
+                    }
+                });
+            }
+            ImageButton imbtn_close = alertDialog.findViewById(R.id.creat_halaka_imgbtn_close);
+            if (imbtn_close != null) {
+                imbtn_close.setOnClickListener(view121 -> alertDialog.dismiss());
             }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
-
-
-        spinner_halaka_stage.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-
-            @Override
-            public void onItemSelected(AdapterView<?> spinner, View v,
-                                       int arg2, long arg3) {
-                String selectedVal = getResources().getStringArray(R.array.stage_array)[spinner.getSelectedItemPosition()];
-                spinner_halaka_mohafez.setSelection(0);
-                getMohafezsfromDatebase(selectedVal);
-                mohafezId = "";
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> arg0) {
-                // TODO Auto-generated method stub
-            }
-
-        });
-
-        btn_add = alertDialog.findViewById(R.id.creat_halaka_add_btn_save);
-        assert btn_add != null;
-        btn_add.setOnClickListener(view -> {
-            if (Action.equals("Add")) {
-                addHalakaToDatabase();
-            } else {
-                updateHalaka();
-            }
-        });
-        ImageButton imbtn_close = alertDialog.findViewById(R.id.creat_halaka_imgbtn_close);
-        assert imbtn_close != null;
-        imbtn_close.setOnClickListener(view121 -> alertDialog.dismiss());
+        }
     }
 
     private void addHalakaToDatabase() {
@@ -268,30 +274,31 @@ public class HalakatFragment extends Fragment {
     }
 
     private void getMohafezsfromDatebase(String selectedVal) {
-        db.collection("Mohafez").whereEqualTo("stage", selectedVal).get().addOnSuccessListener(queryDocumentSnapshots -> {
-            mohafezs.clear();
-            mohafezs.add(new Mohafez("", "", "", "اختر المحفظ"));
-            for (int i = 0; i < queryDocumentSnapshots.size(); i++) {
-                mohafezs.add(queryDocumentSnapshots.toObjects(Mohafez.class).get(i));
-                adapter = new ArrayAdapter<>(Objects.requireNonNull(getActivity()),
-                        android.R.layout.simple_spinner_item, mohafezs);
-                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                spinner_halaka_mohafez.setAdapter(adapter);
-            }
-            for (int i = 0; i < mohafezs.size(); i++) {
-                if (mohafezs.get(i).getId().equals(retMohafezId)) {
-                    spinner_halaka_mohafez.setSelection(i);
-                }
-            }
-        });
+        db.collection("Mohafez")
+                .whereEqualTo("stage", selectedVal)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    mohafezs.clear();
+                    mohafezs.add(new Mohafez("", "", "", "اختر المحفظ"));
+                    for (int i = 0; i < queryDocumentSnapshots.size(); i++) {
+                        mohafezs.add(queryDocumentSnapshots.toObjects(Mohafez.class).get(i));
+                        adapter = new ArrayAdapter<>(Objects.requireNonNull(getActivity()),
+                                android.R.layout.simple_spinner_item, mohafezs);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        spinner_halaka_mohafez.setAdapter(adapter);
+                    }
+                    for (int i = 0; i < mohafezs.size(); i++) {
+                        if (mohafezs.get(i).getId().equals(retMohafezId)) {
+                            spinner_halaka_mohafez.setSelection(i);
+                        }
+                    }
+                });
     }
 
     @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
         if (item.getTitle().equals(Common.UPDATE)) {
             showDialogUpdateHalaka(item.getOrder());
-        } else if (item.getTitle().equals(Common.DELETE)) {
-            Toast.makeText(getActivity(), "DELETE", Toast.LENGTH_LONG).show();
         }
         return super.onContextItemSelected(item);
 
@@ -310,13 +317,12 @@ public class HalakatFragment extends Fragment {
     private void updateHalaka() {
         if (!halakaId.isEmpty()) {
             if (validateInputs()) {
-
                 if (retMohafezId.equals(mohafezId)) {
                     db.collection("Group").document(halakaId).set(new Group(Objects.requireNonNull(halaka_name.getText()).toString().trim()
                             , retMohafezId, spinner_halaka_stage.getSelectedItem().toString(), halakaId));
                     db.collection("Mohafez").document(retMohafezId).update("groupId", halakaId);
                     alertDialog.dismiss();
-                    sweetAlertDialog.showDialogSuccess("OK", "تم إضافة بيانات الحلقة بنجاح !").setConfirmButton("OK", sweetAlertDialog1 -> {
+                    sweetAlertDialog.showDialogSuccess("OK", "تم تحديث بيانات الحلقة بنجاح !").setConfirmButton("OK", sweetAlertDialog1 -> {
                         clearInputs();
                         sweetAlertDialog1.dismissWithAnimation();
                     });
@@ -327,7 +333,7 @@ public class HalakatFragment extends Fragment {
                                     , mohafezId, spinner_halaka_stage.getSelectedItem().toString(), halakaId));
                             db.collection("Mohafez").document(mohafezId).update("groupId", halakaId);
                             db.collection("Mohafez").document(retMohafezId).update("groupId", "");
-                            sweetAlertDialog.showDialogSuccess("OK", "تم إضافة بيانات الحلقة بنجاح !").setConfirmButton("OK", sweetAlertDialog1 -> {
+                            sweetAlertDialog.showDialogSuccess("OK", "تم تحديث بيانات الحلقة بنجاح !").setConfirmButton("OK", sweetAlertDialog1 -> {
                                 clearInputs();
                                 sweetAlertDialog1.dismissWithAnimation();
                             });

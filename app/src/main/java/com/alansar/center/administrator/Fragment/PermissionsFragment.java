@@ -190,137 +190,104 @@ public class PermissionsFragment extends Fragment {
                 && permissionsUsers.getPermissionsEdare() != null
                 && !permissionsUsers.getPermissionsEdare().isEmpty()
                 && permissionsUsers.getPermissionsMohafez() != null
-                && !permissionsUsers.getPermissionsMohafez().isEmpty())
-        {
-            if (permissionsUsers.getPermissionsMoshref().get("addMohafez"))
-            {
+                && !permissionsUsers.getPermissionsMohafez().isEmpty()) {
+            if (permissionsUsers.getPermissionsMoshref().get("addMohafez")) {
                 ch_moshref_add_mohafez.setChecked(true);
-            }else
-            {
+            } else {
                 ch_moshref_add_mohafez.setChecked(false);
             }
 
-            if (permissionsUsers.getPermissionsMoshref().get("updateMohafez"))
-            {
+            if (permissionsUsers.getPermissionsMoshref().get("updateMohafez")) {
                 ch_moshref_update_mohafez.setChecked(true);
-            }else
-            {
+            } else {
                 ch_moshref_update_mohafez.setChecked(false);
             }
 
-            if (permissionsUsers.getPermissionsMoshref().get("disableAccountMohafez"))
-            {
+            if (permissionsUsers.getPermissionsMoshref().get("disableAccountMohafez")) {
                 ch_moshref_disable_account.setChecked(true);
-            }else
-            {
+            } else {
                 ch_moshref_disable_account.setChecked(false);
             }
 
-            if (permissionsUsers.getPermissionsMoshref().get("addHalaka"))
-            {
+            if (permissionsUsers.getPermissionsMoshref().get("addHalaka")) {
                 ch_moshref_add_halaka.setChecked(true);
-            }else
-            {
+            } else {
                 ch_moshref_add_halaka.setChecked(false);
             }
 
-            if (permissionsUsers.getPermissionsMoshref().get("updateHalaka"))
-            {
+            if (permissionsUsers.getPermissionsMoshref().get("updateHalaka")) {
                 ch_moshref_update_halaka.setChecked(true);
-            }else
-            {
+            } else {
                 ch_moshref_update_halaka.setChecked(false);
             }
 
-            if (permissionsUsers.getPermissionsMoshref().get("addStudent"))
-            {
+            if (permissionsUsers.getPermissionsMoshref().get("addStudent")) {
                 ch_moshref_add_student.setChecked(true);
-            }else
-            {
+            } else {
                 ch_moshref_add_student.setChecked(false);
             }
 
-            if (permissionsUsers.getPermissionsMoshref().get("updateStudent"))
-            {
+            if (permissionsUsers.getPermissionsMoshref().get("updateStudent")) {
                 ch_moshref_update_student.setChecked(true);
-            }else
-            {
+            } else {
                 ch_moshref_update_student.setChecked(false);
             }
 
             ///////////////////////////////////////
 
-            if (permissionsUsers.getPermissionsEdare().get("addMohafez"))
-            {
+            if (permissionsUsers.getPermissionsEdare().get("addMohafez")) {
                 ch_edare_add_mohafez.setChecked(true);
-            }else
-            {
+            } else {
                 ch_edare_add_mohafez.setChecked(false);
             }
 
-            if (permissionsUsers.getPermissionsEdare().get("updateMohafez"))
-            {
+            if (permissionsUsers.getPermissionsEdare().get("updateMohafez")) {
                 ch_edare_update_mohafez.setChecked(true);
-            }else
-            {
+            } else {
                 ch_edare_update_mohafez.setChecked(false);
             }
 
-            if (permissionsUsers.getPermissionsEdare().get("disableAccountMohafez"))
-            {
+            if (permissionsUsers.getPermissionsEdare().get("disableAccountMohafez")) {
                 ch_edare_disable_account.setChecked(true);
-            }else
-            {
+            } else {
                 ch_edare_disable_account.setChecked(false);
             }
 
-            if (permissionsUsers.getPermissionsEdare().get("addHalaka"))
-            {
+            if (permissionsUsers.getPermissionsEdare().get("addHalaka")) {
                 ch_edare_add_halaka.setChecked(true);
-            }else
-            {
+            } else {
                 ch_edare_add_halaka.setChecked(false);
             }
 
-            if (permissionsUsers.getPermissionsEdare().get("updateHalaka"))
-            {
+            if (permissionsUsers.getPermissionsEdare().get("updateHalaka")) {
                 ch_edare_update_halaka.setChecked(true);
-            }else
-            {
+            } else {
                 ch_edare_update_halaka.setChecked(false);
             }
 
-            if (permissionsUsers.getPermissionsEdare().get("addStudent"))
-            {
+            if (permissionsUsers.getPermissionsEdare().get("addStudent")) {
                 ch_edare_add_student.setChecked(true);
-            }else
-            {
+            } else {
                 ch_edare_add_student.setChecked(false);
             }
 
-            if (permissionsUsers.getPermissionsEdare().get("updateStudent"))
-            {
+            if (permissionsUsers.getPermissionsEdare().get("updateStudent")) {
                 ch_edare_update_student.setChecked(true);
-            }else
-            {
+            } else {
                 ch_edare_update_student.setChecked(false);
             }
 
             //////////////////////////////////
 
-            if (permissionsUsers.getPermissionsMohafez().get("addStudent"))
-            {
+            if (permissionsUsers.getPermissionsMohafez().get("addStudent")) {
                 ch_mohafez_add_student.setChecked(true);
-            }else
-            {
+            } else {
                 ch_mohafez_add_student.setChecked(false);
             }
 
-            if (permissionsUsers.getPermissionsMohafez().get("updateStudent"))
-            {
+            if (permissionsUsers.getPermissionsMohafez().get("updateStudent")) {
                 ch_mohafez_update_student.setChecked(true);
-            }else
-            {
+            } else {
                 ch_mohafez_update_student.setChecked(false);
             }
 

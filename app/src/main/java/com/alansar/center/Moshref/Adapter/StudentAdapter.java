@@ -9,7 +9,7 @@ import android.widget.Filterable;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.alansar.center.Edare.ViewHolder.StudentViewHolder;
+import com.alansar.center.Moshref.ViewHolder.StudentViewHolder;
 import com.alansar.center.R;
 import com.alansar.center.students.Model.Student;
 
@@ -60,7 +60,7 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentViewHolder> impl
     @Override
     public StudentViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.student_layout, parent, false);
-        return new StudentViewHolder(v, students);
+        return new StudentViewHolder(v);
     }
 
     @Override

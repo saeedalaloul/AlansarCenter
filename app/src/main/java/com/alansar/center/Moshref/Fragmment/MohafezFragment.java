@@ -26,6 +26,8 @@ import com.alansar.center.Common.Common;
 import com.alansar.center.Mohafez.Model.Mohafez;
 import com.alansar.center.Moshref.Adapter.MohafezAdapter;
 import com.alansar.center.R;
+import com.alansar.center.SweetAlertDialog_;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.ListenerRegistration;
@@ -65,8 +67,8 @@ public class MohafezFragment extends Fragment {
 
         rv = view.findViewById(R.id.mohafez_rv);
         mohafezeen = new ArrayList<>();
-        //FloatingActionButton btnaddMohafez = view.findViewById(R.id.btn_add_mohafez);
-        //  btnaddMohafez.setOnClickListener(view1 -> addMohafez());
+        FloatingActionButton btnaddMohafez = view.findViewById(R.id.btn_add_mohafez);
+        btnaddMohafez.setOnClickListener(view1 -> addMohafez());
         adapter = new MohafezAdapter(mohafezeen);
         rv.setLayoutManager(new LinearLayoutManager(getContext()));
         rv.setHasFixedSize(true);
@@ -121,19 +123,46 @@ public class MohafezFragment extends Fragment {
 
     @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
-        adapter.notifyDataSetChanged();
         if (item.getTitle().equals(Common.UPDATE)) {
-            startActivity(new Intent(getActivity(), HostingActivity.class)
-                    .putExtra("fragmentType", "Update_Personal_Information__Fragment")
-                    .putExtra("UID", MohafezAdapter.mohafezeen.get(item.getOrder()).getId())
-                    .putExtra("permissions", Common.PERMISSIONS_MOHAFEZ)
-            );
-        } else if (item.getTitle().equals(Common.DELETE)) {
-            Toast.makeText(getActivity(), "DELETE", Toast.LENGTH_SHORT).show();
+            db.collection("PermissionsUsers")
+                    .document("permissionsUsers")
+                    .get().addOnSuccessListener(documentSnapshot -> {
+                if (documentSnapshot.exists()) {
+                    if (documentSnapshot.get("permissionsMoshref.updateMohafez", Boolean.TYPE)) {
+                        startActivity(new Intent(getActivity(), HostingActivity.class)
+                                .putExtra("fragmentType", "Update_Personal_Information__Fragment")
+                                .putExtra("UID", MohafezAdapter.mohafezeen.get(item.getOrder()).getId())
+                                .putExtra("permissions", Common.PERMISSIONS_MOHAFEZ)
+                        );
+                    } else {
+                        new SweetAlertDialog_(getContext()).showDialogError("لم يتم منحك صلاحية تحديث محفظ يرجى مراجعة مسؤول المركز");
+                    }
+                }
+            });
         } else if (item.getTitle().equals(Common.ISDISABLEACCOUNT)) {
-            updateIsEnabledAccount(MohafezAdapter.mohafezeen.get(item.getOrder()).getId(), false);
+            db.collection("PermissionsUsers")
+                    .document("permissionsUsers")
+                    .get().addOnSuccessListener(documentSnapshot -> {
+                if (documentSnapshot.exists()) {
+                    if (documentSnapshot.get("permissionsMoshref.disableAccountMohafez", Boolean.TYPE)) {
+                        updateIsEnabledAccount(MohafezAdapter.mohafezeen.get(item.getOrder()).getId(), false);
+                    } else {
+                        new SweetAlertDialog_(getContext()).showDialogError("لم يتم منحك صلاحية تعطيل حسابات المحفظين يرجى مراجعة مسؤول المركز");
+                    }
+                }
+            });
         } else if (item.getTitle().equals(Common.ISENABLEACCOUNT)) {
-            updateIsEnabledAccount(MohafezAdapter.mohafezeen.get(item.getOrder()).getId(), true);
+            db.collection("PermissionsUsers")
+                    .document("permissionsUsers")
+                    .get().addOnSuccessListener(documentSnapshot -> {
+                if (documentSnapshot.exists()) {
+                    if (documentSnapshot.get("permissionsMoshref.disableAccountMohafez", Boolean.TYPE)) {
+                        updateIsEnabledAccount(MohafezAdapter.mohafezeen.get(item.getOrder()).getId(), true);
+                    } else {
+                        new SweetAlertDialog_(getContext()).showDialogError("لم يتم منحك صلاحية تمكين حسابات المحفظين يرجى مراجعة مسؤول المركز");
+                    }
+                }
+            });
         }
         return super.onContextItemSelected(item);
 
@@ -232,9 +261,19 @@ public class MohafezFragment extends Fragment {
     }
 
     private void addMohafez() {
-        startActivity(new Intent(getActivity(), HostingActivity.class)
-                .putExtra("fragmentType", "Personal_Information__Fragment")
-                .putExtra("permissions", Common.PERMISSIONS_MOHAFEZ));
+        db.collection("PermissionsUsers")
+                .document("permissionsUsers")
+                .get().addOnSuccessListener(documentSnapshot -> {
+            if (documentSnapshot.exists()) {
+                if (documentSnapshot.get("permissionsMoshref.addMohafez", Boolean.TYPE)) {
+                    startActivity(new Intent(getActivity(), HostingActivity.class)
+                            .putExtra("fragmentType", "Personal_Information__Fragment")
+                            .putExtra("permissions", Common.PERMISSIONS_MOHAFEZ));
+                } else {
+                    new SweetAlertDialog_(getContext()).showDialogError("لم يتم منحك صلاحية إضافة محفظ يرجى مراجعة مسؤول المركز");
+                }
+            }
+        });
     }
 
 }

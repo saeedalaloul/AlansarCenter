@@ -26,6 +26,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.alansar.center.Adapter.Multiple_accounts_Adapter;
 import com.alansar.center.Common.Common;
+import com.alansar.center.Edare.Fragment.CenterReportsFragment;
 import com.alansar.center.Edare.Fragment.ExamsFragment;
 import com.alansar.center.Edare.Fragment.HalakatFragment;
 import com.alansar.center.Edare.Fragment.HomeFragment;
@@ -263,6 +264,15 @@ public class EdareActivity extends AppCompatActivity implements NavigationView.O
                 MohafezFragment mohafez = new MohafezFragment();
                 moveFragment(mohafez);
                 toolbar.setTitle("المحفظين");
+                toolbar.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                drawerLayout.closeDrawers();
+                menuItem.setChecked(true);
+                menuItem.setCheckable(true);
+                break;
+            case R.id.edare_stage_reports:
+                CenterReportsFragment centerReportsFragment = new CenterReportsFragment();
+                moveFragment(centerReportsFragment);
+                toolbar.setTitle("تقارير المرحلة");
                 toolbar.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                 drawerLayout.closeDrawers();
                 menuItem.setChecked(true);

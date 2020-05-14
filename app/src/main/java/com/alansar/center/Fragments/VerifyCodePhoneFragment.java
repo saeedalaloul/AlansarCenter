@@ -17,7 +17,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.alansar.center.Activitys.LoginActivity;
 import com.alansar.center.Adapter.Multiple_accounts_Adapter;
 import com.alansar.center.Common.Common;
 import com.alansar.center.Edare.Activitys.EdareActivity;
@@ -35,7 +34,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.ListenerRegistration;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -54,7 +52,7 @@ public class VerifyCodePhoneFragment extends Fragment {
     private FirebaseFirestore db;
     private ArrayList<AccountItem> accountItems;
     private SweetAlertDialog_ sweetAlertDialog_;
-
+    private AlertDialog dialogMultipleAccounts;
 
 
     public VerifyCodePhoneFragment() {
@@ -125,8 +123,8 @@ public class VerifyCodePhoneFragment extends Fragment {
                                     });
                         } else {
                             if (getActivity() != null)
-                            sweetAlertDialog_.showDialogError("لا يوجد لديك أي صلاحية لتسجيل الدخول إلى حسابك , راجع إدارة التطبيق")
-                                    .setConfirmButton("OK", sweetAlertDialog -> Common.SignOut(mAuth,getActivity(),null));
+                                sweetAlertDialog_.showDialogError("لا يوجد لديك أي صلاحية لتسجيل الدخول إلى حسابك , راجع إدارة التطبيق")
+                                        .setConfirmButton("OK", sweetAlertDialog -> Common.SignOut(mAuth, getActivity(), null));
                         }
                     } else {
                         sweetAlertDialog_.cancelDialog();
@@ -189,7 +187,7 @@ public class VerifyCodePhoneFragment extends Fragment {
             accountItems.add(accountItem);
         }
         if (getActivity() != null)
-        logout.setOnClickListener(view -> Common.SignOut(mAuth,getActivity(),null));
+            logout.setOnClickListener(view -> Common.SignOut(mAuth, getActivity(), null));
 
         Multiple_accounts_Adapter adapter = new Multiple_accounts_Adapter(accountItems, getActivity());
         mRecyclerView.setHasFixedSize(true);
@@ -198,7 +196,8 @@ public class VerifyCodePhoneFragment extends Fragment {
         adapter.notifyDataSetChanged();
 
         builder.setCancelable(false);
-        builder.show();
+        dialogMultipleAccounts = builder.create();
+        dialogMultipleAccounts.show();
     }
 
 
@@ -302,4 +301,11 @@ public class VerifyCodePhoneFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (dialogMultipleAccounts != null && dialogMultipleAccounts.isShowing()) {
+            dialogMultipleAccounts.dismiss();
+        }
+    }
 }

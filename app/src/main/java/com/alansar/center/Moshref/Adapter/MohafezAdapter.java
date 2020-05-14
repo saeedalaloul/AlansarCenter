@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.alansar.center.Mohafez.Model.Mohafez;
 import com.alansar.center.R;
-import com.alansar.center.administrator.ViewHolder.MohafezViewHolder;
+import com.alansar.center.Moshref.ViewHolder.MohafezViewHolder;
 
 import java.util.ArrayList;
 import java.util.List;

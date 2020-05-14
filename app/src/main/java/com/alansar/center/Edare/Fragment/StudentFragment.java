@@ -23,8 +23,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.alansar.center.Activitys.HostingActivity;
 import com.alansar.center.Common.Common;
-import com.alansar.center.Moshref.Adapter.StudentAdapter;
+import com.alansar.center.Edare.Adapter.StudentAdapter;
 import com.alansar.center.R;
+import com.alansar.center.SweetAlertDialog_;
 import com.alansar.center.students.Model.Student;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.CollectionReference;
@@ -114,13 +115,21 @@ public class StudentFragment extends Fragment {
     public boolean onContextItemSelected(@NonNull MenuItem item) {
         adapter.notifyDataSetChanged();
         if (item.getTitle().equals(Common.UPDATE)) {
-            startActivity(new Intent(getActivity(), HostingActivity.class)
-                    .putExtra("fragmentType", "Update_Personal_Information__Fragment")
-                    .putExtra("UID", StudentAdapter.students.get(item.getOrder()).getId())
-                    .putExtra("permissions", Common.PERMISSIONS_STUDENTN)
-            );
-        } else if (item.getTitle().equals(Common.DELETE)) {
-            Toast.makeText(getActivity(), "DELETE", Toast.LENGTH_SHORT).show();
+            db.collection("PermissionsUsers")
+                    .document("permissionsUsers")
+                    .get().addOnSuccessListener(documentSnapshot -> {
+                if (documentSnapshot.exists()) {
+                    if (documentSnapshot.get("permissionsEdare.updateStudent", Boolean.TYPE)) {
+                        startActivity(new Intent(getActivity(), HostingActivity.class)
+                                .putExtra("fragmentType", "Update_Personal_Information__Fragment")
+                                .putExtra("UID", StudentAdapter.students.get(item.getOrder()).getId())
+                                .putExtra("permissions", Common.PERMISSIONS_STUDENTN)
+                        );
+                    } else {
+                        new SweetAlertDialog_(getContext()).showDialogError("لم يتم منحك صلاحية تحديث طالب يرجى مراجعة مسؤول المركز");
+                    }
+                }
+            });
         } else if (item.getTitle().equals(Common.ISDISABLEACCOUNT)) {
             updateIsEnabledAccount(StudentAdapter.students.get(item.getOrder()).getId(), false);
         } else if (item.getTitle().equals(Common.ISENABLEACCOUNT)) {
@@ -227,8 +236,18 @@ public class StudentFragment extends Fragment {
     }
 
     private void addStudent() {
-        startActivity(new Intent(getActivity(), HostingActivity.class)
-                .putExtra("fragmentType", "Personal_Information__Fragment")
-                .putExtra("permissions", Common.PERMISSIONS_STUDENTN));
+        db.collection("PermissionsUsers")
+                .document("permissionsUsers")
+                .get().addOnSuccessListener(documentSnapshot -> {
+            if (documentSnapshot.exists()) {
+                if (documentSnapshot.get("permissionsEdare.addStudent", Boolean.TYPE)) {
+                    startActivity(new Intent(getActivity(), HostingActivity.class)
+                            .putExtra("fragmentType", "Personal_Information__Fragment")
+                            .putExtra("permissions", Common.PERMISSIONS_STUDENTN));
+                } else {
+                    new SweetAlertDialog_(getContext()).showDialogError("لم يتم منحك صلاحية إضافة طالب يرجى مراجعة مسؤول المركز");
+                }
+            }
+        });
     }
 }

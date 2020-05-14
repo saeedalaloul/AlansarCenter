@@ -20,19 +20,19 @@ public class StudentViewHolder extends RecyclerView.ViewHolder implements View.O
     public TextView tv_student_name, tv_student_stage;
     public ImageButton imgbtn_more;
     private ItemClickListener itemClickListener;
-    private List<Student> students;
-    private FirebaseFirestore db;
+//    private List<Student> students;
+//    private FirebaseFirestore db;
 
 
-    public StudentViewHolder(@NonNull View itemView, List<Student> students) {
+    public StudentViewHolder(@NonNull View itemView) {
         super(itemView);
         tv_student_name = itemView.findViewById(R.id.tv_student_name);
         tv_student_stage = itemView.findViewById(R.id.tv_student_stage);
         imgbtn_more = itemView.findViewById(R.id.imgbtn_more_student);
         itemView.setOnClickListener(this);
         itemView.setOnCreateContextMenuListener(this);
-        this.students = students;
-        db = FirebaseFirestore.getInstance();
+//        this.students = students;
+//        db = FirebaseFirestore.getInstance();
     }
 
 
@@ -50,15 +50,14 @@ public class StudentViewHolder extends RecyclerView.ViewHolder implements View.O
     public void onCreateContextMenu(ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
         contextMenu.setHeaderTitle("Select the Action");
         contextMenu.add(0, 0, getAdapterPosition(), Common.UPDATE);
-        contextMenu.add(0, 1, getAdapterPosition(), Common.DELETE);
-        db.collection("Person").document(students.get(getAdapterPosition()).getId()).get().addOnSuccessListener(documentSnapshot -> {
-            if (documentSnapshot.exists()) {
-                if (documentSnapshot.getBoolean("enableAccount")) {
-                    contextMenu.add(0, 2, getAdapterPosition(), Common.ISDISABLEACCOUNT);
-                } else {
-                    contextMenu.add(0, 2, getAdapterPosition(), Common.ISENABLEACCOUNT);
-                }
-            }
-        });
+//        db.collection("Person").document(students.get(getAdapterPosition()).getId()).get().addOnSuccessListener(documentSnapshot -> {
+//            if (documentSnapshot.exists()) {
+//                if (documentSnapshot.getBoolean("enableAccount")) {
+//                    contextMenu.add(0, 1, getAdapterPosition(), Common.ISDISABLEACCOUNT);
+//                } else {
+//                    contextMenu.add(0, 1, getAdapterPosition(), Common.ISENABLEACCOUNT);
+//                }
+//            }
+//        });
     }
 }
