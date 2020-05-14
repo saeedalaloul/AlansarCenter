@@ -50,7 +50,7 @@ public class StudentViewHolder extends RecyclerView.ViewHolder implements View.O
     public void onCreateContextMenu(ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
         contextMenu.setHeaderTitle("Select the Action");
         contextMenu.add(0, 0, getAdapterPosition(), Common.UPDATE);
-        contextMenu.add(0, 1, getAdapterPosition(), Common.DELETE);
+        contextMenu.add(0, 1, getAdapterPosition(), Common.VIEW_THE_LATEST_EXAM);
         db.collection("Person").document(students.get(getAdapterPosition()).getId()).get().addOnSuccessListener(documentSnapshot -> {
             if (documentSnapshot.exists()) {
                 if (documentSnapshot.getBoolean("enableAccount")) {

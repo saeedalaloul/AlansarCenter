@@ -1,9 +1,11 @@
 package com.alansar.center.Moshref.Fragmment;
 
 
+import android.annotation.SuppressLint;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,9 +15,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -27,14 +32,20 @@ import com.alansar.center.Moshref.Adapter.StudentAdapter;
 import com.alansar.center.R;
 import com.alansar.center.SweetAlertDialog_;
 import com.alansar.center.students.Model.Student;
+import com.alansar.center.supervisor_exams.Model.Exam;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.rengwuxian.materialedittext.MaterialEditText;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -52,7 +63,11 @@ public class StudentFragment extends Fragment {
     private RecyclerView rv;
     private View view;
     private ListenerRegistration registration;
-
+    private TextView tv_name_student, tv_part_exam,
+            tv_date_exam, tv_name_mohafez,
+            tv_mark_exam, tv_notes_exam,
+            tv_stage_exam;
+    private LinearLayout li_question_exam_ed;
 
     public StudentFragment() {
         // Required empty public constructor
@@ -121,6 +136,134 @@ public class StudentFragment extends Fragment {
                 });
     }
 
+    private void ViewLatestExamOfStudent(int order) {
+        Calendar calendar = Calendar.getInstance();
+        db.collection("Exam")
+                .whereEqualTo("idStudent", students.get(order).getId())
+                .whereEqualTo("stage", students.get(order).getStage())
+                .whereEqualTo("statusAcceptance", 3)
+                .whereEqualTo("year", calendar.get(Calendar.YEAR))
+                .orderBy("month", Query.Direction.DESCENDING)
+                .orderBy("day", Query.Direction.DESCENDING)
+                .limit(1)
+                .get().addOnSuccessListener(queryDocumentSnapshots -> {
+            if (queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
+                showDialogMoreDetails(queryDocumentSnapshots.getDocuments().get(0).toObject(Exam.class), order);
+            }
+        }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
+    }
+
+    @SuppressLint("SetTextI18n")
+    private void showDialogMoreDetails(Exam exam, int order) {
+        if (getContext() != null && exam != null) {
+            LayoutInflater factory = LayoutInflater.from(getActivity());
+            @SuppressLint("InflateParams") final View moreDetailsDialogView
+                    = factory.inflate(R.layout.more_details_exam_dialog, null);
+            AlertDialog dialogMoreDetails = new AlertDialog.Builder(getContext())
+                    .setView(moreDetailsDialogView).create();
+            dialogMoreDetails.show();
+            Objects.requireNonNull(dialogMoreDetails.getWindow()).setBackgroundDrawableResource(R.color.fbutton_color_transparent);
+            InitializationDialog(dialogMoreDetails);
+
+            tv_name_student.setText(exam.getNotes());
+            tv_part_exam.setText(exam.getExamPart());
+            tv_stage_exam.setText(exam.getStage());
+            tv_date_exam.setText(exam.getDay() + "/" + exam.getMonth() + "/" + exam.getYear());
+            getNameStudentFromDB(exam.getIdStudent(), tv_name_student);
+            getNameMohafezFromDB(students.get(order).getGroupId(), tv_name_mohafez);
+            tv_notes_exam.setText(exam.getNotes());
+            calcMarksExam(exam.getMarksExamQuestions(), tv_mark_exam);
+            if (exam.getMarksExamQuestions() != null) {
+                for (int i = 1; i <= exam.getMarksExamQuestions().size(); i++) {
+                    MaterialEditText ed_questions = new MaterialEditText(getContext());
+                    LinearLayout.LayoutParams lp_ed = new LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.MATCH_PARENT,
+                            LinearLayout.LayoutParams.WRAP_CONTENT);
+
+                    ed_questions.setLayoutParams(lp_ed);
+                    ed_questions.setMetTextColor(Color.BLACK);
+                    ed_questions.setTextSize(20);
+                    ed_questions.setTextColor(Color.BLACK);
+                    ed_questions.setFocusable(false);
+                    ed_questions.setHelperText("س :" + i);
+                    ed_questions.setHelperTextAlwaysShown(true);
+                    ed_questions.setHelperTextColor(Color.BLACK);
+                    ed_questions.setText("" + exam.getMarksExamQuestions().get("" + i));
+                    li_question_exam_ed.addView(ed_questions);
+                }
+            }
+        }
+    }
+
+    private void InitializationDialog(AlertDialog dialogMoreDetails) {
+        tv_notes_exam = dialogMoreDetails.findViewById(R.id.tv_notes_more_details_exam);
+        tv_name_mohafez = dialogMoreDetails.findViewById(R.id.tv_name_mohafez);
+        tv_name_student = dialogMoreDetails.findViewById(R.id.tv_name_student);
+        tv_part_exam = dialogMoreDetails.findViewById(R.id.tv_part_exam);
+        tv_date_exam = dialogMoreDetails.findViewById(R.id.tv_date_exam);
+        tv_mark_exam = dialogMoreDetails.findViewById(R.id.tv_mark_exam);
+        tv_stage_exam = dialogMoreDetails.findViewById(R.id.tv_stage_more_details_exam);
+        li_question_exam_ed = dialogMoreDetails.findViewById(R.id.linear_layout_questions_exam_ed);
+    }
+
+    private void getNameStudentFromDB(String id, TextView et_name) {
+        if (id != null && !id.isEmpty()) {
+            db.collection("Student").document(id)
+                    .get().addOnSuccessListener(documentSnapshot -> {
+                if (documentSnapshot.exists()) {
+                    if (et_name != null) {
+                        et_name.setText(documentSnapshot.getString("name"));
+                    }
+                }
+            });
+        }
+    }
+
+    private void getNameMohafezFromDB(String id, TextView et_name) {
+        if (id != null && !id.isEmpty()) {
+            db.collection("Mohafez")
+                    .whereEqualTo("groupId", id)
+                    .get().addOnSuccessListener(documentSnapshot -> {
+                if (documentSnapshot != null && !documentSnapshot.isEmpty()) {
+                    if (et_name != null) {
+                        et_name.setText(documentSnapshot.getDocuments().get(0).getString("name"));
+                    }
+                }
+            });
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
+    private void calcMarksExam(HashMap<String, Double> map, TextView tv_mark_exam) {
+        if (map != null) {
+            double mark = 0;
+            if (!map.isEmpty()) {
+                for (int i = 1; i <= map.size(); i++) {
+                    if (map.get("" + i) != null) {
+                        mark += map.get("" + i);
+                    }
+                }
+            }
+            double result = round(mark / map.size());
+            if (result >= 80.00) {
+                tv_mark_exam.setText("" + result);
+                tv_mark_exam.setTextColor(Color.WHITE);
+                tv_mark_exam.setBackgroundColor(Color.GREEN);
+
+            } else if (result < 80.00) {
+                tv_mark_exam.setText("" + result);
+                tv_mark_exam.setTextColor(Color.WHITE);
+                tv_mark_exam.setBackgroundColor(Color.RED);
+            }
+        }
+    }
+
+    private double round(double value) {
+        BigDecimal bd = BigDecimal.valueOf(value);
+        bd = bd.setScale(2, RoundingMode.HALF_UP);
+        return bd.doubleValue();
+    }
+
     @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
         if (item.getTitle().equals(Common.UPDATE)) {
@@ -139,6 +282,8 @@ public class StudentFragment extends Fragment {
                     }
                 }
             });
+        } else if (item.getTitle().equals(Common.VIEW_THE_LATEST_EXAM)) {
+            ViewLatestExamOfStudent(item.getOrder());
         } else if (item.getTitle().equals(Common.ISDISABLEACCOUNT)) {
             updateIsEnabledAccount(StudentAdapter.students.get(item.getOrder()).getId(), false);
         } else if (item.getTitle().equals(Common.ISENABLEACCOUNT)) {

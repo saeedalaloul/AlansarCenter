@@ -51,12 +51,11 @@ public class EdareViewHolder extends RecyclerView.ViewHolder implements View.OnC
     public void onCreateContextMenu(ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
         contextMenu.setHeaderTitle("Select the Action");
         contextMenu.add(0, 0, getAdapterPosition(), Common.UPDATE);
-        contextMenu.add(0, 1, getAdapterPosition(), Common.DELETE);
         db.collection("Person").document(edares.get(getAdapterPosition()).getId()).get().addOnSuccessListener(documentSnapshot -> {
             if (documentSnapshot.getBoolean("enableAccount")) {
-                contextMenu.add(0, 2, getAdapterPosition(), Common.ISDISABLEACCOUNT);
+                contextMenu.add(0, 1, getAdapterPosition(), Common.ISDISABLEACCOUNT);
             } else {
-                contextMenu.add(0, 2, getAdapterPosition(), Common.ISENABLEACCOUNT);
+                contextMenu.add(0, 1, getAdapterPosition(), Common.ISENABLEACCOUNT);
             }
         });
     }

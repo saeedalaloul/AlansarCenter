@@ -182,9 +182,9 @@ public class StudentFragment extends Fragment {
                 .whereEqualTo("idMohafez", Common.currentPerson.getId())
                 .whereEqualTo("statusAcceptance", 3)
                 .whereEqualTo("year", calendar.get(Calendar.YEAR))
-                .orderBy("month", Query.Direction.ASCENDING)
-                .orderBy("day", Query.Direction.ASCENDING)
-                .limitToLast(1)
+                .orderBy("month", Query.Direction.DESCENDING)
+                .orderBy("day", Query.Direction.DESCENDING)
+                .limit(1)
                 .get().addOnSuccessListener(queryDocumentSnapshots -> {
             if (queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
                 showDialogMoreDetails(queryDocumentSnapshots.getDocuments().get(0).toObject(Exam.class));
