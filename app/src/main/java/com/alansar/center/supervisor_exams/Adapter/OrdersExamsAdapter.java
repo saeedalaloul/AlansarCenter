@@ -9,9 +9,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.alansar.center.supervisor_exams.ViewHolder.OrdersExamsViewHolder;
 import com.alansar.center.R;
 import com.alansar.center.supervisor_exams.Model.Exam;
+import com.alansar.center.supervisor_exams.ViewHolder.OrdersExamsViewHolder;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.List;
@@ -41,20 +41,26 @@ public class OrdersExamsAdapter extends RecyclerView.Adapter<OrdersExamsViewHold
         holder.setItemClickListener((view, position1, isLongClick) -> {
 
         });
-        if (exams.get(position) != null && exams.get(position).getIdStudent() != null) {
-            db.collection("Student").document(exams.get(position).getIdStudent())
-                    .get().addOnSuccessListener(documentSnapshot -> {
-                if (documentSnapshot.exists()) {
-                    holder.tv_student_name_order_exam.setText(documentSnapshot.getString("name"));
-                }
-            });
-        }
+        getNameStudentFromDB(position, holder.tv_student_name_order_exam);
         getTypeStatusOrder(exams.get(position).getStatusAcceptance(), holder.tv_status_order_exam);
     }
 
     @Override
     public int getItemCount() {
         return exams.size();
+    }
+
+    private void getNameStudentFromDB(int position, TextView tv_name) {
+        if (exams.get(position) != null) {
+            if (exams.get(position).getIdStudent() != null) {
+                db.collection("Student").document(exams.get(position).getIdStudent())
+                        .get().addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        tv_name.setText(documentSnapshot.getString("name"));
+                    }
+                });
+            }
+        }
     }
 
     private void getTypeStatusOrder(int statusAcceptance, TextView tv_status_order_exam) {

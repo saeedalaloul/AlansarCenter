@@ -42,14 +42,18 @@ public class OrdersExamsAdapter extends RecyclerView.Adapter<OrdersExamsViewHold
 
         });
         if (exams.get(position) != null && exams.get(position).getIdStudent() != null) {
-            db.collection("Student").document(exams.get(position).getIdStudent())
-                    .get().addOnSuccessListener(documentSnapshot -> {
-                if (documentSnapshot.exists()) {
-                    holder.tv_student_name_order_exam.setText(documentSnapshot.getString("name"));
-                }
-            });
+            getNameStudentFromDB(position, holder);
         }
         getTypeStatusOrder(exams.get(position).getStatusAcceptance(), holder.tv_status_order_exam);
+    }
+
+    private void getNameStudentFromDB(int position, OrdersExamsViewHolder holder) {
+        db.collection("Student").document(exams.get(position).getIdStudent())
+                .get().addOnSuccessListener(documentSnapshot -> {
+            if (documentSnapshot.exists()) {
+                holder.tv_student_name_order_exam.setText(documentSnapshot.getString("name"));
+            }
+        });
     }
 
     @Override

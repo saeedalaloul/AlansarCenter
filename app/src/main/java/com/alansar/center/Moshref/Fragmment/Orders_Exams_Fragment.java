@@ -1,24 +1,18 @@
 package com.alansar.center.Moshref.Fragmment;
 
-import android.app.SearchManager;
-import android.content.Context;
 import android.icu.text.SimpleDateFormat;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
-import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -71,7 +65,6 @@ public class Orders_Exams_Fragment extends Fragment {
     }
 
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -381,7 +374,7 @@ public class Orders_Exams_Fragment extends Fragment {
                     map.put("statusAcceptance", -1);
                     map.put("notes", Notes);
                     map.put("day", calendar.get(Calendar.DAY_OF_MONTH));
-                    map.put("month", calendar.get(Calendar.MONTH) +1);
+                    map.put("month", calendar.get(Calendar.MONTH) + 1);
                     map.put("year", calendar.get(Calendar.YEAR));
                     map.put("isSeenExam.isSeenMohafez", false);
                     map.put("isSeenExam.isSeenEdare", false);
@@ -402,35 +395,6 @@ public class Orders_Exams_Fragment extends Fragment {
                 }
             }
         }
-    }
-
-
-    @Override
-    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        inflater.inflate(R.menu.fg_menu, menu);
-        SearchManager searchManager = (SearchManager) Objects.requireNonNull(getActivity()).getSystemService(Context.SEARCH_SERVICE);
-        MenuItem searchItem = menu.findItem(R.id.action_search);
-        SearchView searchView = (SearchView) searchItem.getActionView();
-        searchView.setImeOptions(EditorInfo.IME_ACTION_DONE);
-        assert searchManager != null;
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                //adapter.getFilter().filter(query);
-                // SearchData(query);
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                // adapter.getFilter().filter(newText);
-                //SearchData(newText);
-                return false;
-            }
-        });
-        super.onCreateOptionsMenu(menu, inflater);
-
     }
 
     private void getDifferenceDate(Date startDate, Date endDate, QueryDocumentSnapshot doc) {

@@ -84,22 +84,31 @@ public class HalakaAdapter extends RecyclerView.Adapter<HalakaViewHolder> implem
         });
         holder.imgbtn_more.setOnClickListener(View::showContextMenu);
         if (!halakat.get(position).getMohafezId().isEmpty()) {
-            db.collection("Mohafez").document(halakat.get(position).getMohafezId()).get().addOnSuccessListener(documentSnapshot -> {
+            getMohafezName(position, holder);
+            getCountMembersGroup(position, holder);
+        }
+    }
+
+    private void getMohafezName(int position, HalakaViewHolder holder) {
+        db.collection("Mohafez").document(halakat.get(position).getMohafezId()).get().addOnSuccessListener(documentSnapshot -> {
+            if (documentSnapshot.exists()) {
+                holder.tv_mohafez_name.setText(Objects.requireNonNull(documentSnapshot.get("name")).toString());
+            }
+        });
+    }
+
+    private void getCountMembersGroup(int position, HalakaViewHolder holder) {
+        if (halakat.get(position) != null &&
+                halakat.get(position).getGroupId() != null &&
+                !halakat.get(position).getGroupId().isEmpty()) {
+            db.collection("GroupMembers").document(halakat.get(position).getGroupId())
+                    .get().addOnSuccessListener(documentSnapshot -> {
                 if (documentSnapshot.exists()) {
-                    holder.tv_mohafez_name.setText(Objects.requireNonNull(documentSnapshot.get("name")).toString());
+                    holder.tv_student_num.setText("" + Objects.requireNonNull(documentSnapshot.toObject(GroupMembers.class)).getGroupMembers().size());
+                } else {
+                    holder.tv_student_num.setText("0");
                 }
             });
-
-            if (!halakat.get(position).getGroupId().isEmpty()) {
-                db.collection("GroupMembers").document(halakat.get(position).getGroupId())
-                        .get().addOnSuccessListener(documentSnapshot -> {
-                    if (documentSnapshot.exists()) {
-                        holder.tv_student_num.setText("" + Objects.requireNonNull(documentSnapshot.toObject(GroupMembers.class)).getGroupMembers().size());
-                    } else {
-                        holder.tv_student_num.setText("0");
-                    }
-                });
-            }
         }
     }
 

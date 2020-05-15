@@ -43,40 +43,52 @@ public class TodayTestsAdapter extends RecyclerView.Adapter<TodayTestsViewHolder
         });
 
         if (exams.get(position) != null) {
-            if (exams.get(position).getIdStudent() != null) {
-                db.collection("Student").document(exams.get(position).getIdStudent())
-                        .get().addOnSuccessListener(documentSnapshot -> {
-                    if (documentSnapshot.exists()) {
-                        holder.tv_student_name_order_exam.setText(documentSnapshot.getString("name"));
-                    }
-                });
-            }
-
-            if (exams.get(position).getIdTester() != null) {
-                db.collection("Tester").document(exams.get(position).getIdTester())
-                        .get().addOnSuccessListener(documentSnapshot -> {
-                    if (documentSnapshot.exists()) {
-                        holder.tv_tester_name.setText(documentSnapshot.getString("name"));
-                    }
-                });
-            }
-
-            if (exams.get(position).getIdMohafez() != null) {
-                db.collection("Mohafez").document(exams.get(position).getIdMohafez())
-                        .get().addOnSuccessListener(documentSnapshot -> {
-                    if (documentSnapshot.exists()) {
-                        holder.tv_mohafez_name.setText(documentSnapshot.getString("name"));
-                    }
-                });
-            }
+            getNameStudentFromDB(position, holder.tv_student_name_order_exam);
+            getNameTesterFromDB(position, holder.tv_tester_name);
+            getNameMohafezFromDB(position, holder.tv_mohafez_name);
         }
 
         getTypeStatusOrder(exams.get(position).getStatusAcceptance(), holder.tv_status_order_exam);
     }
-
     @Override
     public int getItemCount() {
         return exams.size();
+    }
+
+
+    private void getNameMohafezFromDB(int position, TextView tv_mohafez_name) {
+        if (exams.get(position).getIdMohafez() != null) {
+            db.collection("Mohafez").document(exams.get(position).getIdMohafez())
+                    .get().addOnSuccessListener(documentSnapshot -> {
+                if (documentSnapshot.exists()) {
+                    tv_mohafez_name.setText(documentSnapshot.getString("name"));
+                }
+            });
+        }
+    }
+
+    private void getNameStudentFromDB(int position, TextView tv_name) {
+        if (exams.get(position) != null) {
+            if (exams.get(position).getIdStudent() != null) {
+                db.collection("Student").document(exams.get(position).getIdStudent())
+                        .get().addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        tv_name.setText(documentSnapshot.getString("name"));
+                    }
+                });
+            }
+        }
+    }
+
+    private void getNameTesterFromDB(int position, TextView tv_tester_name) {
+        if (exams.get(position).getIdTester() != null) {
+            db.collection("Tester").document(exams.get(position).getIdTester())
+                    .get().addOnSuccessListener(documentSnapshot -> {
+                if (documentSnapshot.exists()) {
+                    tv_tester_name.setText(documentSnapshot.getString("name"));
+                }
+            });
+        }
     }
 
     private void getTypeStatusOrder(int statusAcceptance, TextView tv_status_order_exam) {

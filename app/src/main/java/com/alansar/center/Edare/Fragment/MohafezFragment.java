@@ -219,17 +219,13 @@ public class MohafezFragment extends Fragment {
         CollectionReference Ref = db.collection("Mohafez");
         Query query = Ref.whereEqualTo("stage", Common.currentSTAGE);
         if (newText.isEmpty()) {
+            LoadData();
             mohafezeen.clear();
             adapter.notifyDataSetChanged();
-            LoadData();
         } else {
             mohafezeen.clear();
             query = query.orderBy("name").startAt(newText).endAt(newText + "\uf8ff");
             query.addSnapshotListener((queryDocumentSnapshots, e) -> {
-                if (e != null) {
-                    Log.w("sss", "listen:error" + e.getLocalizedMessage());
-                    return;
-                }
                 if (queryDocumentSnapshots != null) {
                     if (!queryDocumentSnapshots.isEmpty()) {
                         isFound.set(true);

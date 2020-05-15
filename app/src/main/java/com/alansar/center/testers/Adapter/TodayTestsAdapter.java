@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -42,22 +43,9 @@ public class TodayTestsAdapter extends RecyclerView.Adapter<TodayTestsViewHolder
         });
 
         if (exams.get(position) != null) {
-            if (exams.get(position).getIdStudent() != null) {
-                db.collection("Student").document(exams.get(position).getIdStudent())
-                        .get().addOnSuccessListener(documentSnapshot -> {
-                    if (documentSnapshot.exists()) {
-                        holder.tv_student_name_order_exam.setText(documentSnapshot.getString("name"));
-                    }
-                });
-            }
-
-            if (exams.get(position).getIdMohafez() != null) {
-                db.collection("Mohafez").document(exams.get(position).getIdMohafez())
-                        .get().addOnSuccessListener(documentSnapshot -> {
-                    if (documentSnapshot.exists()) {
-                        holder.tv_mohafez_name.setText(documentSnapshot.getString("name"));
-                    }
-                });
+            if (exams.get(position) != null) {
+                getNameMohafezFromDB(position, holder.tv_mohafez_name);
+                getNameStudentFromDB(position, holder.tv_student_name_order_exam);
             }
         }
 
@@ -66,6 +54,30 @@ public class TodayTestsAdapter extends RecyclerView.Adapter<TodayTestsViewHolder
     @Override
     public int getItemCount() {
         return exams.size();
+    }
+
+    private void getNameMohafezFromDB(int position, TextView tv_mohafez_name) {
+        if (exams.get(position).getIdMohafez() != null) {
+            db.collection("Mohafez").document(exams.get(position).getIdMohafez())
+                    .get().addOnSuccessListener(documentSnapshot -> {
+                if (documentSnapshot.exists()) {
+                    tv_mohafez_name.setText(documentSnapshot.getString("name"));
+                }
+            });
+        }
+    }
+
+    private void getNameStudentFromDB(int position, TextView tv_student_name_order_exam) {
+        if (exams.get(position) != null) {
+            if (exams.get(position).getIdStudent() != null) {
+                db.collection("Student").document(exams.get(position).getIdStudent())
+                        .get().addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        tv_student_name_order_exam.setText(documentSnapshot.getString("name"));
+                    }
+                });
+            }
+        }
     }
 
 }
