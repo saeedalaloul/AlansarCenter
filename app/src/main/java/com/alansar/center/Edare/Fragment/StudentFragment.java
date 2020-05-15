@@ -108,7 +108,10 @@ public class StudentFragment extends Fragment {
 
     private void LoadData() {
         if (Common.currentSTAGE != null) {
-            registration = db.collection("Student").whereEqualTo("stage", Common.currentSTAGE).limit(10)
+            registration = db.collection("Student")
+                    .orderBy("name", Query.Direction.ASCENDING)
+                    .whereEqualTo("stage", Common.currentSTAGE)
+                    .limit(10)
                     .addSnapshotListener((queryDocumentSnapshots, e) -> {
                         if (e != null) {
                             Log.w("sss", "listen:error" + e.getLocalizedMessage());

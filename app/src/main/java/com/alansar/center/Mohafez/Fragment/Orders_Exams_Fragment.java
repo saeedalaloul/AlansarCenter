@@ -90,6 +90,7 @@ public class Orders_Exams_Fragment extends Fragment {
                     .orderBy("year", Query.Direction.DESCENDING)
                     .orderBy("month", Query.Direction.DESCENDING)
                     .orderBy("day", Query.Direction.DESCENDING)
+                    .limit(20)
                     .addSnapshotListener((queryDocumentSnapshots, e) -> {
                         if (e != null) {
                             Log.w("sss", "listen:error" + e.getLocalizedMessage());

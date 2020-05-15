@@ -227,7 +227,7 @@ public class HalakatFragment extends Fragment {
     private void loadData() {
         registration = db.collection("Group")
                 .orderBy("name", Query.Direction.ASCENDING)
-                .limit(5)
+                .limit(10)
                 .addSnapshotListener((queryDocumentSnapshots, e) -> {
                     if (e != null) {
                         Log.w("sss", "listen:error" + e.getLocalizedMessage());

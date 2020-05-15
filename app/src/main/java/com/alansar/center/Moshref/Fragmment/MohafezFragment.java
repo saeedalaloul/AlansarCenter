@@ -95,6 +95,7 @@ public class MohafezFragment extends Fragment {
 
     private void LoadData() {
         registration = db.collection("Mohafez")
+                .orderBy("name", Query.Direction.ASCENDING)
                 .whereEqualTo("stage", Common.currentSTAGE)
                 .limit(10)
                 .addSnapshotListener((queryDocumentSnapshots, e) -> {

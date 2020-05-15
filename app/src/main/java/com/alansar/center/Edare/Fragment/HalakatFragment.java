@@ -138,7 +138,10 @@ public class HalakatFragment extends Fragment {
     }
 
     private void LoadData() {
-        registration = db.collection("Group").whereEqualTo("stage", Common.currentSTAGE).limit(10)
+        registration = db.collection("Group")
+                .orderBy("name", Query.Direction.ASCENDING)
+                .whereEqualTo("stage", Common.currentSTAGE)
+                .limit(10)
                 .addSnapshotListener((queryDocumentSnapshots, e) -> {
                     if (e != null) {
                         Log.w("sss", "listen:error" + e.getLocalizedMessage());

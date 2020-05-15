@@ -100,7 +100,8 @@ public class TestersFragment extends Fragment {
     }
 
     private void loadData() {
-        registration = db.collection("Tester").addSnapshotListener((queryDocumentSnapshots, e) -> {
+        registration = db.collection("Tester")
+                .addSnapshotListener((queryDocumentSnapshots, e) -> {
             if (e != null) {
                 Log.w("sss", "listen:error" + e.getLocalizedMessage());
                 return;
