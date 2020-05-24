@@ -41,6 +41,19 @@ public class OrdersExamsAdapter extends RecyclerView.Adapter<OrdersExamsViewHold
         holder.setItemClickListener((view, position1, isLongClick) -> {
 
         });
+        if (exams.get(position).getStatusAcceptance() == 3) {
+            holder.linearLayout_date.setVisibility(View.VISIBLE);
+            holder.tv_date_order_exam.setText("" + exams.get(position).getDay() + "/" + exams.get(position).getMonth() + "/" + exams.get(position).getYear());
+        } else {
+            holder.linearLayout_date.setVisibility(View.GONE);
+        }
+
+        if (exams.get(position).getNotes() != null && !exams.get(position).getNotes().isEmpty()) {
+            holder.linearLayout.setVisibility(View.VISIBLE);
+            holder.tv_notes_order_exam.setText("" + exams.get(position).getNotes());
+        } else {
+            holder.linearLayout.setVisibility(View.GONE);
+        }
         getNameStudentFromDB(position, holder.tv_student_name_order_exam);
         getTypeStatusOrder(exams.get(position).getStatusAcceptance(), holder.tv_status_order_exam);
     }

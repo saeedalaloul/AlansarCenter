@@ -102,49 +102,49 @@ public class TestersFragment extends Fragment {
     private void loadData() {
         registration = db.collection("Tester")
                 .addSnapshotListener((queryDocumentSnapshots, e) -> {
-            if (e != null) {
-                Log.w("sss", "listen:error" + e.getLocalizedMessage());
-                return;
-            }
-            if (queryDocumentSnapshots != null) {
-                for (DocumentChange dc : queryDocumentSnapshots.getDocumentChanges()) {
-                    switch (dc.getType()) {
-                        case ADDED:
-                            Log.d("sss", "New tester: " + dc.getDocument().getData());
-                            testers.clear();
-                            for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-                                if (doc.exists()) {
-                                    testers.add(doc.toObject(Tester.class));
-                                    testersAdapter.notifyDataSetChanged();
-                                }
-                            }
-                            break;
-                        case MODIFIED:
-                            Log.d("sss", "Modified tester: " + dc.getDocument().getData());
-                            testers.clear();
-                            for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-                                if (doc.exists()) {
-                                    testers.add(doc.toObject(Tester.class));
-                                    testersAdapter.notifyDataSetChanged();
-                                }
-                            }
-                            break;
-                        case REMOVED:
-                            Log.d("sss", "Removed tester: " + dc.getDocument().getData());
-                            testers.remove(dc.getOldIndex());
-                            testersAdapter.notifyDataSetChanged();
-                            break;
+                    if (e != null) {
+                        Log.w("sss", "listen:error" + e.getLocalizedMessage());
+                        return;
                     }
-                    if (testers.isEmpty()) {
-                        view.findViewById(R.id.tv_check_testers).setVisibility(View.VISIBLE);
-                        recyclerView.setVisibility(View.GONE);
-                    } else {
-                        view.findViewById(R.id.tv_check_testers).setVisibility(View.GONE);
-                        recyclerView.setVisibility(View.VISIBLE);
+                    if (queryDocumentSnapshots != null) {
+                        for (DocumentChange dc : queryDocumentSnapshots.getDocumentChanges()) {
+                            switch (dc.getType()) {
+                                case ADDED:
+                                    Log.d("sss", "New tester: " + dc.getDocument().getData());
+                                    testers.clear();
+                                    for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                                        if (doc.exists()) {
+                                            testers.add(doc.toObject(Tester.class));
+                                            testersAdapter.notifyDataSetChanged();
+                                        }
+                                    }
+                                    break;
+                                case MODIFIED:
+                                    Log.d("sss", "Modified tester: " + dc.getDocument().getData());
+                                    testers.clear();
+                                    for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                                        if (doc.exists()) {
+                                            testers.add(doc.toObject(Tester.class));
+                                            testersAdapter.notifyDataSetChanged();
+                                        }
+                                    }
+                                    break;
+                                case REMOVED:
+                                    Log.d("sss", "Removed tester: " + dc.getDocument().getData());
+                                    testers.remove(dc.getOldIndex());
+                                    testersAdapter.notifyDataSetChanged();
+                                    break;
+                            }
+                        }
+                        if (testers.isEmpty()) {
+                            view.findViewById(R.id.tv_check_testers).setVisibility(View.VISIBLE);
+                            recyclerView.setVisibility(View.GONE);
+                        } else {
+                            view.findViewById(R.id.tv_check_testers).setVisibility(View.GONE);
+                            recyclerView.setVisibility(View.VISIBLE);
+                        }
                     }
-                }
-            }
-        });
+                });
     }
 
     private void showDialogAddTester() {

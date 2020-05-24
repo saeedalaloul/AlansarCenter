@@ -3,6 +3,7 @@ package com.alansar.center.Models;
 import java.util.ArrayList;
 
 public class Person {
+    private String id;
     private String fname;
     private String mname;
     private String lname;
@@ -11,7 +12,6 @@ public class Person {
     private String image;
     private ArrayList<String> permissions;
     private String identificationNumber;
-    private String id;
     private boolean isEnableAccount;
 
     public Person() {

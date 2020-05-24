@@ -91,7 +91,7 @@ public class StudentFragment extends Fragment {
     private TextView tv_name_student, tv_part_exam,
             tv_date_exam, tv_name_mohafez,
             tv_mark_exam, tv_notes_exam,
-            tv_stage_exam;
+            tv_name_tester;
     private LinearLayout li_question_exam_ed;
 
     public StudentFragment() {
@@ -190,9 +190,8 @@ public class StudentFragment extends Fragment {
                 .get().addOnSuccessListener(queryDocumentSnapshots -> {
             if (queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
                 showDialogMoreDetails(queryDocumentSnapshots.getDocuments().get(0).toObject(Exam.class));
-            }else
-            {
-                new  SweetAlertDialog_(getContext()).showDialogError("عذرا لم يتم العثور على أية إختبارات لهذا الطالب");
+            } else {
+                new SweetAlertDialog_(getContext()).showDialogError("عذرا لم يتم العثور على أية إختبارات لهذا الطالب");
             }
         }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
     }
@@ -203,7 +202,7 @@ public class StudentFragment extends Fragment {
         if (getContext() != null && exam != null) {
             LayoutInflater factory = LayoutInflater.from(getActivity());
             @SuppressLint("InflateParams") final View moreDetailsDialogView
-                    = factory.inflate(R.layout.more_details_exam_dialog, null);
+                    = factory.inflate(R.layout.more_details_exam_dialog_custom_super_visor, null);
             AlertDialog dialogMoreDetails = new AlertDialog.Builder(getContext())
                     .setView(moreDetailsDialogView).create();
             dialogMoreDetails.show();
@@ -212,7 +211,7 @@ public class StudentFragment extends Fragment {
 
             tv_name_student.setText(exam.getNotes());
             tv_part_exam.setText(exam.getExamPart());
-            tv_stage_exam.setText(exam.getStage());
+            getNameTesterFromDB(exam.getIdTester(), tv_name_tester);
             tv_date_exam.setText(exam.getDay() + "/" + exam.getMonth() + "/" + exam.getYear());
             getNameStudentFromDB(exam.getIdStudent(), tv_name_student);
             getNameMohafezFromDB(exam.getIdMohafez(), tv_name_mohafez);
@@ -247,8 +246,21 @@ public class StudentFragment extends Fragment {
         tv_part_exam = dialogMoreDetails.findViewById(R.id.tv_part_exam);
         tv_date_exam = dialogMoreDetails.findViewById(R.id.tv_date_exam);
         tv_mark_exam = dialogMoreDetails.findViewById(R.id.tv_mark_exam);
-        tv_stage_exam = dialogMoreDetails.findViewById(R.id.tv_stage_more_details_exam);
+        tv_name_tester = dialogMoreDetails.findViewById(R.id.tv_name_tester);
         li_question_exam_ed = dialogMoreDetails.findViewById(R.id.linear_layout_questions_exam_ed);
+    }
+
+    private void getNameTesterFromDB(String idTester, TextView tv_name_tester) {
+        if (idTester != null) {
+            db.collection("Tester").document(idTester)
+                    .get().addOnSuccessListener(documentSnapshot -> {
+                if (documentSnapshot.exists()) {
+                    if (tv_name_tester != null) {
+                        tv_name_tester.setText(documentSnapshot.getString("name"));
+                    }
+                }
+            });
+        }
     }
 
     private void getNameStudentFromDB(String id, TextView et_name) {

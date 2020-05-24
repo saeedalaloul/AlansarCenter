@@ -120,6 +120,9 @@ public class AdminActivity extends AppCompatActivity implements NavigationView.O
         moveFragment(home);
         toolbar.setTitle("الصفحة الرئيسية");
         toolbar.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+        MenuItem menuItem_home = navigationView.getMenu().findItem(R.id.admin_home);
+        menuItem_home.setChecked(true);
+        menuItem_home.setCheckable(true);
         FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(instanceIdResult -> {
             if (instanceIdResult != null) {
                 updateToken(instanceIdResult.getToken());

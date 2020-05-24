@@ -152,7 +152,7 @@ public class Orders_Exams_Fragment extends Fragment {
                                                     try {
                                                         gregorianCalendar.set(exam.getYear(), exam.getMonth(), exam.getDay(), 6, 0, 0);
                                                         String dateRet = dateformat.format(gregorianCalendar.getTime());
-                                                        getDifferenceDate(dateformat.parse(dateRet), dateformat.parse(date), doc);
+                                                        getDifferenceDate(dateformat.parse(date), dateformat.parse(dateRet), doc);
                                                     } catch (ParseException ex) {
                                                         ex.printStackTrace();
                                                     }
@@ -177,7 +177,7 @@ public class Orders_Exams_Fragment extends Fragment {
                                                     try {
                                                         gregorianCalendar.set(exam.getYear(), exam.getMonth(), exam.getDay(), 6, 0, 0);
                                                         String dateRet = dateformat.format(gregorianCalendar.getTime());
-                                                        getDifferenceDate(dateformat.parse(dateRet), dateformat.parse(date), doc);
+                                                        getDifferenceDate(dateformat.parse(date), dateformat.parse(dateRet), doc);
                                                     } catch (ParseException ex) {
                                                         ex.printStackTrace();
                                                     }
@@ -193,15 +193,13 @@ public class Orders_Exams_Fragment extends Fragment {
                                         adapter.notifyDataSetChanged();
                                         break;
                                 }
-                                if (view != null) {
-                                    if (exams.isEmpty()) {
-                                        view.findViewById(R.id.tv_check_exams_today).setVisibility(View.VISIBLE);
-                                        recyclerView.setVisibility(View.GONE);
-                                    } else {
-                                        view.findViewById(R.id.tv_check_exams).setVisibility(View.GONE);
-                                        recyclerView.setVisibility(View.VISIBLE);
-                                    }
-                                }
+                            }
+                            if (exams.isEmpty()) {
+                                view.findViewById(R.id.tv_check_exams).setVisibility(View.VISIBLE);
+                                recyclerView.setVisibility(View.GONE);
+                            } else {
+                                view.findViewById(R.id.tv_check_exams).setVisibility(View.GONE);
+                                recyclerView.setVisibility(View.VISIBLE);
                             }
                         }
                     });

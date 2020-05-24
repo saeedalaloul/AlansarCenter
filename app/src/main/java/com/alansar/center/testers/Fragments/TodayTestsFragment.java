@@ -162,13 +162,13 @@ public class TodayTestsFragment extends Fragment {
                                         adapter.notifyDataSetChanged();
                                         break;
                                 }
-                                if (exams.isEmpty()) {
-                                    view.findViewById(R.id.tv_check_exams_today).setVisibility(View.VISIBLE);
-                                    recyclerView.setVisibility(View.GONE);
-                                } else {
-                                    view.findViewById(R.id.tv_check_exams_today).setVisibility(View.GONE);
-                                    recyclerView.setVisibility(View.VISIBLE);
-                                }
+                            }
+                            if (exams.isEmpty()) {
+                                view.findViewById(R.id.tv_check_exams_today).setVisibility(View.VISIBLE);
+                                recyclerView.setVisibility(View.GONE);
+                            } else {
+                                view.findViewById(R.id.tv_check_exams_today).setVisibility(View.GONE);
+                                recyclerView.setVisibility(View.VISIBLE);
                             }
                         }
                     });

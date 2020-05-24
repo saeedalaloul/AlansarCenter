@@ -73,6 +73,7 @@ public class MohafezActivity extends AppCompatActivity implements NavigationView
     private TextView countUnread_orders_exams;
     private TextView countUnread_exams;
     private TextView countUnread_orders_exams_today;
+    private TextView tv_person_Permission;
     private CircleImageView img_profile;
     private FirebaseAuth mauth;
     private SweetAlertDialog_ sweetAlertDialog_;
@@ -100,11 +101,10 @@ public class MohafezActivity extends AppCompatActivity implements NavigationView
         accountItems = new ArrayList<>();
 
         tv_person_name = view.findViewById(R.id.tv_Person_name);
-        TextView tv_person_Permission = view.findViewById(R.id.tv_Person_Permission);
+        tv_person_Permission = view.findViewById(R.id.tv_Person_Permission);
         img_profile = view.findViewById(R.id.img_person_profile);
 
         if (getIntent() != null && getIntent().getStringExtra("Permission") != null) {
-            tv_person_Permission.setText(Common.ConvertPermissionToNameArabic(getIntent().getStringExtra("Permission")));
             Common.currentPermission = getIntent().getStringExtra("Permission");
             if (getIntent().getStringExtra("typeFragment") != null) {
                 typeFragment = getIntent().getStringExtra("typeFragment");
@@ -158,6 +158,9 @@ public class MohafezActivity extends AppCompatActivity implements NavigationView
         MenuItem menuItem_unCheck_order_exams = navigationView.getMenu().findItem(R.id.mohafez_orders_exams);
         MenuItem menuItem_unCheck_order_exams_today = navigationView.getMenu().findItem(R.id.mohafez_today_tests);
         MenuItem menuItem_unCheck_exams = navigationView.getMenu().findItem(R.id.mohafez_exams);
+        MenuItem menuItem_home = navigationView.getMenu().findItem(R.id.mohafez_home);
+        menuItem_home.setChecked(true);
+        menuItem_home.setCheckable(true);
         countUnread_orders_exams = (TextView) menuItem_unCheck_order_exams.getActionView();
         countUnread_orders_exams_today = (TextView) menuItem_unCheck_order_exams_today.getActionView();
         countUnread_exams = (TextView) menuItem_unCheck_exams.getActionView();
@@ -182,6 +185,7 @@ public class MohafezActivity extends AppCompatActivity implements NavigationView
                 });
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onResume() {
         super.onResume();
@@ -192,6 +196,7 @@ public class MohafezActivity extends AppCompatActivity implements NavigationView
             if (Common.currentPerson.getPermissions().size() == 1) {
                 hideItem();
             }
+            tv_person_Permission.setText(Common.ConvertPermissionToNameArabic(Common.currentPermission) + " " + Common.currentSTAGE);
             checkUnreadDataOfExamFromDB();
         } else {
             Common.currentSTAGE = Paper.book().read(Common.STAGE);
@@ -203,13 +208,14 @@ public class MohafezActivity extends AppCompatActivity implements NavigationView
                 if (Common.currentPerson.getPermissions().size() == 1) {
                     hideItem();
                 }
+                tv_person_Permission.setText(Common.ConvertPermissionToNameArabic(Common.currentPermission) + " " + Common.currentSTAGE);
                 checkUnreadDataOfExamFromDB();
             }
         }
 
         SimpleDateFormat dateformat = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss aa", Locale.getDefault());
         String date = dateformat.format(Timestamp.now().toDate().getTime());
-        Log.d("sss",""+date);
+        Log.d("sss", "" + date);
     }
 
     public void moveFragment(Fragment fragment) {

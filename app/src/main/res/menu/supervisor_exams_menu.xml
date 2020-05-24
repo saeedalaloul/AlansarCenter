@@ -71,6 +71,10 @@
             tools:ignore="HardcodedText">
             <menu>
                 <item
+                    android:id="@+id/supervisor_exams_center_reports"
+                    android:icon="@drawable/ic_report"
+                    android:title="تقارير الإختبارات" />
+                <item
                     android:id="@+id/supervisor_exams_switch_account"
                     android:icon="@drawable/ic_switch"
                     android:title="تبديل الحساب" />

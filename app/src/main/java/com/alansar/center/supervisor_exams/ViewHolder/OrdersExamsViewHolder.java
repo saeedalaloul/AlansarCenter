@@ -3,6 +3,7 @@ package com.alansar.center.supervisor_exams.ViewHolder;
 import android.view.ContextMenu;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -13,8 +14,10 @@ import com.alansar.center.Interface.ItemClickListener;
 import com.alansar.center.R;
 
 public class OrdersExamsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnCreateContextMenuListener {
-    public TextView tv_student_name_order_exam, tv_part_order_exam, tv_status_order_exam;
+    public TextView tv_student_name_order_exam, tv_part_order_exam, tv_status_order_exam
+            , tv_notes_order_exam, tv_date_order_exam;
     public ImageButton imgbtn_more;
+    public LinearLayout linearLayout,linearLayout_date;
     private ItemClickListener itemClickListener;
 
 
@@ -24,6 +27,10 @@ public class OrdersExamsViewHolder extends RecyclerView.ViewHolder implements Vi
         tv_part_order_exam = itemView.findViewById(R.id.tv_part_order_exam);
         tv_status_order_exam = itemView.findViewById(R.id.tv_status_order_exam);
         imgbtn_more = itemView.findViewById(R.id.imgbtn_more_tester);
+        tv_notes_order_exam = itemView.findViewById(R.id.tv_notes_order_exam);
+        tv_date_order_exam = itemView.findViewById(R.id.tv_date_order_exam);
+        linearLayout = itemView.findViewById(R.id.linear2);
+        linearLayout_date = itemView.findViewById(R.id.linear_date);
         itemView.setOnClickListener(this);
         itemView.setOnCreateContextMenuListener(this);
     }

@@ -13,7 +13,8 @@ import com.alansar.center.Interface.ItemClickListener;
 import com.alansar.center.R;
 
 public class OrdersExamsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnCreateContextMenuListener {
-    public TextView tv_student_name_order_exam, tv_part_order_exam, tv_name_mohafez;
+    public TextView tv_student_name_order_exam, tv_part_order_exam, tv_name_mohafez,
+            tv_stage_order_exam,tv_date_order_exam;
     public ImageButton imgbtn_more;
     private ItemClickListener itemClickListener;
 
@@ -23,6 +24,8 @@ public class OrdersExamsViewHolder extends RecyclerView.ViewHolder implements Vi
         tv_student_name_order_exam = itemView.findViewById(R.id.tv_student_name_order_exam_tester);
         tv_part_order_exam = itemView.findViewById(R.id.tv_part_order_exam_tester);
         tv_name_mohafez = itemView.findViewById(R.id.tv_name_mohafez_order_exam_tester);
+        tv_stage_order_exam = itemView.findViewById(R.id.tv_stage_order_exam_tester);
+        tv_date_order_exam = itemView.findViewById(R.id.tv_date_order_exam_tester);
         imgbtn_more = itemView.findViewById(R.id.imgbtn_more_tester);
         itemView.setOnClickListener(this);
         itemView.setOnCreateContextMenuListener(this);

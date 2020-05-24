@@ -61,7 +61,7 @@ public class MoshrefActivity extends AppCompatActivity implements NavigationView
     ActionBarDrawerToggle toggle;
     Class fragmentClass;
     FirebaseFirestore db;
-    private TextView tv_person_name;
+    private TextView tv_person_name,tv_person_Permission;
     private TextView countUnread_orders_exams;
     private TextView countUnread_exams;
     private CircleImageView img_profile;
@@ -91,11 +91,10 @@ public class MoshrefActivity extends AppCompatActivity implements NavigationView
         accountItems = new ArrayList<>();
 
         tv_person_name = view.findViewById(R.id.tv_Person_name);
-        TextView tv_person_Permission = view.findViewById(R.id.tv_Person_Permission);
+        tv_person_Permission = view.findViewById(R.id.tv_Person_Permission);
         img_profile = view.findViewById(R.id.img_person_profile);
 
         if (getIntent() != null && getIntent().getStringExtra("Permission") != null) {
-            tv_person_Permission.setText(Common.ConvertPermissionToNameArabic(getIntent().getStringExtra("Permission")));
             Common.currentPermission = getIntent().getStringExtra("Permission");
             if (getIntent().getStringExtra("typeFragment") != null) {
                 typeFragment = getIntent().getStringExtra("typeFragment");
@@ -139,6 +138,9 @@ public class MoshrefActivity extends AppCompatActivity implements NavigationView
         MenuItem menuItem_unCheck_exams = navigationView.getMenu().findItem(R.id.moshref_exams);
         countUnread_orders_exams = (TextView) menuItem_unCheck_order_exams.getActionView();
         countUnread_exams = (TextView) menuItem_unCheck_exams.getActionView();
+        MenuItem menuItem_home = navigationView.getMenu().findItem(R.id.moshref_home);
+        menuItem_home.setChecked(true);
+        menuItem_home.setCheckable(true);
         FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(instanceIdResult -> {
             if (instanceIdResult != null) {
                 updateToken(instanceIdResult.getToken());
@@ -160,6 +162,7 @@ public class MoshrefActivity extends AppCompatActivity implements NavigationView
                 });
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onResume() {
         super.onResume();
@@ -168,6 +171,7 @@ public class MoshrefActivity extends AppCompatActivity implements NavigationView
             if (Common.currentPerson.getPermissions().size() == 1) {
                 hideItem();
             }
+            tv_person_Permission.setText(Common.ConvertPermissionToNameArabic(Common.currentPermission) + " " + Common.currentSTAGE);
             checkUnreadDataOfExamFromDB();
         } else {
             Common.currentSTAGE = Paper.book().read(Common.STAGE);
@@ -178,6 +182,7 @@ public class MoshrefActivity extends AppCompatActivity implements NavigationView
                 if (Common.currentPerson.getPermissions().size() == 1) {
                     hideItem();
                 }
+                tv_person_Permission.setText(Common.ConvertPermissionToNameArabic(Common.currentPermission) + " " + Common.currentSTAGE);
                 checkUnreadDataOfExamFromDB();
             }
         }

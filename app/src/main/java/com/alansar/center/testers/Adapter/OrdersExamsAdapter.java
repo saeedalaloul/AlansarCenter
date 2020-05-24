@@ -38,6 +38,9 @@ public class OrdersExamsAdapter extends RecyclerView.Adapter<OrdersExamsViewHold
     public void onBindViewHolder(@NonNull OrdersExamsViewHolder holder, int position) {
         holder.imgbtn_more.setOnClickListener(View::showContextMenu);
         holder.tv_part_order_exam.setText(exams.get(position).getExamPart());
+        holder.tv_stage_order_exam.setText(exams.get(position).getStage());
+        holder.tv_date_order_exam.setText(exams.get(position).getDay()
+                + "/" + exams.get(position).getMonth() + "/" + exams.get(position).getYear());
         holder.setItemClickListener((view, position1, isLongClick) -> {
 
         });

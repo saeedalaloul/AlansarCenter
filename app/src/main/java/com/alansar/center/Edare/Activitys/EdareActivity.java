@@ -61,7 +61,7 @@ public class EdareActivity extends AppCompatActivity implements NavigationView.O
     ActionBarDrawerToggle toggle;
     Class fragmentClass;
     FirebaseFirestore db;
-    private TextView tv_person_name;
+    private TextView tv_person_name,tv_person_Permission;
     private CircleImageView img_profile;
     private FirebaseUser mCurrentUser;
     private FirebaseAuth mauth;
@@ -91,11 +91,11 @@ public class EdareActivity extends AppCompatActivity implements NavigationView.O
         Button backButton = view.findViewById(R.id.btn_back);
         backButton.setOnClickListener(view1 -> drawerLayout.closeDrawers());
         tv_person_name = view.findViewById(R.id.tv_Person_name);
-        TextView tv_person_Permission = view.findViewById(R.id.tv_Person_Permission);
+        tv_person_Permission = view.findViewById(R.id.tv_Person_Permission);
         img_profile = view.findViewById(R.id.img_person_profile);
 
         if (getIntent() != null && getIntent().getStringExtra("Permission") != null) {
-            tv_person_Permission.setText(Common.ConvertPermissionToNameArabic(getIntent().getStringExtra("Permission")));
+            Common.currentPermission = getIntent().getStringExtra("Permission");
         } else {
             Common.SignOut(mauth, EdareActivity.this, registration);
         }
@@ -121,6 +121,9 @@ public class EdareActivity extends AppCompatActivity implements NavigationView.O
         toolbar.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
         MenuItem menuItem_unCheck_exams = navigationView.getMenu().findItem(R.id.edare_exams);
         countUnread_exams = (TextView) menuItem_unCheck_exams.getActionView();
+        MenuItem menuItem_home = navigationView.getMenu().findItem(R.id.edare_home);
+        menuItem_home.setChecked(true);
+        menuItem_home.setCheckable(true);
         FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(instanceIdResult -> {
             if (instanceIdResult != null) {
                 updateToken(instanceIdResult.getToken());
@@ -142,6 +145,7 @@ public class EdareActivity extends AppCompatActivity implements NavigationView.O
                 });
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onResume() {
         super.onResume();
@@ -150,6 +154,7 @@ public class EdareActivity extends AppCompatActivity implements NavigationView.O
             if (Common.currentPerson.getPermissions().size() == 1) {
                 hideItem();
             }
+            tv_person_Permission.setText(Common.ConvertPermissionToNameArabic(Common.currentPermission) + " " + Common.currentSTAGE);
             checkUnreadDataOfExamFromDB();
         } else {
             Common.currentSTAGE = Paper.book().read(Common.STAGE);
@@ -160,6 +165,7 @@ public class EdareActivity extends AppCompatActivity implements NavigationView.O
                 if (Common.currentPerson.getPermissions().size() == 1) {
                     hideItem();
                 }
+                tv_person_Permission.setText(Common.ConvertPermissionToNameArabic(Common.currentPermission) + " " + Common.currentSTAGE);
                 checkUnreadDataOfExamFromDB();
             }
         }

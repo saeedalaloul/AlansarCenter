@@ -144,13 +144,13 @@ public class ExamsFragment extends Fragment {
                                         adapter.notifyDataSetChanged();
                                         break;
                                 }
-                                if (exams.isEmpty()) {
-                                    view.findViewById(R.id.tv_check_exams).setVisibility(View.VISIBLE);
-                                    recyclerView.setVisibility(View.GONE);
-                                } else {
-                                    view.findViewById(R.id.tv_check_exams).setVisibility(View.GONE);
-                                    recyclerView.setVisibility(View.VISIBLE);
-                                }
+                            }
+                            if (exams.isEmpty()) {
+                                view.findViewById(R.id.tv_check_exams).setVisibility(View.VISIBLE);
+                                recyclerView.setVisibility(View.GONE);
+                            } else {
+                                view.findViewById(R.id.tv_check_exams).setVisibility(View.GONE);
+                                recyclerView.setVisibility(View.VISIBLE);
                             }
                         }
                     });
@@ -274,7 +274,6 @@ public class ExamsFragment extends Fragment {
                 tv_mark_exam.setText("" + result);
                 tv_mark_exam.setTextColor(Color.WHITE);
                 tv_mark_exam.setBackgroundColor(Color.GREEN);
-
             } else if (result < 80.00) {
                 tv_mark_exam.setText("" + result);
                 tv_mark_exam.setTextColor(Color.WHITE);

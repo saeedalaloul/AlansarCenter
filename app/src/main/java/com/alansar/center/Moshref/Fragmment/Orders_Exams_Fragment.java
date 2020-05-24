@@ -152,7 +152,7 @@ public class Orders_Exams_Fragment extends Fragment {
                                                     try {
                                                         gregorianCalendar.set(exam.getYear(), exam.getMonth(), exam.getDay(), 6, 0, 0);
                                                         String dateRet = dateformat.format(gregorianCalendar.getTime());
-                                                        getDifferenceDate(dateformat.parse(dateRet), dateformat.parse(date), doc);
+                                                        getDifferenceDate(dateformat.parse(date), dateformat.parse(dateRet), doc);
                                                     } catch (ParseException ex) {
                                                         ex.printStackTrace();
                                                     }
@@ -174,7 +174,7 @@ public class Orders_Exams_Fragment extends Fragment {
                                                     try {
                                                         gregorianCalendar.set(exam.getYear(), exam.getMonth(), exam.getDay(), 6, 0, 0);
                                                         String dateRet = dateformat.format(gregorianCalendar.getTime());
-                                                        getDifferenceDate(dateformat.parse(dateRet), dateformat.parse(date), doc);
+                                                        getDifferenceDate(dateformat.parse(date), dateformat.parse(dateRet), doc);
                                                     } catch (ParseException ex) {
                                                         ex.printStackTrace();
                                                     }
@@ -193,13 +193,13 @@ public class Orders_Exams_Fragment extends Fragment {
                                         adapter.notifyDataSetChanged();
                                         break;
                                 }
-                                if (exams.isEmpty()) {
-                                    view.findViewById(R.id.tv_check_exams).setVisibility(View.VISIBLE);
-                                    recyclerView.setVisibility(View.GONE);
-                                } else {
-                                    view.findViewById(R.id.tv_check_exams).setVisibility(View.GONE);
-                                    recyclerView.setVisibility(View.VISIBLE);
-                                }
+                            }
+                            if (exams.isEmpty()) {
+                                view.findViewById(R.id.tv_check_exams).setVisibility(View.VISIBLE);
+                                recyclerView.setVisibility(View.GONE);
+                            } else {
+                                view.findViewById(R.id.tv_check_exams).setVisibility(View.GONE);
+                                recyclerView.setVisibility(View.VISIBLE);
                             }
                         }
                     });
@@ -439,7 +439,7 @@ public class Orders_Exams_Fragment extends Fragment {
                 } else if (status == -1) {
                     Log.d("sss", "" + status);
                     if (doc.getBoolean("isSeenExam.isSeenMohafez")) {
-                        if ((int) elapsedHours >= 2) {
+                        if ((int) elapsedDays >= 2) {
                             doc.getReference().delete();
                         }
                     } else {
@@ -450,7 +450,7 @@ public class Orders_Exams_Fragment extends Fragment {
                 } else if (status == -2) {
                     Log.d("sss", "" + status);
                     if (doc.getBoolean("isSeenExam.isSeenMohafez")) {
-                        if ((int) elapsedHours >= 2) {
+                        if ((int) elapsedDays >= 2) {
                             doc.getReference().delete();
                         }
                     } else {
@@ -461,7 +461,7 @@ public class Orders_Exams_Fragment extends Fragment {
                 } else if (status == -3) {
                     Log.d("sss", "" + status);
                     if (doc.getBoolean("isSeenExam.isSeenMohafez")) {
-                        if ((int) elapsedHours >= 2) {
+                        if ((int) elapsedDays >= 2) {
                             doc.getReference().delete();
                         }
                     } else {

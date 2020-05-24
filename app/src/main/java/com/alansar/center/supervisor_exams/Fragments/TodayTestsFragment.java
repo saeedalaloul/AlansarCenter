@@ -47,9 +47,6 @@ public class TodayTestsFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
         setHasOptionsMenu(true);
-        if (!exams.isEmpty()) {
-            hideView(false);
-        }
         return view;
     }
 
@@ -95,9 +92,6 @@ public class TodayTestsFragment extends Fragment {
                                             adapter.notifyDataSetChanged();
                                         }
                                     }
-                                    if (exams.isEmpty()) {
-                                        hideView(true);
-                                    }
                                     break;
                                 case MODIFIED:
                                     Log.d("sss", "Modified exam: " + dc.getDocument().getData());
@@ -112,31 +106,22 @@ public class TodayTestsFragment extends Fragment {
                                             adapter.notifyDataSetChanged();
                                         }
                                     }
-                                    if (exams.isEmpty()) {
-                                        hideView(true);
-                                    }
                                     break;
                                 case REMOVED:
                                     Log.d("sss", "Removed exam: " + dc.getDocument().getData());
                                     exams.remove(dc.getOldIndex());
                                     adapter.notifyDataSetChanged();
-                                    if (exams.isEmpty()) {
-                                        hideView(true);
-                                    }
                                     break;
                             }
                         }
+                        if (exams.isEmpty()) {
+                            view.findViewById(R.id.tv_check_exams_today).setVisibility(View.VISIBLE);
+                            recyclerView.setVisibility(View.GONE);
+                        } else {
+                            view.findViewById(R.id.tv_check_exams_today).setVisibility(View.GONE);
+                            recyclerView.setVisibility(View.VISIBLE);
+                        }
                     }
                 });
-    }
-
-    private void hideView(boolean isFound) {
-        if (isFound) {
-            view.findViewById(R.id.tv_check_exams_today).setVisibility(View.VISIBLE);
-            recyclerView.setVisibility(View.GONE);
-        } else {
-            view.findViewById(R.id.tv_check_exams_today).setVisibility(View.GONE);
-            recyclerView.setVisibility(View.VISIBLE);
-        }
     }
 }

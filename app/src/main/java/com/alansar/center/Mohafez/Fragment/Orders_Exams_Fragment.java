@@ -115,7 +115,7 @@ public class Orders_Exams_Fragment extends Fragment {
                                                     try {
                                                         gregorianCalendar.set(exam.getYear(), exam.getMonth(), exam.getDay(), 6, 0, 0);
                                                         String dateRet = dateformat.format(gregorianCalendar.getTime());
-                                                        getDifferenceDate(dateformat.parse(dateRet), dateformat.parse(date), doc);
+                                                        getDifferenceDate(dateformat.parse(date), dateformat.parse(dateRet), doc);
                                                     } catch (ParseException ex) {
                                                         ex.printStackTrace();
                                                     }
@@ -140,7 +140,7 @@ public class Orders_Exams_Fragment extends Fragment {
                                                     try {
                                                         gregorianCalendar.set(exam.getYear(), exam.getMonth(), exam.getDay(), 6, 0, 0);
                                                         String dateRet = dateformat.format(gregorianCalendar.getTime());
-                                                        getDifferenceDate(dateformat.parse(dateRet), dateformat.parse(date), doc);
+                                                        getDifferenceDate(dateformat.parse(date), dateformat.parse(dateRet), doc);
                                                     } catch (ParseException ex) {
                                                         ex.printStackTrace();
                                                     }

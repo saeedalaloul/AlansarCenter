@@ -2,13 +2,18 @@ package com.alansar.center.supervisor_exams.Activitys;
 
 import android.annotation.SuppressLint;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -28,6 +33,7 @@ import com.alansar.center.Common.Common;
 import com.alansar.center.FButton;
 import com.alansar.center.Models.AccountItem;
 import com.alansar.center.Models.Person;
+import com.alansar.center.Mohafez.Model.Mohafez;
 import com.alansar.center.Notifications.Token;
 import com.alansar.center.R;
 import com.alansar.center.SweetAlertDialog_;
@@ -37,8 +43,10 @@ import com.alansar.center.supervisor_exams.Fragments.HomeFragment;
 import com.alansar.center.supervisor_exams.Fragments.Orders_Exams_Fragment;
 import com.alansar.center.supervisor_exams.Fragments.TestersFragment;
 import com.alansar.center.supervisor_exams.Fragments.TodayTestsFragment;
+import com.alansar.center.supervisor_exams.Model.DownloadDataExamReport;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
@@ -46,7 +54,9 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -70,6 +80,11 @@ public class SuperVisorExamsActivity extends AppCompatActivity implements Naviga
     private String typeFragment;
     private AlertDialog dialogMultipleAccounts;
 
+    //////////
+    private Spinner sp_stages, sp_mohafzeen_custom;
+    private ImageButton btn_downLoad_report_all, btn_downLoad_report_custom;
+    private ArrayAdapter<Mohafez> adapter;
+    private List<Mohafez> mohafezs;
 
     @SuppressLint("RestrictedApi")
     @Override
@@ -151,6 +166,9 @@ public class SuperVisorExamsActivity extends AppCompatActivity implements Naviga
         countUnread_orders_exams = (TextView) menuItem_unCheck_order_exams.getActionView();
         countUnread_orders_exams_today = (TextView) menuItem_unCheck_order_exams_today.getActionView();
         countUnread_exams = (TextView) menuItem_unCheck_exams.getActionView();
+        MenuItem menuItem_home = navigationView.getMenu().findItem(R.id.supervisor_exams_home);
+        menuItem_home.setChecked(true);
+        menuItem_home.setCheckable(true);
         FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(instanceIdResult -> {
             if (instanceIdResult != null) {
                 updateToken(instanceIdResult.getToken());
@@ -412,6 +430,12 @@ public class SuperVisorExamsActivity extends AppCompatActivity implements Naviga
                 menuItem.setChecked(true);
                 menuItem.setCheckable(true);
                 break;
+            case R.id.supervisor_exams_center_reports:
+                showDialogExamsReports();
+                drawerLayout.closeDrawers();
+                menuItem.setChecked(true);
+                menuItem.setCheckable(true);
+                break;
             case R.id.supervisor_exams_switch_account:
                 showDialogMultipleAccounts();
                 drawerLayout.closeDrawers();
@@ -425,6 +449,97 @@ public class SuperVisorExamsActivity extends AppCompatActivity implements Naviga
                 break;
         }
         return true;
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    private void showDialogExamsReports() {
+        new CustomTask().execute((Void[]) null);
+    }
+
+    private void getMohafzeenByStageFromDB() {
+        if (sp_stages.getSelectedItem() != null) {
+            mohafezs.clear();
+            mohafezs.add(new Mohafez("", "", "", "اختر المحفظ"));
+            db.collection("Mohafez")
+                    .whereEqualTo("stage", sp_stages.getSelectedItem().toString())
+                    .get().addOnSuccessListener(queryDocumentSnapshots -> {
+                if (queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
+                    for (DocumentSnapshot snapshot : queryDocumentSnapshots.getDocuments()) {
+                        mohafezs.add(snapshot.toObject(Mohafez.class));
+                    }
+                    adapter = new ArrayAdapter<>(this,
+                            android.R.layout.simple_spinner_item, mohafezs);
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    sp_mohafzeen_custom.setAdapter(adapter);
+                }
+            });
+        }
+    }
+
+    private void initialDialog(View view) {
+        sp_stages = view.findViewById(R.id.sp_center_reports_stages);
+        sp_mohafzeen_custom = view.findViewById(R.id.sp_center_reports_mohafzeen_custom);
+        btn_downLoad_report_custom = view.findViewById(R.id.imgbtn_center_reports_download_report_custom);
+        btn_downLoad_report_all = view.findViewById(R.id.imgbtn_center_reports_download_report_all);
+        mohafezs = new ArrayList<>();
+    }
+
+    private void showDialogSelectColumns(int type) {
+        // Set up the alert builder
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("حدد الأعمدة التي تريدها أو حدد الكل");
+
+        List<String> ColumnsList = new ArrayList<>();
+
+// Add a checkbox list
+        String[] Columns = {"اسم الطالب رباعي", "جزء الإختبار", "تاريخ الإختبار", "اسم المحفظ", "اسم المختبر", "المرحلة", "عدد أسئلة الإختبار", "أسئلة الإختبار", "المعدل", "ملاحظات"};
+        boolean[] checkedItems = {false, false, false, false, false, false, false, false, false, false};
+
+        builder.setMultiChoiceItems(Columns, checkedItems, (dialog, which, isChecked) -> {
+            // The user checked or unchecked a box
+            if (isChecked) {
+                // If the user checked the item, add it to the selected items
+                ColumnsList.add(Columns[which]);
+            } else {
+                // Else, if the item is already in the array, remove it
+                ColumnsList.remove(Columns[which]);
+            }
+
+        });
+
+// Add OK and Cancel buttons
+        builder.setPositiveButton("تحميل التقرير", (dialog, which) -> {
+            // The user clicked OK
+            if (!ColumnsList.isEmpty()) {
+                if (type == 0) {
+                    new DownloadDataExamReport(this, ColumnsList, FirebaseFirestore.getInstance(), null, null);
+                } else if (type == 1) {
+                    if (sp_stages.getSelectedItem() != null)
+                        new DownloadDataExamReport(this, ColumnsList, FirebaseFirestore.getInstance(), null, sp_stages.getSelectedItem().toString());
+                } else if (type == 2) {
+                    if (sp_stages.getSelectedItem() != null && sp_mohafzeen_custom.getSelectedItemPosition() != 0)
+                        new DownloadDataExamReport(this, ColumnsList, FirebaseFirestore.getInstance(),
+                                mohafezs.get(sp_mohafzeen_custom.getSelectedItemPosition()).getId()
+                                , sp_stages.getSelectedItem().toString());
+                }
+            } else {
+                new SweetAlertDialog_(this).showDialogError("عذرا يجب تحديد عمود ..");
+            }
+        });
+
+        builder.setNeutralButton("حدد الكل", (dialogInterface, i) -> {
+            Arrays.fill(checkedItems, true);
+            ColumnsList.clear();
+            Collections.addAll(ColumnsList, Columns);
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        });
+
+        builder.setNegativeButton("إلغاء", null);
+
+// Create and show the alert dialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     @Override
@@ -462,6 +577,50 @@ public class SuperVisorExamsActivity extends AppCompatActivity implements Naviga
             builder.setCancelable(false);
             dialogMultipleAccounts = builder.create();
             dialogMultipleAccounts.show();
+        }
+    }
+
+    private class CustomTask extends AsyncTask<Void, Void, Void> {
+
+        protected Void doInBackground(Void... param) {
+            //Do some work
+            return null;
+        }
+
+        protected void onPostExecute(Void param) {
+            //Print Toast or open dialog
+            AlertDialog.Builder builder = new AlertDialog.Builder(SuperVisorExamsActivity.this);
+            LayoutInflater inflater = LayoutInflater.from(SuperVisorExamsActivity.this);
+            @SuppressLint("InflateParams") View content = inflater.inflate(R.layout.layout_exams_reports, null);
+            builder.setView(content);
+            initialDialog(content);
+            btn_downLoad_report_all.setOnClickListener(view -> showDialogSelectColumns(0));
+            btn_downLoad_report_custom.setOnClickListener(view -> {
+                if (sp_stages.getSelectedItemPosition() != 0) {
+                    if (sp_mohafzeen_custom.getSelectedItemPosition() != 0) {
+                        showDialogSelectColumns(2);
+                    } else {
+                        showDialogSelectColumns(1);
+                    }
+                } else {
+                    sweetAlertDialog_.showDialogError("عذرا يجب تحديد مرحلة");
+                }
+            });
+
+            sp_stages.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                    if (i != 0) {
+                        getMohafzeenByStageFromDB();
+                    }
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> adapterView) {
+
+                }
+            });
+            builder.create().show();
         }
     }
 }

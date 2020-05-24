@@ -8,8 +8,7 @@
     android:padding="@dimen/_20sdp"
     app:cardBackgroundColor="@color/white"
     app:cardCornerRadius="@dimen/_20sdp"
-    app:cardElevation="@dimen/_5sdp"
-    tools:context=".administrator.Fragment.EdareFragment">
+    app:cardElevation="@dimen/_5sdp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

@@ -8,7 +8,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.alansar.center.Common.Common;
 import com.alansar.center.Interface.ItemClickListener;
 import com.alansar.center.R;
 
@@ -41,6 +40,5 @@ public class MonthlyReportsViewHolder extends RecyclerView.ViewHolder implements
     @Override
     public void onCreateContextMenu(ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
         contextMenu.setHeaderTitle("Select the Action");
-        contextMenu.add(0, 0, getAdapterPosition(), Common.MORE_DETAILS);
     }
 }

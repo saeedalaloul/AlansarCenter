@@ -26,7 +26,7 @@ public class ReportDesignMonthly {
 
     public ReportDesignMonthly(String nameMohafez, XSSFWorkbook wb, int month, int year, ArrayList<MonthlyReport> reports) {
         if (reports.size() > 0) {
-            String ReportName = "تقرير الحلقة عن شهر " + month;
+            String ReportName = "تقرير لحلقة المحفظ " + nameMohafez + " عن شهر " + month;
             String extStorageDirectory = Environment.getExternalStorageDirectory().toString();
             File folder = new File(extStorageDirectory, "مركز الأنصار");
             file = new File(folder, ReportName + ".xlsx");

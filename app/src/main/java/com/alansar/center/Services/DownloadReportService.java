@@ -62,6 +62,7 @@ public class DownloadReportService extends Service {
             StartAya2, EndAya1, EndAya2, StartAya1Moragea, StartAya2Moragea, EndAya1Moragea, EndAya2Moragea, StudentsAbsentDays;
     private HashMap<String, Double> StudentTotalPagesHefaz, StudentTotalPagesMoragea;
     private NotificationManager notificationManager;
+    private String mohafezName;
 
     @Override
     public void onCreate() {
@@ -76,18 +77,19 @@ public class DownloadReportService extends Service {
         }
         wakeLock.acquire(2 * 60 * 1000L /*10 minutes*/);
         Log.d("sss", "Wakelock acquired");
-        createNotification("تجهيز التقرير الشهري", "جاري تحميل البيانات من السيرفر ...", 0);
+        createNotification("جاري تحميل البيانات من السيرفر ...", 0);
     }
 
-    private void createNotification(String contentTitle, String contentText, int type) {
+    private void createNotification(String contentText, int type) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationCompat.Builder notification = new NotificationCompat.Builder(this, ID)
-                    .setContentTitle(contentTitle)
+                    .setContentTitle("تجهيز التقرير الشهري")
                     .setContentText(contentText)
                     .setColor(Color.GREEN)
                     .setOnlyAlertOnce(true)
                     .setVibrate(new long[]{1000, 1000, 1000, 1000, 1000})
                     .setAutoCancel(true)
+                    .setStyle(new NotificationCompat.BigTextStyle().bigText(contentText))
                     .setSmallIcon(R.drawable.logo_ansar)
                     .setChannelId(ID)
                     .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.logo_ansar));
@@ -107,7 +109,7 @@ public class DownloadReportService extends Service {
                     intent.setDataAndType(uri, "application/vnd.ms-excel");
                     PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
                     notification.setContentIntent(pendingIntent);
-                    Common.getNotificationManager(notificationManager,this).notify(10, notification.build());
+                    Common.getNotificationManager(notificationManager, this).notify(10, notification.build());
                 }
             }
         }
@@ -122,7 +124,8 @@ public class DownloadReportService extends Service {
                     && intent.hasExtra("mohafezName")) {
                 month = intent.getIntExtra("month", 0);
                 year = intent.getIntExtra("year", 0);
-                getIdsOfStudentsFromDB(year, month,intent.getStringExtra("groupId"));
+                mohafezName = intent.getStringExtra("mohafezName");
+                getIdsOfStudentsFromDB(year, month, intent.getStringExtra("groupId"));
                 if (requestQueue != null) {
                     final int[] i = {0};
                     i[0] = 1;
@@ -190,8 +193,8 @@ public class DownloadReportService extends Service {
                                 }
                                 if (reports.size() > 0 && reports.size() == size) {
                                     if (Common.currentPerson != null) {
-                                        createNotification("تجهيز التقرير الشهري", "جاري الإنتهاء من إعداد التقري الشهري ...", 0);
-
+                                        String contentText = "جاري الإنتهاء من إعداد التقري الشهري لحلقة المحفظ " + intent.getStringExtra("mohafezName") + " عن شهر " + month;
+                                        createNotification(contentText, 0);
                                         if (month != 0 && year != 0) {
                                             new ReportDesignMonthly("" + intent.getStringExtra("mohafezName"), new XSSFWorkbook(), month, year, reports);
                                             reports.clear();
@@ -215,7 +218,8 @@ public class DownloadReportService extends Service {
         Log.d("sss", "onDestroy");
         wakeLock.release();
         Log.d("sss", "Wakelock released");
-        createNotification("تجهيز التقرير الشهري", "تم تجهيز التقرير الشهري بنجاح ...", 1);
+        String contentText = "تم تجهيز التقرير الشهري بنجاح لحلقة المحفظ " + mohafezName + " عن شهر " + month +" للفتح انقر هنا ...";
+        createNotification(contentText, 1);
     }
 
     @Nullable
@@ -404,7 +408,6 @@ public class DownloadReportService extends Service {
     }
 
     private void getNumberPageSuraFromApi() {
-        createNotification("جاري معالجة البيانات ...", "تجهيز التقرير الشهري", 0);
         if (groupMembers != null && !groupMembers.isEmpty()
                 && StartSura != null && !StartSura.isEmpty()
                 && StartAya1 != null && !StartAya1.isEmpty()
