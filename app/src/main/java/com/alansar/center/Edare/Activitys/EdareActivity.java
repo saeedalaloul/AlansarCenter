@@ -61,7 +61,7 @@ public class EdareActivity extends AppCompatActivity implements NavigationView.O
     ActionBarDrawerToggle toggle;
     Class fragmentClass;
     FirebaseFirestore db;
-    private TextView tv_person_name,tv_person_Permission;
+    private TextView tv_person_name, tv_person_Permission;
     private CircleImageView img_profile;
     private FirebaseUser mCurrentUser;
     private FirebaseAuth mauth;
