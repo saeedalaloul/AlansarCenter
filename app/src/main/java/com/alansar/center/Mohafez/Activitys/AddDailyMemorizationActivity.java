@@ -3,6 +3,7 @@ package com.alansar.center.Mohafez.Activitys;
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.RadioGroup;
@@ -185,7 +186,7 @@ public class AddDailyMemorizationActivity extends AppCompatActivity {
                     }
                 }
             }
-        });
+        }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
     }
 
     @SuppressLint("DefaultLocale")
@@ -447,7 +448,7 @@ public class AddDailyMemorizationActivity extends AppCompatActivity {
                     sweetAlertDialog.showDialogError("التاريخ المدخل موجود مسبقا !");
                 }
             }
-        });
+        }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
     }
 
     private void addDataMoragea() {
@@ -479,7 +480,7 @@ public class AddDailyMemorizationActivity extends AppCompatActivity {
                     sweetAlertDialog.showDialogError("التاريخ المدخل موجود مسبقا !");
                 }
             }
-        });
+        }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
     }
 
     private void addDataNoHafez(String notes_No_hafez) {
@@ -502,7 +503,7 @@ public class AddDailyMemorizationActivity extends AppCompatActivity {
                     sweetAlertDialog.showDialogError("التاريخ المدخل موجود مسبقا !");
                 }
             }
-        });
+        }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
     }
 
     private void addDataApsent(String notes_No_hafez) {
@@ -524,7 +525,7 @@ public class AddDailyMemorizationActivity extends AppCompatActivity {
                     sweetAlertDialog.showDialogError("التاريخ المدخل موجود مسبقا !");
                 }
             }
-        });
+        }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
     }
 
     private void addDataAuthorized(String notes_authorized) {
@@ -549,7 +550,7 @@ public class AddDailyMemorizationActivity extends AppCompatActivity {
                     sweetAlertDialog.showDialogError("التاريخ المدخل موجود مسبقا !");
                 }
             }
-        });
+        }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
     }
 
     private void InitializeFields() {

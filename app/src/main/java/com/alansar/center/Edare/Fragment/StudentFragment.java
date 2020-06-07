@@ -149,7 +149,7 @@ public class StudentFragment extends Fragment {
                         new SweetAlertDialog_(getContext()).showDialogError("لم يتم منحك صلاحية تحديث طالب يرجى مراجعة مسؤول المركز");
                     }
                 }
-            });
+            }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
         } else if (item.getTitle().equals(Common.VIEW_THE_LATEST_EXAM)) {
             ViewLatestExamOfStudent(item.getOrder());
         } else if (item.getTitle().equals(Common.ISDISABLEACCOUNT)) {
@@ -241,7 +241,7 @@ public class StudentFragment extends Fragment {
                         tv_name_tester.setText(documentSnapshot.getString("name"));
                     }
                 }
-            });
+            }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
         }
     }
 
@@ -254,7 +254,7 @@ public class StudentFragment extends Fragment {
                         et_name.setText(documentSnapshot.getString("name"));
                     }
                 }
-            });
+            }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
         }
     }
 
@@ -268,7 +268,7 @@ public class StudentFragment extends Fragment {
                         et_name.setText(documentSnapshot.getDocuments().get(0).getString("name"));
                     }
                 }
-            });
+            }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
         }
     }
 
@@ -373,6 +373,10 @@ public class StudentFragment extends Fragment {
             students.clear();
             query = query.orderBy("name").startAt(newText).endAt(newText + "\uf8ff");
             query.addSnapshotListener((queryDocumentSnapshots, e) -> {
+                if (e != null) {
+                    Log.w("sss", "listen:error" + e.getLocalizedMessage());
+                    return;
+                }
                 if (queryDocumentSnapshots != null) {
                     if (!queryDocumentSnapshots.isEmpty()) {
                         isFound.set(true);
@@ -409,6 +413,6 @@ public class StudentFragment extends Fragment {
                     new SweetAlertDialog_(getContext()).showDialogError("لم يتم منحك صلاحية إضافة طالب يرجى مراجعة مسؤول المركز");
                 }
             }
-        });
+        }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
     }
 }

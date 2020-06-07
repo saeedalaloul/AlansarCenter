@@ -2,6 +2,7 @@ package com.alansar.center.Edare.Fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -237,8 +238,7 @@ public class CenterReportsFragment extends Fragment {
                                 years_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                                 sp_year.setAdapter(years_adapter);
                             }
-                        });
-
+                        }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
             }
         }
     }
@@ -259,7 +259,7 @@ public class CenterReportsFragment extends Fragment {
                     sp_mohafzeen.setAdapter(adapter);
                     sp_mohafzeen_custom.setAdapter(adapter);
                 }
-            });
+            }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
         }
     }
 

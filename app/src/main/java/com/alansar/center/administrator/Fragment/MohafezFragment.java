@@ -198,6 +198,10 @@ public class MohafezFragment extends Fragment {
         } else {
             Query query = Ref.orderBy("name").startAt(newText).endAt(newText + "\uf8ff");
             query.addSnapshotListener((queryDocumentSnapshots, e) -> {
+                if (e != null) {
+                    Log.w("sss", "listen:error" + e.getLocalizedMessage());
+                    return;
+                }
                 if (queryDocumentSnapshots != null) {
                     if (!queryDocumentSnapshots.isEmpty()) {
                         mohafezeen.clear();

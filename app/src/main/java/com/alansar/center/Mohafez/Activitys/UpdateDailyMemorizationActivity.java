@@ -235,7 +235,9 @@ public class UpdateDailyMemorizationActivity extends AppCompatActivity {
 
     @SuppressLint("SetTextI18n")
     private void getPersonData() {
-        db.collection("Person").document(UID).get().addOnSuccessListener(documentSnapshot -> {
+        db.collection("Person")
+                .document(UID)
+                .get().addOnSuccessListener(documentSnapshot -> {
             if (documentSnapshot.exists()) {
                 tv_Person_name.setText(documentSnapshot.getString("fname")
                         + " " + documentSnapshot.getString("mname") + " " +
@@ -245,7 +247,7 @@ public class UpdateDailyMemorizationActivity extends AppCompatActivity {
                     Picasso.get().load(documentSnapshot.getString("image")).into(img_profile);
                 }
             }
-        });
+        }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
     }
 
     @SuppressLint("DefaultLocale")

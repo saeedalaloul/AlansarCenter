@@ -171,7 +171,7 @@ public class LoginFragment extends Fragment {
                         sweetAlertDialog_.showDialogError(Objects.requireNonNull(task.getException()).getMessage());
                         Log.d("sss", Objects.requireNonNull(Objects.requireNonNull(task.getException()).getMessage()));
                     }
-                });
+                }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
     }
 
     @Override
@@ -225,7 +225,7 @@ public class LoginFragment extends Fragment {
                 sweetAlertDialog_.cancelDialog();
                 sweetAlertDialog_.showDialogError("لم يتم العثور على حساب في النظام يجب التأكد من رقم الهاتف المدخل ..");
             }
-        });
+        }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
     }
 
     private void showDialogMultipleAccounts() {
@@ -324,7 +324,7 @@ public class LoginFragment extends Fragment {
                                     Paper.book().write(Common.GROUPID, Common.currentGroupId);
                                     SendUserToMainActivity(Permission);
                                 }
-                            });
+                            }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
                     break;
                 case Common.PERMISSIONS_SUPER_VISOR:
                     db.collection("Moshref").document(UID).get()
@@ -334,7 +334,7 @@ public class LoginFragment extends Fragment {
                                     Paper.book().write(Common.STAGE, Common.currentSTAGE);
                                     SendUserToMainActivity(Permission);
                                 }
-                            });
+                            }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
                     break;
                 case Common.PERMISSIONS_TESTER:
                     db.collection("Tester").document(UID).get()
@@ -344,7 +344,7 @@ public class LoginFragment extends Fragment {
                                     Paper.book().write(Common.STAGE, Common.currentSTAGE);
                                     SendUserToMainActivity(Permission);
                                 }
-                            });
+                            }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
                     break;
                 case Common.PERMISSIONS_EDARE:
                     db.collection("Edare").document(UID).get()
@@ -354,7 +354,7 @@ public class LoginFragment extends Fragment {
                                     Paper.book().write(Common.STAGE, Common.currentSTAGE);
                                     SendUserToMainActivity(Permission);
                                 }
-                            });
+                            }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
                     break;
             }
         }

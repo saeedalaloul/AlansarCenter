@@ -56,7 +56,7 @@ public class HomeFragment extends Fragment {
             if (queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
                 count_exams_all.setText("" + queryDocumentSnapshots.size());
             }
-        });
+        }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
         db.collection("Exam")
                 .whereEqualTo("year", calendar.get(Calendar.YEAR))
                 .whereEqualTo("month", calendar.get(Calendar.MONTH) + 1)

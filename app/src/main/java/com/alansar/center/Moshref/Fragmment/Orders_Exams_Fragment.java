@@ -89,7 +89,7 @@ public class Orders_Exams_Fragment extends Fragment {
             if (!queryDocumentSnapshots.isEmpty()) {
                 IdMoshrefExams = queryDocumentSnapshots.getDocuments().get(0).getId();
             }
-        });
+        }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -150,7 +150,7 @@ public class Orders_Exams_Fragment extends Fragment {
                                                     String date = dateformat.format(Timestamp.now().toDate().getTime());
                                                     GregorianCalendar gregorianCalendar = new GregorianCalendar();
                                                     try {
-                                                        gregorianCalendar.set(exam.getYear(), exam.getMonth(), exam.getDay(), 6, 0, 0);
+                                                        gregorianCalendar.set(exam.getYear(), exam.getMonth() - 1, exam.getDay(), 6, 0, 0);
                                                         String dateRet = dateformat.format(gregorianCalendar.getTime());
                                                         getDifferenceDate(dateformat.parse(date), dateformat.parse(dateRet), doc);
                                                     } catch (ParseException ex) {
@@ -172,7 +172,7 @@ public class Orders_Exams_Fragment extends Fragment {
                                                     String date = dateformat.format(Timestamp.now().toDate().getTime());
                                                     GregorianCalendar gregorianCalendar = new GregorianCalendar();
                                                     try {
-                                                        gregorianCalendar.set(exam.getYear(), exam.getMonth(), exam.getDay(), 6, 0, 0);
+                                                        gregorianCalendar.set(exam.getYear(), exam.getMonth() - 1, exam.getDay(), 6, 0, 0);
                                                         String dateRet = dateformat.format(gregorianCalendar.getTime());
                                                         getDifferenceDate(dateformat.parse(date), dateformat.parse(dateRet), doc);
                                                     } catch (ParseException ex) {
@@ -305,7 +305,7 @@ public class Orders_Exams_Fragment extends Fragment {
                                     });
                         }
                     }
-                });
+                }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
 
                 if (documentSnapshot.getString("name") != null && IdMoshrefExams != null && !IdMoshrefExams.isEmpty()) {
                     if (status == 1) {
@@ -337,7 +337,7 @@ public class Orders_Exams_Fragment extends Fragment {
                                             }
                                         });
                             }
-                        });
+                        }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
                     }
                 } else {
                     Log.d("sss", "Name Student Not Found");

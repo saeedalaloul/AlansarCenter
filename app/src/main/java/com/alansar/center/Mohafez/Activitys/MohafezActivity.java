@@ -81,6 +81,7 @@ public class MohafezActivity extends AppCompatActivity implements NavigationView
     private ListenerRegistration registration;
     private String typeFragment;
     private AlertDialog dialogMultipleAccounts;
+    private MenuItem menuItem_home;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @SuppressLint("RestrictedApi")
@@ -158,7 +159,7 @@ public class MohafezActivity extends AppCompatActivity implements NavigationView
         MenuItem menuItem_unCheck_order_exams = navigationView.getMenu().findItem(R.id.mohafez_orders_exams);
         MenuItem menuItem_unCheck_order_exams_today = navigationView.getMenu().findItem(R.id.mohafez_today_tests);
         MenuItem menuItem_unCheck_exams = navigationView.getMenu().findItem(R.id.mohafez_exams);
-        MenuItem menuItem_home = navigationView.getMenu().findItem(R.id.mohafez_home);
+        menuItem_home = navigationView.getMenu().findItem(R.id.mohafez_home);
         menuItem_home.setChecked(true);
         menuItem_home.setCheckable(true);
         countUnread_orders_exams = (TextView) menuItem_unCheck_order_exams.getActionView();
@@ -182,7 +183,7 @@ public class MohafezActivity extends AppCompatActivity implements NavigationView
                                 .document(Common.currentPerson.getId()).
                                 set(new Token(token));
                     }
-                });
+                }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
     }
 
     @SuppressLint("SetTextI18n")
@@ -303,7 +304,6 @@ public class MohafezActivity extends AppCompatActivity implements NavigationView
                 moveFragment(home);
                 toolbar.setTitle("الصفحة الرئيسية");
                 toolbar.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                drawerLayout.closeDrawers();
                 menuItem.setChecked(true);
                 menuItem.setCheckable(true);
                 break;
@@ -312,7 +312,6 @@ public class MohafezActivity extends AppCompatActivity implements NavigationView
                 moveFragment(studentsFragment);
                 toolbar.setTitle("الطلاب");
                 toolbar.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                drawerLayout.closeDrawers();
                 menuItem.setChecked(true);
                 menuItem.setCheckable(true);
                 break;
@@ -321,7 +320,6 @@ public class MohafezActivity extends AppCompatActivity implements NavigationView
                 moveFragment(examsFragment);
                 toolbar.setTitle("الإختبارات");
                 toolbar.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                drawerLayout.closeDrawers();
                 menuItem.setChecked(true);
                 menuItem.setCheckable(true);
                 break;
@@ -330,7 +328,6 @@ public class MohafezActivity extends AppCompatActivity implements NavigationView
                 moveFragment(todayTestsFragment);
                 toolbar.setTitle("اختبارات اليوم");
                 toolbar.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                drawerLayout.closeDrawers();
                 menuItem.setChecked(true);
                 menuItem.setCheckable(true);
                 break;
@@ -339,7 +336,6 @@ public class MohafezActivity extends AppCompatActivity implements NavigationView
                 moveFragment(orders_exams_fragment);
                 toolbar.setTitle("طلبات الإختبارات");
                 toolbar.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                drawerLayout.closeDrawers();
                 menuItem.setChecked(true);
                 menuItem.setCheckable(true);
                 break;
@@ -348,19 +344,16 @@ public class MohafezActivity extends AppCompatActivity implements NavigationView
                 moveFragment(monthly_reports_fragment);
                 toolbar.setTitle("التقارير الشهرية");
                 toolbar.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                drawerLayout.closeDrawers();
                 menuItem.setChecked(true);
                 menuItem.setCheckable(true);
                 break;
             case R.id.mohafez_download_reports_db:
                 showDialogSelectColumns();
-                drawerLayout.closeDrawers();
                 menuItem.setChecked(true);
                 menuItem.setCheckable(true);
                 break;
             case R.id.mohafez_switch_account:
                 showDialogMultipleAccounts();
-                drawerLayout.closeDrawers();
                 menuItem.setChecked(true);
                 menuItem.setCheckable(true);
                 break;
@@ -369,6 +362,11 @@ public class MohafezActivity extends AppCompatActivity implements NavigationView
                 menuItem.setCheckable(true);
                 Common.SignOut(mauth, MohafezActivity.this, registration);
                 break;
+        }
+        drawerLayout.closeDrawers();
+        if (menuItem.getItemId() != R.id.mohafez_home) {
+            menuItem_home.setChecked(false);
+            menuItem_home.setCheckable(false);
         }
         return true;
     }

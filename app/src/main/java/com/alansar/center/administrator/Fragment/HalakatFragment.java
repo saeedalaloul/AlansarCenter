@@ -200,7 +200,7 @@ public class HalakatFragment extends Fragment {
                         sweetAlertDialog.showDialogError("المحفظ الذي قمت بإختياره لديه حلقة مسبقا ..");
                     }
                 }
-            });
+            }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
         }
     }
 
@@ -292,7 +292,7 @@ public class HalakatFragment extends Fragment {
                             spinner_halaka_mohafez.setSelection(i);
                         }
                     }
-                });
+                }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
     }
 
     @Override
@@ -341,7 +341,7 @@ public class HalakatFragment extends Fragment {
                         } else {
                             sweetAlertDialog.showDialogError("المحفظ الذي قمت بإختياره لديه حلقة مسبقا ..");
                         }
-                    });
+                    }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
                 }
 
             }
@@ -394,6 +394,10 @@ public class HalakatFragment extends Fragment {
         } else {
             Query query = Ref.orderBy("name").startAt(newText).endAt(newText + "\uf8ff");
             query.addSnapshotListener((queryDocumentSnapshots, e) -> {
+                if (e != null) {
+                    Log.w("sss", "listen:error" + e.getLocalizedMessage());
+                    return;
+                }
                 if (queryDocumentSnapshots != null) {
                     if (!queryDocumentSnapshots.isEmpty()) {
                         groups.clear();

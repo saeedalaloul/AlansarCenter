@@ -172,7 +172,7 @@ public class Update_Personal_Information__Fragment extends Fragment {
                     sp_group.setAdapter(adapter);
                     sp_group.setSelection(groups_Names.indexOf(retGroupName));
                 }
-            });
+            }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
         }
     }
 
@@ -237,7 +237,7 @@ public class Update_Personal_Information__Fragment extends Fragment {
                     db.collection("GroupMembers").document(groupId).set(new GroupMembers(groupId, strings));
                 }
                 db.collection("GroupMembers").document(retGroupId).update("groupMembers", FieldValue.arrayRemove(UID));
-            });
+            }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
         }
     }
 
@@ -283,7 +283,7 @@ public class Update_Personal_Information__Fragment extends Fragment {
                         validatePhoneFromDB(Phone, FName, MName, LName, DOB, IdentificationNumber);
                     }
                 }
-            });
+            }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
         }
     }
 
@@ -397,7 +397,7 @@ public class Update_Personal_Information__Fragment extends Fragment {
                             groupId = mohafez.getGroupId();
                             retStage = mohafez.getStage();
                         }
-                    });
+                    }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
                     break;
                 case Common.PERMISSIONS_SUPER_VISOR:
                     db.collection("Moshref").document(UID).get().addOnSuccessListener(documentSnapshot -> {
@@ -405,7 +405,7 @@ public class Update_Personal_Information__Fragment extends Fragment {
                         assert moshref != null;
                         sp_stage.setSelection(stage_list.indexOf(moshref.getStage()));
                         retStage = moshref.getStage();
-                    });
+                    }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
                     break;
                 case Common.PERMISSIONS_EDARE:
                     db.collection("Edare").document(UID).get().addOnSuccessListener(documentSnapshot -> {
@@ -413,7 +413,7 @@ public class Update_Personal_Information__Fragment extends Fragment {
                         assert edare != null;
                         sp_stage.setSelection(stage_list.indexOf(edare.getStage()));
                         retStage = edare.getStage();
-                    });
+                    }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
                     break;
                 case Common.PERMISSIONS_STUDENTN:
                     db.collection("Student").document(UID).get().addOnSuccessListener(documentSnapshot -> {
@@ -422,14 +422,13 @@ public class Update_Personal_Information__Fragment extends Fragment {
                         sp_stage.setSelection(stage_list.indexOf(student.getStage()));
                         retStage = student.getStage();
                         retGroupId = student.getGroupId();
-                    });
+                    }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
                     break;
             }
         }
 
         db.collection("Person").document(UID).get().addOnSuccessListener(documentSnapshot -> {
             if (documentSnapshot.exists()) {
-
                 person = documentSnapshot.toObject(Person.class);
                 assert person != null;
                 edtFName.setText(person.getFname());
@@ -444,7 +443,7 @@ public class Update_Personal_Information__Fragment extends Fragment {
                 ImageUrl = person.getImage();
                 ListPermissions.addAll(person.getPermissions());
             }
-        });
+        }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
     }
 
     private void showDialogSelectPermissions() {
@@ -497,7 +496,6 @@ public class Update_Personal_Information__Fragment extends Fragment {
     private void uploadImage(String id) {
         if (imgUri != null) {
             sweetAlertDialog.showdialogProgress();
-
             final StorageReference imageFolder = storageReference.child("images/" + id);
             imageFolder.putFile(imgUri).addOnSuccessListener(taskSnapshot -> {
                 sweetAlertDialog.cancelDialog();
@@ -510,7 +508,7 @@ public class Update_Personal_Information__Fragment extends Fragment {
                                 sweetAlertDialog.cancelDialog();
                                 Objects.requireNonNull(getActivity()).finish();
                             });
-                });
+                }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
             })
                     .addOnFailureListener(e -> {
                         sweetAlertDialog.cancelDialog();

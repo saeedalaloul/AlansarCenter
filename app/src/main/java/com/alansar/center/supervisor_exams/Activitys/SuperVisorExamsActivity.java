@@ -85,6 +85,7 @@ public class SuperVisorExamsActivity extends AppCompatActivity implements Naviga
     private ImageButton btn_downLoad_report_all, btn_downLoad_report_custom;
     private ArrayAdapter<Mohafez> adapter;
     private List<Mohafez> mohafezs;
+    private MenuItem menuItem_home;
 
     @SuppressLint("RestrictedApi")
     @Override
@@ -166,7 +167,7 @@ public class SuperVisorExamsActivity extends AppCompatActivity implements Naviga
         countUnread_orders_exams = (TextView) menuItem_unCheck_order_exams.getActionView();
         countUnread_orders_exams_today = (TextView) menuItem_unCheck_order_exams_today.getActionView();
         countUnread_exams = (TextView) menuItem_unCheck_exams.getActionView();
-        MenuItem menuItem_home = navigationView.getMenu().findItem(R.id.supervisor_exams_home);
+        menuItem_home = navigationView.getMenu().findItem(R.id.supervisor_exams_home);
         menuItem_home.setChecked(true);
         menuItem_home.setCheckable(true);
         FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(instanceIdResult -> {
@@ -187,7 +188,7 @@ public class SuperVisorExamsActivity extends AppCompatActivity implements Naviga
                                 .document(Common.currentPerson.getId()).
                                 set(new Token(token));
                     }
-                });
+                }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
     }
 
     @Override
@@ -381,7 +382,6 @@ public class SuperVisorExamsActivity extends AppCompatActivity implements Naviga
                 moveFragment(home);
                 toolbar.setTitle("الصفحة الرئيسية");
                 toolbar.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                drawerLayout.closeDrawers();
                 menuItem.setChecked(true);
                 menuItem.setCheckable(true);
                 break;
@@ -390,7 +390,6 @@ public class SuperVisorExamsActivity extends AppCompatActivity implements Naviga
                 moveFragment(orders_exams_fragment);
                 toolbar.setTitle("طلبات الإختبارات");
                 toolbar.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                drawerLayout.closeDrawers();
                 menuItem.setChecked(true);
                 menuItem.setCheckable(true);
                 break;
@@ -399,7 +398,6 @@ public class SuperVisorExamsActivity extends AppCompatActivity implements Naviga
                 moveFragment(todayTestsFragment);
                 toolbar.setTitle("اختبارات اليوم");
                 toolbar.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                drawerLayout.closeDrawers();
                 menuItem.setChecked(true);
                 menuItem.setCheckable(true);
                 break;
@@ -408,7 +406,6 @@ public class SuperVisorExamsActivity extends AppCompatActivity implements Naviga
                 moveFragment(examsFragment);
                 toolbar.setTitle("الإختبارات");
                 toolbar.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                drawerLayout.closeDrawers();
                 menuItem.setChecked(true);
                 menuItem.setCheckable(true);
                 break;
@@ -417,7 +414,6 @@ public class SuperVisorExamsActivity extends AppCompatActivity implements Naviga
                 moveFragment(testersFragment);
                 toolbar.setTitle("المختبرين");
                 toolbar.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                drawerLayout.closeDrawers();
                 menuItem.setChecked(true);
                 menuItem.setCheckable(true);
                 break;
@@ -426,19 +422,16 @@ public class SuperVisorExamsActivity extends AppCompatActivity implements Naviga
                 moveFragment(examsSettingsFragment);
                 toolbar.setTitle("إعدادات الإختبارات");
                 toolbar.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                drawerLayout.closeDrawers();
                 menuItem.setChecked(true);
                 menuItem.setCheckable(true);
                 break;
             case R.id.supervisor_exams_center_reports:
                 showDialogExamsReports();
-                drawerLayout.closeDrawers();
                 menuItem.setChecked(true);
                 menuItem.setCheckable(true);
                 break;
             case R.id.supervisor_exams_switch_account:
                 showDialogMultipleAccounts();
-                drawerLayout.closeDrawers();
                 menuItem.setChecked(true);
                 menuItem.setCheckable(true);
                 break;
@@ -447,6 +440,11 @@ public class SuperVisorExamsActivity extends AppCompatActivity implements Naviga
                 menuItem.setCheckable(true);
                 Common.SignOut(mauth, SuperVisorExamsActivity.this, registration);
                 break;
+        }
+        drawerLayout.closeDrawers();
+        if (menuItem.getItemId() != R.id.supervisor_exams_home) {
+            menuItem_home.setChecked(false);
+            menuItem_home.setCheckable(false);
         }
         return true;
     }
@@ -580,6 +578,7 @@ public class SuperVisorExamsActivity extends AppCompatActivity implements Naviga
         }
     }
 
+    @SuppressLint("StaticFieldLeak")
     private class CustomTask extends AsyncTask<Void, Void, Void> {
 
         protected Void doInBackground(Void... param) {

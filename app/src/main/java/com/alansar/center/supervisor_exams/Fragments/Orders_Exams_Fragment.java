@@ -159,9 +159,9 @@ public class Orders_Exams_Fragment extends Fragment {
                                                 String date = dateformat.format(Timestamp.now().toDate().getTime());
                                                 GregorianCalendar gregorianCalendar = new GregorianCalendar();
                                                 try {
-                                                    gregorianCalendar.set(exam.getYear(), exam.getMonth(), exam.getDay(), 6, 0, 0);
+                                                    gregorianCalendar.set(exam.getYear(), exam.getMonth() - 1, exam.getDay(), 6, 0, 0);
                                                     String dateRet = dateformat.format(gregorianCalendar.getTime());
-                                                    getDifferenceDate(dateformat.parse(date),dateformat.parse(dateRet), doc);
+                                                    getDifferenceDate(dateformat.parse(date), dateformat.parse(dateRet), doc);
                                                 } catch (ParseException ex) {
                                                     ex.printStackTrace();
                                                 }
@@ -184,9 +184,9 @@ public class Orders_Exams_Fragment extends Fragment {
                                                 String date = dateformat.format(Timestamp.now().toDate().getTime());
                                                 GregorianCalendar gregorianCalendar = new GregorianCalendar();
                                                 try {
-                                                    gregorianCalendar.set(exam.getYear(), exam.getMonth(), exam.getDay(), 6, 0, 0);
+                                                    gregorianCalendar.set(exam.getYear(), exam.getMonth() - 1, exam.getDay(), 6, 0, 0);
                                                     String dateRet = dateformat.format(gregorianCalendar.getTime());
-                                                    getDifferenceDate(dateformat.parse(date),dateformat.parse(dateRet), doc);
+                                                    getDifferenceDate(dateformat.parse(date), dateformat.parse(dateRet), doc);
                                                 } catch (ParseException ex) {
                                                     ex.printStackTrace();
                                                 }
@@ -567,8 +567,7 @@ public class Orders_Exams_Fragment extends Fragment {
                                         @Override
                                         public void onResponse(@NonNull Call<Response> call, @NonNull retrofit2.Response<Response> response) {
                                             if (response.code() == 200) {
-                                                assert response.body() != null;
-                                                if (response.body().success != 1) {
+                                                if (response.body() != null && response.body().success != 1) {
                                                     new SweetAlertDialog_(getContext())
                                                             .showDialogError("حدث خطا ما في إرسال الإشعار!");
                                                 }
@@ -577,7 +576,7 @@ public class Orders_Exams_Fragment extends Fragment {
 
                                         @Override
                                         public void onFailure(@NonNull Call<Response> call, @NonNull Throwable t) {
-                                            Log.d("sss", "" + t.getLocalizedMessage());
+                                            Log.d("sss", "Error Notification :" + t.getLocalizedMessage());
                                         }
                                     });
                         }
@@ -601,8 +600,7 @@ public class Orders_Exams_Fragment extends Fragment {
                                             @Override
                                             public void onResponse(@NonNull Call<Response> call, @NonNull retrofit2.Response<Response> response) {
                                                 if (response.code() == 200) {
-                                                    assert response.body() != null;
-                                                    if (response.body().success != 1) {
+                                                    if (response.body() != null && response.body().success != 1) {
                                                         new SweetAlertDialog_(getContext())
                                                                 .showDialogError("حدث خطا ما في إرسال الإشعار!");
                                                     }
@@ -611,7 +609,7 @@ public class Orders_Exams_Fragment extends Fragment {
 
                                             @Override
                                             public void onFailure(@NonNull Call<Response> call, @NonNull Throwable t) {
-                                                Log.d("sss", "" + t.getLocalizedMessage());
+                                                Log.d("sss", "Error Notification :" + t.getLocalizedMessage());
                                             }
                                         });
                             }
@@ -620,7 +618,6 @@ public class Orders_Exams_Fragment extends Fragment {
                 } else {
                     Toast.makeText(getContext(), "Name is not Found", Toast.LENGTH_SHORT).show();
                 }
-
             }
         });
     }

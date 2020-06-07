@@ -211,16 +211,15 @@ public class StudentFragment extends Fragment {
                 .limit(1)
                 .get().addOnSuccessListener(queryDocumentSnapshots -> {
             if (queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
-                showDialogMoreDetails(queryDocumentSnapshots.getDocuments().get(0).toObject(Exam.class),order);
-            }else
-            {
+                showDialogMoreDetails(queryDocumentSnapshots.getDocuments().get(0).toObject(Exam.class), order);
+            } else {
                 sweetAlertDialog.showDialogError("عذرا لم يتم العثور على أية إختبارات لهذا الطالب");
             }
         }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
     }
 
     @SuppressLint("SetTextI18n")
-    private void showDialogMoreDetails(Exam exam,int order) {
+    private void showDialogMoreDetails(Exam exam, int order) {
         if (getContext() != null && exam != null) {
             LayoutInflater factory = LayoutInflater.from(getActivity());
             @SuppressLint("InflateParams") final View moreDetailsDialogView
@@ -281,7 +280,7 @@ public class StudentFragment extends Fragment {
                         et_name.setText(documentSnapshot.getString("name"));
                     }
                 }
-            });
+            }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
         }
     }
 
@@ -295,7 +294,7 @@ public class StudentFragment extends Fragment {
                         et_name.setText(documentSnapshot.getDocuments().get(0).getString("name"));
                     }
                 }
-            });
+            }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
         }
     }
 
@@ -443,7 +442,7 @@ public class StudentFragment extends Fragment {
                     db.collection("GroupMembers").document(groupId).set(new GroupMembers(groupId, strings));
                 }
                 db.collection("GroupMembers").document(retGroupId).update("groupMembers", FieldValue.arrayRemove(UID));
-            });
+            }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
         }
     }
 
@@ -463,7 +462,7 @@ public class StudentFragment extends Fragment {
                     sp_halaka.setSelection(i);
                 }
             }
-        });
+        }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
     }
 
     private boolean validateInputs() {
@@ -492,6 +491,10 @@ public class StudentFragment extends Fragment {
         } else {
             Query query = Ref.orderBy("name").startAt(newText).endAt(newText + "\uf8ff");
             query.addSnapshotListener((queryDocumentSnapshots, e) -> {
+                if (e != null) {
+                    Log.w("sss", "listen:error" + e.getLocalizedMessage());
+                    return;
+                }
                 if (queryDocumentSnapshots != null) {
                     if (!queryDocumentSnapshots.isEmpty()) {
                         students.clear();

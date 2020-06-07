@@ -130,7 +130,7 @@ public class MohafezFragment extends Fragment {
                         new SweetAlertDialog_(getContext()).showDialogError("لم يتم منحك صلاحية تحديث محفظ يرجى مراجعة مسؤول المركز");
                     }
                 }
-            });
+            }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
         } else if (item.getTitle().equals(Common.ISDISABLEACCOUNT)) {
             db.collection("PermissionsUsers")
                     .document("permissionsUsers")
@@ -142,7 +142,7 @@ public class MohafezFragment extends Fragment {
                         new SweetAlertDialog_(getContext()).showDialogError("لم يتم منحك صلاحية تعطيل حسابات المحفظين يرجى مراجعة مسؤول المركز");
                     }
                 }
-            });
+            }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
         } else if (item.getTitle().equals(Common.ISENABLEACCOUNT)) {
             db.collection("PermissionsUsers")
                     .document("permissionsUsers")
@@ -154,7 +154,7 @@ public class MohafezFragment extends Fragment {
                         new SweetAlertDialog_(getContext()).showDialogError("لم يتم منحك صلاحية تمكين حسابات المحفظين يرجى مراجعة مسؤول المركز");
                     }
                 }
-            });
+            }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
         }
         return super.onContextItemSelected(item);
 
@@ -229,6 +229,10 @@ public class MohafezFragment extends Fragment {
             mohafezeen.clear();
             query = query.orderBy("name").startAt(newText).endAt(newText + "\uf8ff");
             query.addSnapshotListener((queryDocumentSnapshots, e) -> {
+                if (e != null) {
+                    Log.w("sss", "listen:error" + e.getLocalizedMessage());
+                    return;
+                }
                 if (queryDocumentSnapshots != null) {
                     if (!queryDocumentSnapshots.isEmpty()) {
                         isFound.set(true);
@@ -265,7 +269,7 @@ public class MohafezFragment extends Fragment {
                     new SweetAlertDialog_(getContext()).showDialogError("لم يتم منحك صلاحية إضافة محفظ يرجى مراجعة مسؤول المركز");
                 }
             }
-        });
+        }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
     }
 
 }

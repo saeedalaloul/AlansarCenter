@@ -71,6 +71,7 @@ public class AdminActivity extends AppCompatActivity implements NavigationView.O
     private ArrayList<AccountItem> accountItems;
     private ListenerRegistration registration;
     private AlertDialog dialogMultipleAccounts;
+    private MenuItem menuItem_home;
 
 
     @SuppressLint({"SetTextI18n", "RestrictedApi"})
@@ -120,7 +121,7 @@ public class AdminActivity extends AppCompatActivity implements NavigationView.O
         moveFragment(home);
         toolbar.setTitle("الصفحة الرئيسية");
         toolbar.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-        MenuItem menuItem_home = navigationView.getMenu().findItem(R.id.admin_home);
+        menuItem_home = navigationView.getMenu().findItem(R.id.admin_home);
         menuItem_home.setChecked(true);
         menuItem_home.setCheckable(true);
         FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(instanceIdResult -> {
@@ -141,7 +142,7 @@ public class AdminActivity extends AppCompatActivity implements NavigationView.O
                                 .document(Common.currentPerson.getId()).
                                 set(new Token(token));
                     }
-                });
+                }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
     }
 
     @Override
@@ -199,7 +200,6 @@ public class AdminActivity extends AppCompatActivity implements NavigationView.O
                 moveFragment(home);
                 toolbar.setTitle("الصفحة الرئيسة");
                 toolbar.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                drawerLayout.closeDrawers();
                 menuItem.setChecked(true);
                 menuItem.setCheckable(true);
                 break;
@@ -208,7 +208,6 @@ public class AdminActivity extends AppCompatActivity implements NavigationView.O
                 moveFragment(halakat);
                 toolbar.setTitle("الحلقات");
                 toolbar.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                drawerLayout.closeDrawers();
                 menuItem.setChecked(true);
                 menuItem.setCheckable(true);
                 break;
@@ -217,7 +216,6 @@ public class AdminActivity extends AppCompatActivity implements NavigationView.O
                 moveFragment(edare);
                 toolbar.setTitle("الاداريين");
                 toolbar.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                drawerLayout.closeDrawers();
                 menuItem.setChecked(true);
                 menuItem.setCheckable(true);
                 break;
@@ -226,7 +224,6 @@ public class AdminActivity extends AppCompatActivity implements NavigationView.O
                 moveFragment(moshref);
                 toolbar.setTitle("المشرفين");
                 toolbar.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                drawerLayout.closeDrawers();
                 menuItem.setChecked(true);
                 menuItem.setCheckable(true);
                 break;
@@ -235,7 +232,6 @@ public class AdminActivity extends AppCompatActivity implements NavigationView.O
                 moveFragment(mohafez);
                 toolbar.setTitle("المحفظين");
                 toolbar.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                drawerLayout.closeDrawers();
                 menuItem.setChecked(true);
                 menuItem.setCheckable(true);
                 break;
@@ -244,7 +240,6 @@ public class AdminActivity extends AppCompatActivity implements NavigationView.O
                 moveFragment(studentFragment);
                 toolbar.setTitle("الطلاب");
                 toolbar.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                drawerLayout.closeDrawers();
                 menuItem.setChecked(true);
                 menuItem.setCheckable(true);
                 break;
@@ -253,7 +248,6 @@ public class AdminActivity extends AppCompatActivity implements NavigationView.O
                 moveFragment(permissionsFragment);
                 toolbar.setTitle("صلاحيات المستخدمين");
                 toolbar.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                drawerLayout.closeDrawers();
                 menuItem.setChecked(true);
                 menuItem.setCheckable(true);
                 break;
@@ -262,14 +256,12 @@ public class AdminActivity extends AppCompatActivity implements NavigationView.O
                 moveFragment(centerReportsFragment);
                 toolbar.setTitle("تقارير المركز");
                 toolbar.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                drawerLayout.closeDrawers();
                 menuItem.setChecked(true);
                 menuItem.setCheckable(true);
                 break;
             case R.id.admin_switch_account:
                 menuItem.setChecked(true);
                 menuItem.setCheckable(true);
-                drawerLayout.closeDrawers();
                 showDialogMultipleAccounts();
                 break;
             case R.id.admin_logout:
@@ -277,6 +269,11 @@ public class AdminActivity extends AppCompatActivity implements NavigationView.O
                 menuItem.setCheckable(true);
                 Common.SignOut(mauth, AdminActivity.this, registration);
                 break;
+        }
+        drawerLayout.closeDrawers();
+        if (menuItem.getItemId() != R.id.admin_home) {
+            menuItem_home.setChecked(false);
+            menuItem_home.setCheckable(false);
         }
         return true;
     }

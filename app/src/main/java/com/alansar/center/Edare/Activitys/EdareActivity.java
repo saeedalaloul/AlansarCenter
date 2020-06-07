@@ -70,6 +70,7 @@ public class EdareActivity extends AppCompatActivity implements NavigationView.O
     private ListenerRegistration registration;
     private TextView countUnread_exams;
     private AlertDialog dialogMultipleAccounts;
+    private MenuItem menuItem_home;
 
 
     @SuppressLint("RestrictedApi")
@@ -121,7 +122,7 @@ public class EdareActivity extends AppCompatActivity implements NavigationView.O
         toolbar.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
         MenuItem menuItem_unCheck_exams = navigationView.getMenu().findItem(R.id.edare_exams);
         countUnread_exams = (TextView) menuItem_unCheck_exams.getActionView();
-        MenuItem menuItem_home = navigationView.getMenu().findItem(R.id.edare_home);
+        menuItem_home = navigationView.getMenu().findItem(R.id.edare_home);
         menuItem_home.setChecked(true);
         menuItem_home.setCheckable(true);
         FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(instanceIdResult -> {
@@ -142,7 +143,7 @@ public class EdareActivity extends AppCompatActivity implements NavigationView.O
                                 .document(Common.currentPerson.getId()).
                                 set(new Token(token));
                     }
-                });
+                }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
     }
 
     @SuppressLint("SetTextI18n")
@@ -235,7 +236,6 @@ public class EdareActivity extends AppCompatActivity implements NavigationView.O
                 moveFragment(home);
                 toolbar.setTitle("الصفحة الرئيسية");
                 toolbar.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                drawerLayout.closeDrawers();
                 menuItem.setChecked(true);
                 menuItem.setCheckable(true);
                 break;
@@ -244,7 +244,6 @@ public class EdareActivity extends AppCompatActivity implements NavigationView.O
                 moveFragment(halakat);
                 toolbar.setTitle("الحلقات");
                 toolbar.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                drawerLayout.closeDrawers();
                 menuItem.setChecked(true);
                 menuItem.setCheckable(true);
                 break;
@@ -253,7 +252,6 @@ public class EdareActivity extends AppCompatActivity implements NavigationView.O
                 moveFragment(examsFragment);
                 toolbar.setTitle("الإختبارات");
                 toolbar.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                drawerLayout.closeDrawers();
                 menuItem.setChecked(true);
                 menuItem.setCheckable(true);
                 break;
@@ -262,7 +260,6 @@ public class EdareActivity extends AppCompatActivity implements NavigationView.O
                 moveFragment(studentsFragment);
                 toolbar.setTitle("الطلاب");
                 toolbar.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                drawerLayout.closeDrawers();
                 menuItem.setChecked(true);
                 menuItem.setCheckable(true);
                 break;
@@ -271,7 +268,6 @@ public class EdareActivity extends AppCompatActivity implements NavigationView.O
                 moveFragment(mohafez);
                 toolbar.setTitle("المحفظين");
                 toolbar.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                drawerLayout.closeDrawers();
                 menuItem.setChecked(true);
                 menuItem.setCheckable(true);
                 break;
@@ -280,7 +276,6 @@ public class EdareActivity extends AppCompatActivity implements NavigationView.O
                 moveFragment(centerReportsFragment);
                 toolbar.setTitle("تقارير المرحلة");
                 toolbar.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                drawerLayout.closeDrawers();
                 menuItem.setChecked(true);
                 menuItem.setCheckable(true);
                 break;
@@ -288,13 +283,17 @@ public class EdareActivity extends AppCompatActivity implements NavigationView.O
                 menuItem.setChecked(true);
                 menuItem.setCheckable(true);
                 showDialogMultipleAccounts();
-                drawerLayout.closeDrawers();
                 break;
             case R.id.edare_logout:
                 menuItem.setChecked(true);
                 menuItem.setCheckable(true);
                 Common.SignOut(mauth, EdareActivity.this, registration);
                 break;
+        }
+        drawerLayout.closeDrawers();
+        if (menuItem.getItemId() != R.id.edare_home) {
+            menuItem_home.setChecked(false);
+            menuItem_home.setCheckable(false);
         }
         return true;
     }

@@ -158,9 +158,9 @@ public class Personal_Information__Fragment extends Fragment {
                                     });
                         }
                     }
-                });
+                }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
             }
-        });
+        }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
     }
 
     private void chooseImage() {
@@ -214,7 +214,7 @@ public class Personal_Information__Fragment extends Fragment {
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 sp_group.setAdapter(adapter);
             }
-        });
+        }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
     }
 
     private void uploadImage(String id) {
@@ -230,7 +230,7 @@ public class Personal_Information__Fragment extends Fragment {
                                 clearInputs();
                                 Objects.requireNonNull(getActivity()).finish();
                             });
-                }));
+                }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage())));
             })
                     .addOnFailureListener(e -> {
                         sweetAlertDialog_.cancelDialog();
@@ -277,10 +277,10 @@ public class Personal_Information__Fragment extends Fragment {
                     } else {
                         db.collection("GroupMembers").document(groupId).set(new GroupMembers(groupId, groupMembers));
                     }
-                });
+                }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
 
             }
-        });
+        }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
     }
 
     @SuppressLint("SetTextI18n")

@@ -61,7 +61,7 @@ public class MoshrefActivity extends AppCompatActivity implements NavigationView
     ActionBarDrawerToggle toggle;
     Class fragmentClass;
     FirebaseFirestore db;
-    private TextView tv_person_name,tv_person_Permission;
+    private TextView tv_person_name, tv_person_Permission;
     private TextView countUnread_orders_exams;
     private TextView countUnread_exams;
     private CircleImageView img_profile;
@@ -71,6 +71,7 @@ public class MoshrefActivity extends AppCompatActivity implements NavigationView
     private ListenerRegistration registration;
     private String typeFragment;
     private AlertDialog dialogMultipleAccounts;
+    private MenuItem menuItem_home;
 
 
     @SuppressLint("RestrictedApi")
@@ -138,7 +139,7 @@ public class MoshrefActivity extends AppCompatActivity implements NavigationView
         MenuItem menuItem_unCheck_exams = navigationView.getMenu().findItem(R.id.moshref_exams);
         countUnread_orders_exams = (TextView) menuItem_unCheck_order_exams.getActionView();
         countUnread_exams = (TextView) menuItem_unCheck_exams.getActionView();
-        MenuItem menuItem_home = navigationView.getMenu().findItem(R.id.moshref_home);
+        menuItem_home = navigationView.getMenu().findItem(R.id.moshref_home);
         menuItem_home.setChecked(true);
         menuItem_home.setCheckable(true);
         FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(instanceIdResult -> {
@@ -159,7 +160,7 @@ public class MoshrefActivity extends AppCompatActivity implements NavigationView
                                 .document(Common.currentPerson.getId()).
                                 set(new Token(token));
                     }
-                });
+                }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
     }
 
     @SuppressLint("SetTextI18n")
@@ -341,7 +342,6 @@ public class MoshrefActivity extends AppCompatActivity implements NavigationView
                 moveFragment(home);
                 toolbar.setTitle("الصفحة الرئيسية");
                 toolbar.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                drawerLayout.closeDrawers();
                 menuItem.setChecked(true);
                 menuItem.setCheckable(true);
                 break;
@@ -350,7 +350,6 @@ public class MoshrefActivity extends AppCompatActivity implements NavigationView
                 moveFragment(halakat);
                 toolbar.setTitle("الحلقات");
                 toolbar.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                drawerLayout.closeDrawers();
                 menuItem.setChecked(true);
                 menuItem.setCheckable(true);
                 break;
@@ -359,7 +358,6 @@ public class MoshrefActivity extends AppCompatActivity implements NavigationView
                 moveFragment(examsFragment);
                 toolbar.setTitle("الإختبارات");
                 toolbar.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                drawerLayout.closeDrawers();
                 menuItem.setChecked(true);
                 menuItem.setCheckable(true);
                 break;
@@ -368,7 +366,6 @@ public class MoshrefActivity extends AppCompatActivity implements NavigationView
                 moveFragment(orders_exams_fragment);
                 toolbar.setTitle("طلبات الإختبارات");
                 toolbar.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                drawerLayout.closeDrawers();
                 menuItem.setChecked(true);
                 menuItem.setCheckable(true);
                 break;
@@ -377,7 +374,6 @@ public class MoshrefActivity extends AppCompatActivity implements NavigationView
                 moveFragment(studentsFragment);
                 toolbar.setTitle("الطلاب");
                 toolbar.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                drawerLayout.closeDrawers();
                 menuItem.setChecked(true);
                 menuItem.setCheckable(true);
                 break;
@@ -386,7 +382,6 @@ public class MoshrefActivity extends AppCompatActivity implements NavigationView
                 moveFragment(mohafez);
                 toolbar.setTitle("المحفظين");
                 toolbar.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                drawerLayout.closeDrawers();
                 menuItem.setChecked(true);
                 menuItem.setCheckable(true);
                 break;
@@ -395,13 +390,11 @@ public class MoshrefActivity extends AppCompatActivity implements NavigationView
                 moveFragment(centerReportsFragment);
                 toolbar.setTitle("تقارير المرحلة");
                 toolbar.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                drawerLayout.closeDrawers();
                 menuItem.setChecked(true);
                 menuItem.setCheckable(true);
                 break;
             case R.id.moshref_switch_account:
                 showDialogMultipleAccounts();
-                drawerLayout.closeDrawers();
                 menuItem.setChecked(true);
                 menuItem.setCheckable(true);
                 break;
@@ -410,6 +403,11 @@ public class MoshrefActivity extends AppCompatActivity implements NavigationView
                 menuItem.setCheckable(true);
                 Common.SignOut(mauth, MoshrefActivity.this, registration);
                 break;
+        }
+        drawerLayout.closeDrawers();
+        if (menuItem.getItemId() != R.id.moshref_home) {
+            menuItem_home.setChecked(false);
+            menuItem_home.setCheckable(false);
         }
         return true;
     }

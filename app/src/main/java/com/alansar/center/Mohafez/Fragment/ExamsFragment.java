@@ -213,7 +213,7 @@ public class ExamsFragment extends Fragment {
                         tv_name_tester.setText(documentSnapshot.getString("name"));
                     }
                 }
-            });
+            }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
         }
     }
 
@@ -226,7 +226,8 @@ public class ExamsFragment extends Fragment {
                         et_name.setText(documentSnapshot.getString("name"));
                     }
                 }
-            });
+            }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
+
         }
     }
 
@@ -239,7 +240,7 @@ public class ExamsFragment extends Fragment {
                         et_name.setText(documentSnapshot.getString("name"));
                     }
                 }
-            });
+            }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
         }
     }
 

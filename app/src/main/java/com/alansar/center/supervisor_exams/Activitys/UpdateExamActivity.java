@@ -82,7 +82,7 @@ public class UpdateExamActivity extends AppCompatActivity {
             if (!queryDocumentSnapshots.isEmpty()) {
                 IdMoshrefExams = queryDocumentSnapshots.getDocuments().get(0).getId();
             }
-        });
+        }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
     }
 
     private void initialize() {
@@ -256,7 +256,7 @@ public class UpdateExamActivity extends AppCompatActivity {
             if (documentSnapshot.exists()) {
                 tv_name_mohafez.setText(documentSnapshot.getString("name"));
             }
-        });
+        }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
     }
 
     @SuppressLint({"SetTextI18n"})
@@ -378,7 +378,7 @@ public class UpdateExamActivity extends AppCompatActivity {
                     et_name.setText(documentSnapshot.getString("name"));
                 }
             }
-        });
+        }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
     }
 
     private void sendNotifications(String idMohafez) {

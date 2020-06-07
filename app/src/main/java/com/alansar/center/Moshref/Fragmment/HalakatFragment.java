@@ -93,7 +93,7 @@ public class HalakatFragment extends Fragment {
                             new SweetAlertDialog_(getContext()).showDialogError("لم يتم منحك صلاحية إضافة حلقة يرجى مراجعة مسؤول المركز");
                         }
                     }
-                }));
+                }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage())));
         halakaAdapter = new HalakaAdapter(groups);
         rv.setLayoutManager(new LinearLayoutManager(getContext()));
         rv.setHasFixedSize(true);
@@ -216,7 +216,7 @@ public class HalakatFragment extends Fragment {
                             spinner_halaka_mohafez.setSelection(i);
                         }
                     }
-                });
+                }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
     }
 
     private void addHalakaToDatabase() {
@@ -238,7 +238,7 @@ public class HalakatFragment extends Fragment {
                         sweetAlertDialog.showDialogError("المحفظ الذي قمت بإختياره لديه حلقة مسبقا ..");
                     }
                 }
-            });
+            }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
         }
     }
 
@@ -279,7 +279,7 @@ public class HalakatFragment extends Fragment {
                         } else {
                             sweetAlertDialog.showDialogError("المحفظ الذي قمت بإختياره لديه حلقة مسبقا ..");
                         }
-                    });
+                    }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
                 }
 
             }
@@ -432,7 +432,7 @@ public class HalakatFragment extends Fragment {
                         new SweetAlertDialog_(getContext()).showDialogError("لم يتم منحك صلاحية تحديث حلقة يرجى مراجعة مسؤول المركز");
                     }
                 }
-            });
+            }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
         }
         return super.onContextItemSelected(item);
 

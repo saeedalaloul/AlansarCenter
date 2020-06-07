@@ -198,7 +198,7 @@ public class PlaceExamActivity extends AppCompatActivity {
                 tv_date_exam.setText(exam.getDay() + "/" + exam.getMonth() + "/" + exam.getYear());
                 IdMohafez = exam.getIdMohafez();
             }
-        });
+        }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
     }
 
     private void getNameOfMohafeaFromDB(String id) {
@@ -207,7 +207,7 @@ public class PlaceExamActivity extends AppCompatActivity {
             if (documentSnapshot.exists()) {
                 tv_name_mohafez.setText(documentSnapshot.getString("name"));
             }
-        });
+        }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
     }
 
     @SuppressLint({"SetTextI18n"})
@@ -235,7 +235,7 @@ public class PlaceExamActivity extends AppCompatActivity {
             if (!queryDocumentSnapshots.isEmpty()) {
                 IdMoshrefExams = queryDocumentSnapshots.getDocuments().get(0).getId();
             }
-        });
+        }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
     }
 
     @Override

@@ -66,6 +66,7 @@ public class TesterActivity extends AppCompatActivity implements NavigationView.
     private ListenerRegistration registration;
     private String typeFragment;
     private AlertDialog dialogMultipleAccounts;
+    private MenuItem menuItem_home;
 
     @SuppressLint("RestrictedApi")
     @Override
@@ -137,7 +138,7 @@ public class TesterActivity extends AppCompatActivity implements NavigationView.
         countUnread_orders_exams = (TextView) menuItem_unCheck_order_exams.getActionView();
         countUnread_orders_exams_today = (TextView) menuItem_unCheck_order_exams_today.getActionView();
         countUnread_exams = (TextView) menuItem_unCheck_exams.getActionView();
-        MenuItem menuItem_home = navigationView.getMenu().findItem(R.id.tester_home);
+        menuItem_home = navigationView.getMenu().findItem(R.id.tester_home);
         menuItem_home.setChecked(true);
         menuItem_home.setCheckable(true);
         FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(instanceIdResult -> {
@@ -158,7 +159,7 @@ public class TesterActivity extends AppCompatActivity implements NavigationView.
                                 .document(Common.currentPerson.getId()).
                                 set(new Token(token));
                     }
-                });
+                }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
     }
 
     @Override
@@ -390,6 +391,10 @@ public class TesterActivity extends AppCompatActivity implements NavigationView.
                 break;
         }
         drawerLayout.closeDrawers();
+        if (menuItem.getItemId() != R.id.tester_home) {
+            menuItem_home.setChecked(false);
+            menuItem_home.setCheckable(false);
+        }
         return true;
     }
 

@@ -2,6 +2,7 @@ package com.alansar.center.administrator.Fragment;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,7 +53,7 @@ public class HomeFragment extends Fragment {
             if (queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
                 count_students_all_stage_4.setText("" + queryDocumentSnapshots.size());
             }
-        });
+        }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
 
         db.collection("Mohafez")
                 .whereEqualTo("stage", Common.SUP_STAGE)
@@ -60,7 +61,7 @@ public class HomeFragment extends Fragment {
             if (queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
                 count_mohafzeen_all_stage_4.setText("" + queryDocumentSnapshots.size());
             }
-        });
+        }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
 
         Calendar calendar = Calendar.getInstance();
         db.collection("Exam")
@@ -72,7 +73,7 @@ public class HomeFragment extends Fragment {
             if (queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
                 count_exams_month_stage_4.setText("" + queryDocumentSnapshots.size());
             }
-        });
+        }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
 
         db.collection("Exam")
                 .whereEqualTo("year", calendar.get(Calendar.YEAR))
@@ -82,7 +83,7 @@ public class HomeFragment extends Fragment {
             if (queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
                 count_exams_all_stage_4.setText("" + queryDocumentSnapshots.size());
             }
-        });
+        }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
     }
 
     @SuppressLint("SetTextI18n")
@@ -93,7 +94,7 @@ public class HomeFragment extends Fragment {
             if (queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
                 count_students_all_stage_3.setText("" + queryDocumentSnapshots.size());
             }
-        });
+        }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
 
         db.collection("Mohafez")
                 .whereEqualTo("stage", Common.FOUNDATION_STAGE)
@@ -101,7 +102,7 @@ public class HomeFragment extends Fragment {
             if (queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
                 count_mohafzeen_all_stage_3.setText("" + queryDocumentSnapshots.size());
             }
-        });
+        }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
 
         Calendar calendar = Calendar.getInstance();
         db.collection("Exam")
@@ -113,7 +114,7 @@ public class HomeFragment extends Fragment {
             if (queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
                 count_exams_month_stage_3.setText("" + queryDocumentSnapshots.size());
             }
-        });
+        }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
 
         db.collection("Exam")
                 .whereEqualTo("year", calendar.get(Calendar.YEAR))
@@ -123,7 +124,7 @@ public class HomeFragment extends Fragment {
             if (queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
                 count_exams_all_stage_3.setText("" + queryDocumentSnapshots.size());
             }
-        });
+        }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
     }
 
     @SuppressLint("SetTextI18n")
@@ -134,7 +135,7 @@ public class HomeFragment extends Fragment {
             if (queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
                 count_students_all_stage_2.setText("" + queryDocumentSnapshots.size());
             }
-        });
+        }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
 
         db.collection("Mohafez")
                 .whereEqualTo("stage", Common.INTERMEDIATE_STAGE)
@@ -142,7 +143,7 @@ public class HomeFragment extends Fragment {
             if (queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
                 count_mohafzeen_all_stage_2.setText("" + queryDocumentSnapshots.size());
             }
-        });
+        }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
 
         Calendar calendar = Calendar.getInstance();
         db.collection("Exam")
@@ -154,7 +155,7 @@ public class HomeFragment extends Fragment {
             if (queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
                 count_exams_month_stage_2.setText("" + queryDocumentSnapshots.size());
             }
-        });
+        }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
 
         db.collection("Exam")
                 .whereEqualTo("year", calendar.get(Calendar.YEAR))
@@ -164,7 +165,7 @@ public class HomeFragment extends Fragment {
             if (queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
                 count_exams_all_stage_2.setText("" + queryDocumentSnapshots.size());
             }
-        });
+        }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
     }
 
     @SuppressLint("SetTextI18n")
@@ -174,14 +175,14 @@ public class HomeFragment extends Fragment {
             if (queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
                 count_students_all.setText("" + queryDocumentSnapshots.size());
             }
-        });
+        }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
 
         db.collection("Mohafez")
                 .get().addOnSuccessListener(queryDocumentSnapshots -> {
             if (queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
                 count_mohafzeen_all.setText("" + queryDocumentSnapshots.size());
             }
-        });
+        }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
 
         Calendar calendar = Calendar.getInstance();
         db.collection("Exam")
@@ -192,7 +193,7 @@ public class HomeFragment extends Fragment {
             if (queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
                 count_exams_month.setText("" + queryDocumentSnapshots.size());
             }
-        });
+        }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
 
         db.collection("Exam")
                 .whereEqualTo("year", calendar.get(Calendar.YEAR))
@@ -201,7 +202,7 @@ public class HomeFragment extends Fragment {
             if (queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
                 count_exams_all.setText("" + queryDocumentSnapshots.size());
             }
-        });
+        }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
     }
 
     @SuppressLint("SetTextI18n")
@@ -212,7 +213,7 @@ public class HomeFragment extends Fragment {
             if (queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
                 count_students_all_stage_1.setText("" + queryDocumentSnapshots.size());
             }
-        });
+        }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
 
         db.collection("Mohafez")
                 .whereEqualTo("stage", Common.THE_UPPER_STAGE)
@@ -220,7 +221,7 @@ public class HomeFragment extends Fragment {
             if (queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
                 count_mohafzeen_all_stage_1.setText("" + queryDocumentSnapshots.size());
             }
-        });
+        }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
 
         Calendar calendar = Calendar.getInstance();
         db.collection("Exam")
@@ -232,7 +233,7 @@ public class HomeFragment extends Fragment {
             if (queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
                 count_exams_month_stage_1.setText("" + queryDocumentSnapshots.size());
             }
-        });
+        }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
 
         db.collection("Exam")
                 .whereEqualTo("year", calendar.get(Calendar.YEAR))
@@ -242,7 +243,7 @@ public class HomeFragment extends Fragment {
             if (queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
                 count_exams_all_stage_1.setText("" + queryDocumentSnapshots.size());
             }
-        });
+        }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
     }
 
     private void initial(View view) {

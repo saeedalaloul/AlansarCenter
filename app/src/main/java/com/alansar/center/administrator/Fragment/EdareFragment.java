@@ -98,6 +98,10 @@ public class EdareFragment extends Fragment {
         registration = db.collection("Edare")
                 .orderBy("name", Query.Direction.ASCENDING).limit(10)
                 .addSnapshotListener((queryDocumentSnapshots, e) -> {
+                    if (e != null) {
+                        Log.w("sss", "listen:error" + e.getLocalizedMessage());
+                        return;
+                    }
                     assert queryDocumentSnapshots != null;
                     if (!queryDocumentSnapshots.isEmpty()) {
                         edares.clear();

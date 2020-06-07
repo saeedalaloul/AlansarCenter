@@ -95,7 +95,7 @@ public class ViewMonthlyReportsActivity extends AppCompatActivity {
                     this.month = Arrays.stream(month).max().getAsInt();
                     LoadData(Arrays.stream(month).max().getAsInt());
                 }
-            });
+            }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
         }
     }
 

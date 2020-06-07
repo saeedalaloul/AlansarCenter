@@ -55,16 +55,18 @@ public class HomeFragment extends Fragment {
 
     @SuppressLint("SetTextI18n")
     private void getDataGroupFromDB() {
-        db.collection("GroupMembers")
-                .document(Common.currentGroupId)
-                .get().addOnSuccessListener(documentSnapshot -> {
-            if (documentSnapshot != null && documentSnapshot.exists()) {
-                ArrayList<String> groupMembers = Objects.requireNonNull(documentSnapshot.toObject(GroupMembers.class)).getGroupMembers();
-                if (groupMembers != null && !groupMembers.isEmpty()) {
-                    count_students_all_group.setText("" + groupMembers.size());
+        if (Common.currentGroupId != null) {
+            db.collection("GroupMembers")
+                    .document(Common.currentGroupId)
+                    .get().addOnSuccessListener(documentSnapshot -> {
+                if (documentSnapshot != null && documentSnapshot.exists()) {
+                    ArrayList<String> groupMembers = Objects.requireNonNull(documentSnapshot.toObject(GroupMembers.class)).getGroupMembers();
+                    if (groupMembers != null && !groupMembers.isEmpty()) {
+                        count_students_all_group.setText("" + groupMembers.size());
+                    }
                 }
-            }
-        });
+            }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
+        }
 
         Calendar calendar = Calendar.getInstance();
         db.collection("Exam")

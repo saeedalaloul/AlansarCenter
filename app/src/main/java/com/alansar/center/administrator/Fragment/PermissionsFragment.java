@@ -2,6 +2,7 @@ package com.alansar.center.administrator.Fragment;
 
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -180,7 +181,7 @@ public class PermissionsFragment extends Fragment {
             } else {
                 db.collection("PermissionsUsers").document("permissionsUsers").set(new PermissionsUsers());
             }
-        });
+        }).addOnFailureListener(e -> Log.d("sss", "" + e.getLocalizedMessage()));
     }
 
     private void setDataOfFailds(PermissionsUsers permissionsUsers) {
